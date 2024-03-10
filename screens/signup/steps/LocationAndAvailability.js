@@ -18,9 +18,9 @@ const LocationAndAvailability = forwardRef((props, ref) => {
     const { i, contentWidth } = props
 
     const [data, setData] = useState({
-        workingHours: [{ day: 'monday', from: '', until: '', enabled: true }, { day: 'tuesday', from: '', until: '', enabled: true }, { day: 'wednesday', from: '', until: '', enabled: true }, { day: 'thursday', from: '', until: '', enabled: true }, { day: 'friday', from: '', until: '', enabled: true }, { day: 'saturday', from: '', until: '', enabled: true }, { day: 'sunday', from: '', until: '', enabled: true }],
+        working_hours: [{ day: 'monday', from: '', until: '', enabled: true }, { day: 'tuesday', from: '', until: '', enabled: true }, { day: 'wednesday', from: '', until: '', enabled: true }, { day: 'thursday', from: '', until: '', enabled: true }, { day: 'friday', from: '', until: '', enabled: true }, { day: 'saturday', from: '', until: '', enabled: true }, { day: 'sunday', from: '', until: '', enabled: true }],
         address: '',
-        hiddenAddress: false
+        hidden_address: false
     })
     
     const [showErrors, setShowErrors] = useState(false)
@@ -33,9 +33,9 @@ const LocationAndAvailability = forwardRef((props, ref) => {
             dataValid = false
         }
 
-        const workingHours = JSON.parse(JSON.stringify(data.workingHours))
+        const working_hours = JSON.parse(JSON.stringify(data.working_hours))
 
-        workingHours.filter(day => day.enabled).forEach(setup => {
+        working_hours.filter(day => day.enabled).forEach(setup => {
             if (!setup.from) {
                 setup.invalidFrom = 'Enter value in HH:mm format.'
             } else {
@@ -85,7 +85,7 @@ const LocationAndAvailability = forwardRef((props, ref) => {
             setShowErrors(true)
             setData(data => ({
                 ...data,
-                workingHours
+                working_hours
             }))
             return false
         }
@@ -108,10 +108,10 @@ const LocationAndAvailability = forwardRef((props, ref) => {
 
     const onWorkingHourChange = (value, index, attribute) => {
         setData(d => {
-            d.workingHours[index][attribute] = value
+            d.working_hours[index][attribute] = value
             if (attribute === 'enabled' && !value) {
-                d.workingHours[index].from = ''
-                d.workingHours[index].until = ''
+                d.working_hours[index].from = ''
+                d.working_hours[index].until = ''
             }
             return { ...d }
         })
@@ -177,10 +177,10 @@ const LocationAndAvailability = forwardRef((props, ref) => {
                             </Text>
                         </View>
                         <Switch
-                            value={!data.hiddenAddress}
+                            value={!data.hidden_address}
                             onValueChange={(value) => setData({
                                 ...data,
-                                hiddenAddress: !value
+                                hidden_address: !value
                             })} 
                             color={COLORS.red}
                         />
@@ -193,94 +193,94 @@ const LocationAndAvailability = forwardRef((props, ref) => {
                             <Text style={styles.tableHeaderText}>Day</Text>
                         </View>
                         <View style={[styles.column, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }]}>
-                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.workingHours[0].enabled ? 'none' : 'line-through' }]}>Monday</Text>
+                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.working_hours[0].enabled ? 'none' : 'line-through' }]}>Monday</Text>
                             <Switch
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }], marginLeft: SPACING.xxx_small }}
-                                value={data.workingHours[0].enabled}
+                                value={data.working_hours[0].enabled}
                                 onValueChange={(value) => onWorkingHourChange(value, 0, 'enabled')}
                                 color={COLORS.red}
                             />
                         </View>
-                        {((data.workingHours[0].invalidFrom || data.workingHours[0].invalidUntil) && data.workingHours[0].enabled) &&
-                            <View style={{ height: data.workingHours[0].errorHeight }} />
+                        {((data.working_hours[0].invalidFrom || data.working_hours[0].invalidUntil) && data.working_hours[0].enabled) &&
+                            <View style={{ height: data.working_hours[0].errorHeight }} />
                         }
 
                         <View style={[styles.column, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }]}>
-                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.workingHours[1].enabled ? 'none' : 'line-through' }]}>Tuesday</Text>
+                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.working_hours[1].enabled ? 'none' : 'line-through' }]}>Tuesday</Text>
                             <Switch
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }], marginLeft: SPACING.xxx_small }}
-                                value={data.workingHours[1].enabled}
+                                value={data.working_hours[1].enabled}
                                 onValueChange={(value) => onWorkingHourChange(value, 1, 'enabled')}
                                 color={COLORS.red}
                             />
                         </View>
-                        {((data.workingHours[1].invalidFrom || data.workingHours[1].invalidUntil) && data.workingHours[1].enabled) &&
-                            <View style={{ height: data.workingHours[1].errorHeight }} />
+                        {((data.working_hours[1].invalidFrom || data.working_hours[1].invalidUntil) && data.working_hours[1].enabled) &&
+                            <View style={{ height: data.working_hours[1].errorHeight }} />
                         }
 
                         <View style={[styles.column, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }]}>
-                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.workingHours[2].enabled ? 'none' : 'line-through' }]}>Wednesday</Text>
+                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.working_hours[2].enabled ? 'none' : 'line-through' }]}>Wednesday</Text>
                             <Switch
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }], marginLeft: SPACING.xxx_small }}
-                                value={data.workingHours[2].enabled}
+                                value={data.working_hours[2].enabled}
                                 onValueChange={(value) => onWorkingHourChange(value, 2, 'enabled')}
                                 color={COLORS.red}
                             />
                         </View>
-                        {((data.workingHours[2].invalidFrom || data.workingHours[2].invalidUntil) && data.workingHours[2].enabled) &&
-                            <View style={{ height: data.workingHours[2].errorHeight }} />
+                        {((data.working_hours[2].invalidFrom || data.working_hours[2].invalidUntil) && data.working_hours[2].enabled) &&
+                            <View style={{ height: data.working_hours[2].errorHeight }} />
                         }
 
                         <View style={[styles.column, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }]}>
-                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.workingHours[3].enabled ? 'none' : 'line-through' }]}>Thursday</Text>
+                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.working_hours[3].enabled ? 'none' : 'line-through' }]}>Thursday</Text>
                             <Switch
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }], marginLeft: SPACING.xxx_small }}
-                                value={data.workingHours[3].enabled}
+                                value={data.working_hours[3].enabled}
                                 onValueChange={(value) => onWorkingHourChange(value, 3, 'enabled')}
                                 color={COLORS.red}
                             />
                         </View>
-                        {((data.workingHours[3].invalidFrom || data.workingHours[3].invalidUntil) && data.workingHours[3].enabled) &&
-                            <View style={{ height: data.workingHours[3].errorHeight }} />
+                        {((data.working_hours[3].invalidFrom || data.working_hours[3].invalidUntil) && data.working_hours[3].enabled) &&
+                            <View style={{ height: data.working_hours[3].errorHeight }} />
                         }
 
                         <View style={[styles.column, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }]}>
-                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.workingHours[4].enabled ? 'none' : 'line-through' }]}>Friday</Text>
+                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.working_hours[4].enabled ? 'none' : 'line-through' }]}>Friday</Text>
                             <Switch
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }], marginLeft: SPACING.xxx_small }}
-                                value={data.workingHours[4].enabled}
+                                value={data.working_hours[4].enabled}
                                 onValueChange={(value) => onWorkingHourChange(value, 4, 'enabled')}
                                 color={COLORS.red}
                             />
                         </View>
-                        {((data.workingHours[4].invalidFrom || data.workingHours[4].invalidUntil) && data.workingHours[4].enabled) &&
-                            <View style={{ height: data.workingHours[4].errorHeight }} />
+                        {((data.working_hours[4].invalidFrom || data.working_hours[4].invalidUntil) && data.working_hours[4].enabled) &&
+                            <View style={{ height: data.working_hours[4].errorHeight }} />
                         }
 
                         <View style={[styles.column, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }]}>
-                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.workingHours[5].enabled ? 'none' : 'line-through' }]}>Saturday</Text>
+                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.working_hours[5].enabled ? 'none' : 'line-through' }]}>Saturday</Text>
                             <Switch
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }], marginLeft: SPACING.xxx_small }}
-                                value={data.workingHours[5].enabled}
+                                value={data.working_hours[5].enabled}
                                 onValueChange={(value) => onWorkingHourChange(value, 5, 'enabled')}
                                 color={COLORS.red}
                             />
                         </View>
-                        {((data.workingHours[5].invalidFrom || data.workingHours[5].invalidUntil) && data.workingHours[5].enabled) &&
-                            <View style={{ height: data.workingHours[5].errorHeight }} />
+                        {((data.working_hours[5].invalidFrom || data.working_hours[5].invalidUntil) && data.working_hours[5].enabled) &&
+                            <View style={{ height: data.working_hours[5].errorHeight }} />
                         }
 
                         <View style={[styles.column, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }]}>
-                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.workingHours[6].enabled ? 'none' : 'line-through' }]}>Sunday</Text>
+                            <Text numberOfLines={1} style={[styles.tableHeaderValue, { textDecorationLine: data.working_hours[6].enabled ? 'none' : 'line-through' }]}>Sunday</Text>
                             <Switch
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }], marginLeft: SPACING.xxx_small }}
-                                value={data.workingHours[6].enabled}
+                                value={data.working_hours[6].enabled}
                                 onValueChange={(value) => onWorkingHourChange(value, 6, 'enabled')}
                                 color={COLORS.red}
                             />
                         </View>
-                        {((data.workingHours[6].invalidFrom || data.workingHours[6].invalidUntil) && data.workingHours[6].enabled) &&
-                            <View style={{ height: data.workingHours[6].errorHeight }} />
+                        {((data.working_hours[6].invalidFrom || data.working_hours[6].invalidUntil) && data.working_hours[6].enabled) &&
+                            <View style={{ height: data.working_hours[6].errorHeight }} />
                         }
                     </View>
 
@@ -288,8 +288,8 @@ const LocationAndAvailability = forwardRef((props, ref) => {
                         <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
                             <Text style={styles.tableHeaderText}>From</Text>
                         </View>
-                        {data.workingHours.map((value, index) => (
-                            <View key={value.day} style={{ padding: 4, opacity: data.workingHours[index].enabled ? 1 : 0.3 }}>
+                        {data.working_hours.map((value, index) => (
+                            <View key={value.day} style={{ padding: 4, opacity: data.working_hours[index].enabled ? 1 : 0.3 }}>
                                 <TextInput
                                     style={[styles.column, {
                                         fontFamily: FONTS.regular,
@@ -297,21 +297,21 @@ const LocationAndAvailability = forwardRef((props, ref) => {
                                         outlineStyle: 'none',
                                         color: '#000',
                                         height: styles.column.height - 8,
-                                        borderColor: data.workingHours[index].invalidFrom && data.workingHours[index].enabled ? COLORS.error : '#000',
+                                        borderColor: data.working_hours[index].invalidFrom && data.working_hours[index].enabled ? COLORS.error : '#000',
                                         borderWidth: 1,
                                         borderRadius: 5
                                     }]}
-                                    editable={data.workingHours[index].enabled}
+                                    editable={data.working_hours[index].enabled}
                                     onChangeText={(text) => onWorkingHourChange(text.replaceAll(' ', '').replace(/[^\d:]/g, ''), index, 'from')}
-                                    value={data.workingHours[index].from}
+                                    value={data.working_hours[index].from}
                                     placeholder='HH:mm'
                                     placeholderTextColor="grey"
                                     maxLength={5}
                                 />
-                                {((data.workingHours[index].invalidFrom || data.workingHours[index].invalidUntil) && data.workingHours[index].enabled) &&
+                                {((data.working_hours[index].invalidFrom || data.working_hours[index].invalidUntil) && data.working_hours[index].enabled) &&
                                     <HelperText onLayout={(event) => onWorkingHourChange(event.nativeEvent.layout.height, index, 'errorHeight')} type="error" visible>
-                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.error, opacity: data.workingHours[index].invalidFrom ? 1 : 0 }}>
-                                            {data.workingHours[index].invalidFrom || data.workingHours[index].invalidUntil}
+                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.error, opacity: data.working_hours[index].invalidFrom ? 1 : 0 }}>
+                                            {data.working_hours[index].invalidFrom || data.working_hours[index].invalidUntil}
                                         </Text>
                                     </HelperText>
                                 }
@@ -323,8 +323,8 @@ const LocationAndAvailability = forwardRef((props, ref) => {
                         <View style={[styles.column, { backgroundColor: COLORS.lightGrey, flexShrink: 0 }]}>
                             <Text style={styles.tableHeaderText}>Until</Text>
                         </View>
-                        {data.workingHours.map((value, index) => (
-                            <View key={value.day} style={{ padding: 4, opacity: data.workingHours[index].enabled ? 1 : 0.3 }}>
+                        {data.working_hours.map((value, index) => (
+                            <View key={value.day} style={{ padding: 4, opacity: data.working_hours[index].enabled ? 1 : 0.3 }}>
                                 <TextInput
                                     style={[styles.column, {
                                         fontFamily: FONTS.regular,
@@ -332,21 +332,21 @@ const LocationAndAvailability = forwardRef((props, ref) => {
                                         outlineStyle: 'none',
                                         color: '#000',
                                         height: styles.column.height - 8,
-                                        borderColor: data.workingHours[index].invalidUntil && data.workingHours[index].enabled ? COLORS.error : '#000',
+                                        borderColor: data.working_hours[index].invalidUntil && data.working_hours[index].enabled ? COLORS.error : '#000',
                                         borderWidth: 1,
                                         borderRadius: 5
                                     }]}
-                                    editable={data.workingHours[index].enabled}
+                                    editable={data.working_hours[index].enabled}
                                     onChangeText={(text) => onWorkingHourChange(text.replaceAll(' ', '').replace(/[^\d:]/g, ''), index, 'until')}
-                                    value={data.workingHours[index].until}
+                                    value={data.working_hours[index].until}
                                     placeholder='HH:mm'
                                     placeholderTextColor="grey"
                                     maxLength={5}
                                 />
-                                {((data.workingHours[index].invalidFrom || data.workingHours[index].invalidUntil) && data.workingHours[index].enabled) &&
+                                {((data.working_hours[index].invalidFrom || data.working_hours[index].invalidUntil) && data.working_hours[index].enabled) &&
                                     <HelperText onLayout={(event) => onWorkingHourChange(event.nativeEvent.layout.height, index, 'errorHeight')} type="error" visible>
-                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.error, opacity: data.workingHours[index].invalidUntil ? 1 : 0 }}>
-                                            {data.workingHours[index].invalidFrom || data.workingHours[index].invalidUntil}
+                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.error, opacity: data.working_hours[index].invalidUntil ? 1 : 0 }}>
+                                            {data.working_hours[index].invalidFrom || data.working_hours[index].invalidUntil}
                                         </Text>
                                     </HelperText>
                                 }

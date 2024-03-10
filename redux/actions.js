@@ -129,7 +129,7 @@ export const fetchLadies = () => (dispatch, getState) => {
                         const id = doc.id
                         return { id, ...data }
                     })
-                    .sort((a, b) => b.createdDate.toDate() - a.createdDate.toDate())
+                    .sort((a, b) => b.created_date.toDate() - a.created_date.toDate())
 
                 dispatch({ type: LADIES_STATE_CHANGE, ladies })
             }

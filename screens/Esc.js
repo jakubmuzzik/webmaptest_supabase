@@ -105,13 +105,13 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
     }
 
     const getOrdering = () => {
-        return orderBy("createdDate")
+        return orderBy("created_date")
     }
 
     const loadMockDataForPage = () => {
         updateLadiesData(new Array(MAX_ITEMS_PER_PAGE).fill({
             name: 'llll',
-            dateOfBirth: '25071996',
+            date_of_birth: '25071996',
             address: {city: 'Praha'},
             images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
         }, 0), params.page)
@@ -155,7 +155,7 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
                 //query all data from the beginning till the last one
                 const q = query(
                     collection(db, "users"), 
-                    where('accountType', '==', 'lady'), 
+                    where('account_type', '==', 'lady'), 
                     where('status', '==', ACTIVE),
                     ...getWhereConditions(),
                     getOrdering(),
@@ -189,7 +189,7 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
             const snapshot = await getDocs(
                 query(
                     collection(db, "users"), 
-                    where('accountType', '==', 'lady'), 
+                    where('account_type', '==', 'lady'), 
                     where('status', '==', ACTIVE),
                     ...getWhereConditions(),
                     getOrdering(),
@@ -223,7 +223,7 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
             const snapshot = await getDocs(
                 query(
                     collection(db, "users"), 
-                    where('accountType', '==', 'lady'), 
+                    where('account_type', '==', 'lady'), 
                     where('status', '==', ACTIVE),
                     ...getWhereConditions(),
                     getOrdering(),
@@ -256,7 +256,7 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
             const snapshot = await getCountFromServer(
                 query(
                     collection(db, "users"),
-                    where('accountType', '==', 'lady'),
+                    where('account_type', '==', 'lady'),
                     where('status', '==', ACTIVE),
                     ...getWhereConditions(),
                 )

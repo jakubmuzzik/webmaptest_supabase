@@ -146,7 +146,7 @@ const Profile = ({ toastRef }) => {
             return
         }
 
-        if (data.accountType === 'lady') {
+        if (data.account_type === 'lady') {
             leftPhotoOpacity.value = withTiming(1, {
                 useNativeDriver: true
             })
@@ -213,7 +213,7 @@ const Profile = ({ toastRef }) => {
 
                 if (snapshotData.establishmentId) {
                     fetchEstablishmentName(snapshotData.establishmentId)
-                } else if (snapshotData.accountType === 'establishment') {
+                } else if (snapshotData.account_type === 'establishment') {
                     fetchLadiesUnderEstablishment(snapshotData.id)
                 }
             }
@@ -243,7 +243,7 @@ const Profile = ({ toastRef }) => {
         setTimeout(() => {
             setLadiesUnderEstablishment(new Array(30).fill({
                 name: 'lady xxx',
-                dateOfBirth: '25071996',
+                date_of_birth: '25071996',
                 address: {city: 'Praha'},
                 images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
             }, 0))
@@ -422,8 +422,8 @@ const Profile = ({ toastRef }) => {
             <Text style={{ color: '#FFF', marginBottom: SPACING.x_small, marginHorizontal: SPACING.xx_small, fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, }}>
                 {data.name}
             </Text>
-            {data.accountType === 'lady' && <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText, marginBottom: SPACING.xx_small }}>
-                {calculateAgeFromDate(data.dateOfBirth)} years <Text style={{ color: COLORS.red }}>•</Text> {data.height} cm <Text style={{ color: COLORS.red }}>•</Text> {data.weight} kg
+            {data.account_type === 'lady' && <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText, marginBottom: SPACING.xx_small }}>
+                {calculateAgeFromDate(data.date_of_birth)} years <Text style={{ color: COLORS.red }}>•</Text> {data.height} cm <Text style={{ color: COLORS.red }}>•</Text> {data.weight} kg
             </Text>}
             <View style={{ flexDirection: 'row', marginBottom: SPACING.xx_small, alignItems: 'center' }}>
                 <MaterialCommunityIcons name="phone" size={20} color={COLORS.greyText} style={{ marginRight: 3 }} />
@@ -623,11 +623,11 @@ const Profile = ({ toastRef }) => {
                 <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
                     About
                 </Text>
-                {!data.establishmentId && data.accountType === 'lady' && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
+                {!data.establishmentId && data.account_type === 'lady' && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
                     • Independent lady
                 </Text>}
-                {data.establishmentType && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
-                    • {data.establishmentType}
+                {data.establishment_type && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
+                    • {data.establishment_type}
                 </Text>}
                 {data.establishmentId && establishmentName && (
                     <Animated.Text
@@ -667,7 +667,7 @@ const Profile = ({ toastRef }) => {
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Age</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{calculateAgeFromDate(data.dateOfBirth)}</Text>
+                        <Text style={styles.attributeValue}>{calculateAgeFromDate(data.date_of_birth)}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Sexual orientation</Text>
@@ -699,32 +699,32 @@ const Profile = ({ toastRef }) => {
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Body type</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.bodyType}</Text>
+                        <Text style={styles.attributeValue}>{data.body_type}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Pubic hair</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.pubicHair}</Text>
+                        <Text style={styles.attributeValue}>{data.pubic_hair}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Breast size</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.breastSize}</Text>
+                        <Text style={styles.attributeValue}>{data.breast_size}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Breast type</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.breastType}</Text>
+                        <Text style={styles.attributeValue}>{data.breast_type}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Hair color</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.hairColor}</Text>
+                        <Text style={styles.attributeValue}>{data.hair_color}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Eye color</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.eyeColor}</Text>
+                        <Text style={styles.attributeValue}>{data.eye_color}</Text>
                     </View>
                 </View>
             </View>
@@ -754,7 +754,7 @@ const Profile = ({ toastRef }) => {
 
     const renderWorkingHours = () => {
         const todaysDay = new Date().toLocaleString('en-us', {weekday:'long'}).toLowerCase()
-        const todaysWorkingHours = data.workingHours.find(workingHours => workingHours.day === todaysDay)
+        const todaysWorkingHours = data.working_hours.find(working_hours => working_hours.day === todaysDay)
 
         let availableNow = false
 
@@ -820,25 +820,25 @@ const Profile = ({ toastRef }) => {
                             <Text style={styles.tableHeaderText}>Availability</Text>
                         </View>
                         <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.workingHours[0].enabled ? COLORS.white : COLORS.greyText }]}>{data.workingHours[0].enabled ? (data.workingHours[0].from + ' - ' + data.workingHours[0].until) : 'Not available'}</Text>
+                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[0].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[0].enabled ? (data.working_hours[0].from + ' - ' + data.working_hours[0].until) : 'Not available'}</Text>
                         </HoverableView>
                         <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.workingHours[1].enabled ? COLORS.white : COLORS.greyText }]}>{data.workingHours[1].enabled ? (data.workingHours[1].from + ' - ' + data.workingHours[1].until) : 'Not available'}</Text>
+                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[1].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[1].enabled ? (data.working_hours[1].from + ' - ' + data.working_hours[1].until) : 'Not available'}</Text>
                         </HoverableView>
                         <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.workingHours[2].enabled ? COLORS.white : COLORS.greyText }]}>{data.workingHours[2].enabled ? (data.workingHours[2].from + ' - ' + data.workingHours[2].until) : 'Not available'}</Text>
+                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[2].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[2].enabled ? (data.working_hours[2].from + ' - ' + data.working_hours[2].until) : 'Not available'}</Text>
                         </HoverableView>
                         <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.workingHours[3].enabled ? COLORS.white : COLORS.greyText }]}>{data.workingHours[3].enabled ? (data.workingHours[3].from + ' - ' + data.workingHours[3].until) : 'Not available'}</Text>
+                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[3].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[3].enabled ? (data.working_hours[3].from + ' - ' + data.working_hours[3].until) : 'Not available'}</Text>
                         </HoverableView>
                         <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.workingHours[4].enabled ? COLORS.white : COLORS.greyText }]}>{data.workingHours[4].enabled ? (data.workingHours[4].from + ' - ' + data.workingHours[4].until) : 'Not available'}</Text>
+                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[4].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[4].enabled ? (data.working_hours[4].from + ' - ' + data.working_hours[4].until) : 'Not available'}</Text>
                         </HoverableView>
                         <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.workingHours[5].enabled ? COLORS.white : COLORS.greyText }]}>{data.workingHours[5].enabled ? (data.workingHours[5].from + ' - ' + data.workingHours[5].until) : 'Not available'}</Text>
+                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[5].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[5].enabled ? (data.working_hours[5].from + ' - ' + data.working_hours[5].until) : 'Not available'}</Text>
                         </HoverableView>
                         <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.workingHours[6].enabled ? COLORS.white : COLORS.greyText }]}>{data.workingHours[6].enabled ? (data.workingHours[6].from + ' - ' + data.workingHours[6].until) : 'Not available'}</Text>
+                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[6].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[6].enabled ? (data.working_hours[6].from + ' - ' + data.working_hours[6].until) : 'Not available'}</Text>
                         </HoverableView>
                     </View>
                 </View>
@@ -907,12 +907,12 @@ const Profile = ({ toastRef }) => {
                 <View style={{ flexDirection: 'row', alignItems: 'center', flexShrink: 1 }}>
                     <MaterialCommunityIcons name="map-marker" size={20} color={COLORS.white} style={{ marginRight: 3 }} />
                     <Text numberOfLines={1} style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: data.address ? COLORS.white : COLORS.error }}>
-                        {data.address ? (data.hiddenAddress ? data.address.city : data.address.title) : 'Enter your address'}
+                        {data.address ? (data.hidden_address ? data.address.city : data.address.title) : 'Enter your address'}
                     </Text>
                 </View>
             </View>
 
-            {!data.hiddenAddress && <View style={{ width: '100%', height: 300, borderRadius: 5, overflow: 'hidden' }}>
+            {!data.hidden_address && <View style={{ width: '100%', height: 300, borderRadius: 5, overflow: 'hidden' }}>
                 <MapView
                     ref={mapRef}
                     googleMapsApiKey="AIzaSyCA1Gw6tQbTOm9ME6Ru0nulUNFAOotVY3s"
@@ -1093,23 +1093,23 @@ const Profile = ({ toastRef }) => {
             <View style={{ alignSelf: 'center', maxWidth: '100%', width: 800 + SPACING.xxx_small, padding: SPACING.large }}>
                 {renderHeaderInfo()}
 
-                {data.accountType === 'lady' && renderPhotosGrid()}
+                {data.account_type === 'lady' && renderPhotosGrid()}
 
-                {data.accountType === 'establishment' && renderCoverPhoto()}
+                {data.account_type === 'establishment' && renderCoverPhoto()}
 
                 {renderAbout()}
 
-                {data.accountType === 'lady' && renderPersonalDetails()}
+                {data.account_type === 'lady' && renderPersonalDetails()}
 
-                {data.accountType === 'lady' && renderPricing()}
+                {data.account_type === 'lady' && renderPricing()}
 
-                {data.accountType === 'lady' && renderServices()}
+                {data.account_type === 'lady' && renderServices()}
 
                 {renderWorkingHours()}
 
                 {renderAddress()}
 
-                {data.accountType === 'establishment' && renderLadiesUnderEstablishment()}
+                {data.account_type === 'establishment' && renderLadiesUnderEstablishment()}
             </View>
 
             <AssetsTabView visible={photosModalVisible} pressedAssetIndex={pressedImageIndexRef.current} images={Object.values(images)} videos={videos} closeModal={closeModal} />

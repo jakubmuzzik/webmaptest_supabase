@@ -120,11 +120,11 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
         setIsSaving(true)
 
         let addr = JSON.parse(JSON.stringify(changedAddress))
-        const hidden = addr.hiddenAddress
-        delete addr.hiddenAddress
+        const hidden = addr.hidden_address
+        delete addr.hidden_address
 
         try {
-            await updateDoc(doc(db, 'users', userId), {address: addr, hiddenAddress: hidden, lastModifiedDate: new Date()})
+            await updateDoc(doc(db, 'users', userId), {address: addr, hidden_address: hidden, last_modified_date: new Date()})
 
             const infoRef = doc(db, 'info', 'webwide')
 
@@ -152,7 +152,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                 text: 'Address was changed successfully.'
             })
 
-            updateRedux({address: addr, hiddenAddress: hidden, id: userId, lastModifiedDate: new Date()})
+            updateRedux({address: addr, hidden_address: hidden, id: userId, last_modified_date: new Date()})
         } catch(e) {
             modalToastRef.current.show({
                 type: 'error',
@@ -223,7 +223,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
         }
 
         const { title, id, address, position } = a
-        setChangedAddress(data => ({ title, id, ...address, ...position, hiddenAddress: data.hiddenAddress }))
+        setChangedAddress(data => ({ title, id, ...address, ...position, hidden_address: data.hidden_address }))
     }
 
     const modalContainerStyles = useAnimatedStyle(() => {
@@ -270,10 +270,10 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                             </Text>
                         </View>
                         <Switch
-                            value={!changedAddress.hiddenAddress}
+                            value={!changedAddress.hidden_address}
                             onValueChange={(value) => setChangedAddress({
                                 ...changedAddress,
-                                hiddenAddress: !value
+                                hidden_address: !value
                             })}
                             color={COLORS.red}
                         />
@@ -435,7 +435,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                                 mode="contained"
                                 onPress={onSavePress}
                                 loading={isSaving}
-                                disabled={isSaving || (address.id === changedAddress.id && address.hiddenAddress === changedAddress.hiddenAddress)}
+                                disabled={isSaving || (address.id === changedAddress.id && address.hidden_address === changedAddress.hidden_address)}
                             >
                                 Save
                             </Button>

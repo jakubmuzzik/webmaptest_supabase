@@ -74,7 +74,7 @@ const RenderLady = ({ lady, width, delay = 0 }) => {
                 {lady.name}
             </Text>
             <Text numberOfLines={1} style={{ textAlign: 'center', fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, color: COLORS.greyText }}>
-                {calculateAgeFromDate(lady.dateOfBirth) + ' years'} <Text style={{ color: COLORS.red }}>•</Text> {lady.address.city}
+                {calculateAgeFromDate(lady.date_of_birth) + ' years'} <Text style={{ color: COLORS.red }}>•</Text> {lady.address.city}
             </Text>
         </Animated.View>
     )

@@ -150,9 +150,9 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
 
         data = {
             ...data,
-            nameLowerCase: data.name.toLowerCase(),
-            createdDate: new Date(),
-            accountType: 'lady',
+            name_lowercase: data.name.toLowerCase(),
+            created_date: new Date(),
+            account_type: 'lady',
             independent
         }
 

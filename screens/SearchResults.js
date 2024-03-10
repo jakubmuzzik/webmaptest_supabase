@@ -40,8 +40,8 @@ const SearchResults = ({ toastRef }) => {
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
     const [results, setResults] = useState([])
 
-    const ladies = results.filter(result => result.accountType === 'lady')
-    const establishments = results.filter(result => result.accountType === 'establishment')
+    const ladies = results.filter(result => result.account_type === 'lady')
+    const establishments = results.filter(result => result.account_type === 'establishment')
 
     useEffect(() => {
         if (!params.query) {
@@ -62,7 +62,7 @@ const SearchResults = ({ toastRef }) => {
             const q = query(
                 collection(db, "users"), 
                 where('status', '==', ACTIVE),
-                orderBy('nameLowerCase'),
+                orderBy('name_lowercase'),
                 startAt(params.query.toLowerCase()),
                 endAt(params.query.toLowerCase() + '\uf8ff'),
                 limit(MAX_ITEMS_PER_PAGE)

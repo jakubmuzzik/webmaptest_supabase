@@ -31,17 +31,17 @@ const PersonalDetails = forwardRef((props, ref) => {
 
     const [data, setData] = useState({
         name: '',
-        dateOfBirth: '',
+        date_of_birth: '',
         nationality: '',
         languages: [],
         height: '',
         weight: '',
-        bodyType: '',
-        pubicHair: '',
-        breastSize: '',
-        breastType: '',
-        hairColor: '',
-        eyeColor: '',
+        body_type: '',
+        pubic_hair: '',
+        breast_size: '',
+        breast_type: '',
+        hair_color: '',
+        eye_color: '',
         sexuality: '',
         phone: '',
         viber: false,
@@ -54,18 +54,18 @@ const PersonalDetails = forwardRef((props, ref) => {
     const validate = async () => {
         if (
             !data.name 
-            || !data.dateOfBirth 
-            || data.dateOfBirth.length !== 8
+            || !data.date_of_birth 
+            || data.date_of_birth.length !== 8
             || !data.nationality 
             || !data.languages.length 
             || !data.height 
             || !data.weight 
-            || !data.bodyType 
-            || !data.pubicHair 
-            || !data.breastSize 
-            || !data.breastType 
-            || !data.hairColor 
-            || !data.eyeColor
+            || !data.body_type 
+            || !data.pubic_hair 
+            || !data.breast_size 
+            || !data.breast_type 
+            || !data.hair_color 
+            || !data.eye_color
             || !data.sexuality
             || !data.phone
             || !data.description
@@ -98,27 +98,27 @@ const PersonalDetails = forwardRef((props, ref) => {
     }
 
     const getDateOfBirth = () => {
-        switch (data.dateOfBirth.length) {
+        switch (data.date_of_birth.length) {
             case 0:
                 return ''
             case 1:
-                return data.dateOfBirth
+                return data.date_of_birth
             case 2:
-                return data.dateOfBirth //+ '.'
+                return data.date_of_birth //+ '.'
             case 3:
-                return data.dateOfBirth[0] + data.dateOfBirth[1] + '.' + data.dateOfBirth[2]
+                return data.date_of_birth[0] + data.date_of_birth[1] + '.' + data.date_of_birth[2]
             case 4:
-                return data.dateOfBirth[0] + data.dateOfBirth[1] + '.' + data.dateOfBirth[2] + data.dateOfBirth[3] //+ '.'
+                return data.date_of_birth[0] + data.date_of_birth[1] + '.' + data.date_of_birth[2] + data.date_of_birth[3] //+ '.'
             case 5:
-                return data.dateOfBirth[0] + data.dateOfBirth[1] + '.' + data.dateOfBirth[2] + data.dateOfBirth[3] + '.' + data.dateOfBirth[4]
+                return data.date_of_birth[0] + data.date_of_birth[1] + '.' + data.date_of_birth[2] + data.date_of_birth[3] + '.' + data.date_of_birth[4]
             case 6:
-                return data.dateOfBirth[0] + data.dateOfBirth[1] + '.' + data.dateOfBirth[2] + data.dateOfBirth[3] + '.' + data.dateOfBirth[4] + data.dateOfBirth[5]
+                return data.date_of_birth[0] + data.date_of_birth[1] + '.' + data.date_of_birth[2] + data.date_of_birth[3] + '.' + data.date_of_birth[4] + data.date_of_birth[5]
             case 7:
-                return data.dateOfBirth[0] + data.dateOfBirth[1] + '.' + data.dateOfBirth[2] + data.dateOfBirth[3] + '.' + data.dateOfBirth[4] + data.dateOfBirth[5] + data.dateOfBirth[6]
+                return data.date_of_birth[0] + data.date_of_birth[1] + '.' + data.date_of_birth[2] + data.date_of_birth[3] + '.' + data.date_of_birth[4] + data.date_of_birth[5] + data.date_of_birth[6]
             case 8:
-                return data.dateOfBirth[0] + data.dateOfBirth[1] + '.' + data.dateOfBirth[2] + data.dateOfBirth[3] + '.' + data.dateOfBirth[4] + data.dateOfBirth[5] + data.dateOfBirth[6] + data.dateOfBirth[7]
+                return data.date_of_birth[0] + data.date_of_birth[1] + '.' + data.date_of_birth[2] + data.date_of_birth[3] + '.' + data.date_of_birth[4] + data.date_of_birth[5] + data.date_of_birth[6] + data.date_of_birth[7]
             default:
-                return data.dateOfBirth[0] + data.dateOfBirth[1] + '.' + data.dateOfBirth[2] + data.dateOfBirth[3] + '.' + data.dateOfBirth[4] + data.dateOfBirth[5] + data.dateOfBirth[5] + data.dateOfBirth[7]
+                return data.date_of_birth[0] + data.date_of_birth[1] + '.' + data.date_of_birth[2] + data.date_of_birth[3] + '.' + data.date_of_birth[4] + data.date_of_birth[5] + data.date_of_birth[5] + data.date_of_birth[7]
         }
     }
 
@@ -129,7 +129,7 @@ const PersonalDetails = forwardRef((props, ref) => {
             return
         }
 
-        onValueChange(strippedText, 'dateOfBirth')
+        onValueChange(strippedText, 'date_of_birth')
     }
 
     const onMultiPicklistChange = (value, attribute) => {
@@ -188,7 +188,7 @@ const PersonalDetails = forwardRef((props, ref) => {
                         placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                         text={getDateOfBirth()}
                         setText={(text) => onBirthdateChange(text)}
-                        errorMessage={showErrors && !data.dateOfBirth ? 'Enter your date of birth' : showErrors && data.dateOfBirth.length !== 8 ? 'Enter a date in DD.MM.YYYY format.' : undefined}
+                        errorMessage={showErrors && !data.date_of_birth ? 'Enter your date of birth' : showErrors && data.date_of_birth.length !== 8 ? 'Enter a date in DD.MM.YYYY format.' : undefined}
                         numeric={true}
                     />
                 </View>
@@ -282,10 +282,10 @@ const PersonalDetails = forwardRef((props, ref) => {
                         textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                         labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                         placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.bodyType}
-                        setText={(text) => onValueChange(text, 'bodyType')}
+                        text={data.body_type}
+                        setText={(text) => onValueChange(text, 'body_type')}
                         rightIconName='chevron-down'
-                        errorMessage={showErrors && !data.bodyType ? 'Select your body type' : undefined}
+                        errorMessage={showErrors && !data.body_type ? 'Select your body type' : undefined}
                     />
                     <DropdownSelect
                         values={PUBIC_HAIR_VALUES}
@@ -299,10 +299,10 @@ const PersonalDetails = forwardRef((props, ref) => {
                         textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                         labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                         placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.pubicHair}
-                        setText={(text) => onValueChange(text, 'pubicHair')}
+                        text={data.pubic_hair}
+                        setText={(text) => onValueChange(text, 'pubic_hair')}
                         rightIconName='chevron-down'
-                        errorMessage={showErrors && !data.pubicHair ? 'Select your pubic hair' : undefined}
+                        errorMessage={showErrors && !data.pubic_hair ? 'Select your pubic hair' : undefined}
                     />
                 </View>
 
@@ -319,10 +319,10 @@ const PersonalDetails = forwardRef((props, ref) => {
                         textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                         labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                         placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.breastSize}
-                        setText={(text) => onValueChange(text, 'breastSize')}
+                        text={data.breast_size}
+                        setText={(text) => onValueChange(text, 'breast_size')}
                         rightIconName='chevron-down'
-                        errorMessage={showErrors && !data.breastSize ? 'Select your breast size' : undefined}
+                        errorMessage={showErrors && !data.breast_size ? 'Select your breast size' : undefined}
                     />
                     <DropdownSelect
                         values={BREAST_TYPES}
@@ -336,10 +336,10 @@ const PersonalDetails = forwardRef((props, ref) => {
                         textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                         labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                         placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.breastType}
-                        setText={(text) => onValueChange(text, 'breastType')}
+                        text={data.breast_type}
+                        setText={(text) => onValueChange(text, 'breast_type')}
                         rightIconName='chevron-down'
-                        errorMessage={showErrors && !data.breastType ? 'Select your breast type' : undefined}
+                        errorMessage={showErrors && !data.breast_type ? 'Select your breast type' : undefined}
                     />
                 </View>
 
@@ -356,10 +356,10 @@ const PersonalDetails = forwardRef((props, ref) => {
                         textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                         labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                         placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.hairColor}
-                        setText={(text) => onValueChange(text, 'hairColor')}
+                        text={data.hair_color}
+                        setText={(text) => onValueChange(text, 'hair_color')}
                         rightIconName='chevron-down'
-                        errorMessage={showErrors && !data.hairColor ? 'Select your hair color' : undefined}
+                        errorMessage={showErrors && !data.hair_color ? 'Select your hair color' : undefined}
                     />
                     <DropdownSelect
                         values={EYE_COLORS}
@@ -373,10 +373,10 @@ const PersonalDetails = forwardRef((props, ref) => {
                         textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                         labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                         placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.eyeColor}
-                        setText={(text) => onValueChange(text, 'eyeColor')}
+                        text={data.eye_color}
+                        setText={(text) => onValueChange(text, 'eye_color')}
                         rightIconName='chevron-down'
-                        errorMessage={showErrors && !data.eyeColor ? 'Select your eye color' : undefined}
+                        errorMessage={showErrors && !data.eye_color ? 'Select your eye color' : undefined}
                     />
                 </View>
 

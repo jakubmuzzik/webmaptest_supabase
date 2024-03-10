@@ -101,7 +101,7 @@ const ContactInformationEditor = ({ visible, setVisible, contactInformation, toa
                 delete changedData.website
             }
 
-            await updateDoc(doc(db, 'users', userId), {...changedData, lastModifiedDate: new Date()})
+            await updateDoc(doc(db, 'users', userId), {...changedData, last_modified_date: new Date()})
 
             closeModal()
 
@@ -111,7 +111,7 @@ const ContactInformationEditor = ({ visible, setVisible, contactInformation, toa
                 text: 'Contact Information was changed successfully.'
             })
 
-            updateRedux({...changedData, id: userId, lastModifiedDate: new Date()})
+            updateRedux({...changedData, id: userId, last_modified_date: new Date()})
         } catch(e) {
             console.error(e)
             modalToastRef.current.show({
@@ -141,7 +141,7 @@ const ContactInformationEditor = ({ visible, setVisible, contactInformation, toa
         setChangedContactInformation(data => ({
             ...data,
             name: value,
-            nameLowerCase: value.toLowerCase()
+            name_lowercase: value.toLowerCase()
         }))
     }
 

@@ -92,7 +92,7 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
         setShowErrorMessage(false)
 
         try {
-            await updateDoc(doc(db, 'users', userId), {description: changedAbout, lastModifiedDate: new Date()})
+            await updateDoc(doc(db, 'users', userId), {description: changedAbout, last_modified_date: new Date()})
 
             closeModal()
 
@@ -102,7 +102,7 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
                 text: 'Description was changed successfully.'
             })
 
-            updateRedux({description: changedAbout, id: userId, lastModifiedDate: new Date()})
+            updateRedux({description: changedAbout, id: userId, last_modified_date: new Date()})
         } catch(e) {
             modalToastRef.current.show({
                 type: 'error',

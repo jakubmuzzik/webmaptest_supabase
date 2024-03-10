@@ -212,12 +212,12 @@ export const getFilterParams = (searchParams) => {
     outcall: isBoolean(searchParams.get('outcall')) ? Boolean(searchParams.get('outcall')) : undefined,
     incall: isBoolean(searchParams.get('incall')) ? Boolean(searchParams.get('incall')) : undefined,
     services: searchParams.get('services') ? decodeURIComponent(searchParams.get('services')).split(',').filter(val => SERVICES.includes(val)) : undefined,
-    bodyType: searchParams.get('bodyType') ? decodeURIComponent(searchParams.get('bodyType')).split(',').filter(val => BODY_TYPES.includes(val)) : undefined,
-    hairColor: searchParams.get('hairColor') ? decodeURIComponent(searchParams.get('hairColor')).split(',').filter(val => HAIR_COLORS.includes(val)) : undefined,
-    eyeColor: searchParams.get('eyeColor') ? decodeURIComponent(searchParams.get('eyeColor')).split(',').filter(val => EYE_COLORS.includes(val)) : undefined,
-    pubicHair: searchParams.get('pubicHair') ? decodeURIComponent(searchParams.get('pubicHair')).split(',').filter(val => PUBIC_HAIR_VALUES.includes(val)) : undefined,
-    breastSize: searchParams.get('breastSize') ? decodeURIComponent(searchParams.get('breastSize')).split(',').filter(val => BREAST_SIZES.includes(val)) : undefined,
-    breastType: searchParams.get('breastType') ? decodeURIComponent(searchParams.get('breastType')).split(',').filter(val => BREAST_TYPES.includes(val)) : undefined,
+    body_type: searchParams.get('body_type') ? decodeURIComponent(searchParams.get('body_type')).split(',').filter(val => BODY_TYPES.includes(val)) : undefined,
+    hair_color: searchParams.get('hair_color') ? decodeURIComponent(searchParams.get('hair_color')).split(',').filter(val => HAIR_COLORS.includes(val)) : undefined,
+    eye_color: searchParams.get('eye_color') ? decodeURIComponent(searchParams.get('eye_color')).split(',').filter(val => EYE_COLORS.includes(val)) : undefined,
+    pubic_hair: searchParams.get('pubic_hair') ? decodeURIComponent(searchParams.get('pubic_hair')).split(',').filter(val => PUBIC_HAIR_VALUES.includes(val)) : undefined,
+    breast_size: searchParams.get('breast_size') ? decodeURIComponent(searchParams.get('breast_size')).split(',').filter(val => BREAST_SIZES.includes(val)) : undefined,
+    breast_type: searchParams.get('breast_type') ? decodeURIComponent(searchParams.get('breast_type')).split(',').filter(val => BREAST_TYPES.includes(val)) : undefined,
     speaks: searchParams.get('speaks') ? decodeURIComponent(searchParams.get('speaks')).split(',').filter(val => LANGUAGES.includes(val)) : undefined,
     nationality: searchParams.get('nationality') ? decodeURIComponent(searchParams.get('nationality')).split(',').filter(val => NATIONALITIES.includes(val)) : undefined,
     sexualOrientation: searchParams.get('sexualOrientation') ? decodeURIComponent(searchParams.get('sexualOrientation')).split(',').filter(val => SEXUAL_ORIENTATION.includes(val)) : undefined
@@ -268,17 +268,17 @@ export const buildWhereConditions = (filterParams) => {
 
   whereConditions.push(where('services', 'array-contains-any', filterNames.includes('services') ? filterParams.services : [...SERVICES, ...MASSAGE_SERVICES]))
 
-  whereConditions.push(where('bodyType', 'array-contains-any', filterNames.includes('bodyType') ? filterParams.bodyType : BODY_TYPES))
+  whereConditions.push(where('body_type', 'array-contains-any', filterNames.includes('body_type') ? filterParams.body_type : BODY_TYPES))
 
-  whereConditions.push(where('hairColor', 'array-contains-any', filterNames.includes('hairColor') ? filterParams.hairColor : HAIR_COLORS))
+  whereConditions.push(where('hair_color', 'array-contains-any', filterNames.includes('hair_color') ? filterParams.hair_color : HAIR_COLORS))
 
-  whereConditions.push(where('eyeColor', 'array-contains-any', filterNames.includes('eyeColor') ? filterParams.eyeColor : EYE_COLORS))
+  whereConditions.push(where('eye_color', 'array-contains-any', filterNames.includes('eye_color') ? filterParams.eye_color : EYE_COLORS))
 
-  whereConditions.push(where('pubicHair', 'array-contains-any', filterNames.includes('pubicHair') ? filterParams.pubicHair : PUBIC_HAIR_VALUES))
+  whereConditions.push(where('pubic_hair', 'array-contains-any', filterNames.includes('pubic_hair') ? filterParams.pubic_hair : PUBIC_HAIR_VALUES))
 
-  whereConditions.push(where('breastSize', 'array-contains-any', filterNames.includes('breastSize') ? filterParams.breastSize : BREAST_SIZES))
+  whereConditions.push(where('breast_size', 'array-contains-any', filterNames.includes('breast_size') ? filterParams.breast_size : BREAST_SIZES))
 
-  whereConditions.push(where('breastType', 'array-contains-any', filterNames.includes('breastType') ? filterParams.breastType : BREAST_TYPES))
+  whereConditions.push(where('breast_type', 'array-contains-any', filterNames.includes('breast_type') ? filterParams.breast_type : BREAST_TYPES))
 
   whereConditions.push(where('languages', 'array-contains-any', filterNames.includes('speaks') ? filterParams.speaks : LANGUAGES))
 

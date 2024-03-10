@@ -39,6 +39,8 @@ import {
     sendPasswordResetEmail
   } from '../../firebase/config'
 
+import { supabase } from '../../supabase/config'
+
 const window = Dimensions.get('window')
 
 const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
@@ -148,6 +150,26 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
     }
 
     const onLoginPress = async () => {
+        supabase.auth.getSession().then(async ({ data: { session } }) => {
+           if (session) {
+            supabase.auth.signOut()
+           } else {
+            const { error } = await supabase.auth.signInWithPassword({
+                email: data.email,
+                password: data.password,
+            })
+    
+            console.log('error: ', error)
+            console.log(supabase.auth.getSession().session)
+           }
+          })
+
+        return
+
+        
+
+        return
+
         if (buttonIsLoading) {
             return
         }

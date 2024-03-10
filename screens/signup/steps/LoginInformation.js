@@ -33,6 +33,8 @@ const LoginInformation = forwardRef((props, ref) => {
             return false
         }
 
+        return true
+
         try {
             const result = await fetchSignInMethodsForEmail(getAuth(), data.email)
             if (result.length > 0) {

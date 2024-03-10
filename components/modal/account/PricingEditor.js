@@ -95,7 +95,7 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
         setIsSaving(true)
 
         try {
-            await updateDoc(doc(db, 'users', userId), {...changedPricing, lastModifiedDate: new Date()})
+            await updateDoc(doc(db, 'users', userId), {...changedPricing, last_modified_date: new Date()})
 
             closeModal()
 
@@ -105,7 +105,7 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                 text: 'Pricing was changed successfully.'
             })
 
-            updateRedux({...changedPricing, id: userId, lastModifiedDate: new Date()})
+            updateRedux({...changedPricing, id: userId, last_modified_date: new Date()})
         } catch(e) {
             console.error(e)
             modalToastRef.current.show({

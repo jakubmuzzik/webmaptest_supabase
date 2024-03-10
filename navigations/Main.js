@@ -30,6 +30,8 @@ import Explore from './Explore'
 
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, Outlet, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 
+import { supabase } from '../supabase/config'
+
 const { height: initialHeight } = Dimensions.get('window')
 
 const auth = getAuth()
@@ -116,7 +118,37 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
                 }
             })
 
-        const unsubscribe = onAuthStateChanged(auth, user => {
+
+       
+
+        const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
+            console.log(_event)
+            console.log('sess2: ', session)
+
+            if (!session) {
+                setIsLoggedIn(false)
+            } else {
+                //fetch only on page reloads and when already signed in
+                if (!hasLoadedRef.current) {
+                    //fetchUser()
+                }
+                setIsLoggedIn(true)
+
+                /*if (user.emailVerified && hasLoadedRef.current) {
+                    toastRef.current?.show({
+                        type: 'success',
+                        text: 'Successfully logged in.'
+                    })
+                }*/
+            }
+
+            hasLoadedRef.current = true
+        })
+
+        return () => {
+            unsubscribe()
+        }
+        /*const unsubscribe = onAuthStateChanged(auth, user => {
             if (!user) {
                 setIsLoggedIn(false)
             } else {
@@ -139,7 +171,7 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
 
         return () => {
             unsubscribe()
-        }
+        }*/
     }, [])
 
     /*const ProhibitsAuth = useCallback(({ children }) => {

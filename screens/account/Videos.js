@@ -132,12 +132,12 @@ const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLa
 
         const videos = userData.videos.concat([videoData])
         
-        await updateDoc(doc(db, 'users', userData.id), { videos, lastModifiedDate: new Date() })
+        await updateDoc(doc(db, 'users', userData.id), { videos, last_modified_date: new Date() })
 
         if (userData.establishmentId) {
-            updateLadyInRedux({ videos, id: userData.id, lastModifiedDate: new Date() })
+            updateLadyInRedux({ videos, id: userData.id, last_modified_date: new Date() })
         } else {
-            updateCurrentUserInRedux({ videos, id: userData.id, lastModifiedDate: new Date() })
+            updateCurrentUserInRedux({ videos, id: userData.id, last_modified_date: new Date() })
         }
     }
 

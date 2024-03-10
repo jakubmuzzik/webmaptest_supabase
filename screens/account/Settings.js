@@ -40,7 +40,7 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, updateCurrentUs
     }
 
     const onStatusChangePress = () => {
-        if (currentUser.accountType === 'establishment') {
+        if (currentUser.account_type === 'establishment') {
             return
         }
 
@@ -165,7 +165,7 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, updateCurrentUs
 
             <PasswordEditor visible={passwordEditorVisible} setVisible={setPasswordEditorVisible} toastRef={toastRef} />
             <EmailEditor visible={emailEditorVisible} setVisible={setEmailEditorVisible} toastRef={toastRef} />
-            <DeleteAccount visible={deleteAccountVisible} setVisible={setDeleteAccountVisible} toastRef={toastRef} isEstablishment={currentUser.accountType === 'establishment'} logOut={logOut} />
+            <DeleteAccount visible={deleteAccountVisible} setVisible={setDeleteAccountVisible} toastRef={toastRef} isEstablishment={currentUser.account_type === 'establishment'} logOut={logOut} />
 
             <ConfirmationModal
                 visible={activateConfirmationVisible}

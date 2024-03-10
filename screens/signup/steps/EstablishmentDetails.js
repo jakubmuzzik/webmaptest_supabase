@@ -23,7 +23,7 @@ const EstablishmentDetails = forwardRef((props, ref) => {
 
     const [data, setData] = useState({
         name: '',
-        establishmentType: '',
+        establishment_type: '',
         website: '',
         phone: '',
         viber: false,
@@ -36,7 +36,7 @@ const EstablishmentDetails = forwardRef((props, ref) => {
     const validate = async () => {
         if (
             !data.name
-            || !data.establishmentType
+            || !data.establishment_type
             || !data.phone
             || !data.description
         ) {
@@ -115,10 +115,10 @@ const EstablishmentDetails = forwardRef((props, ref) => {
                         textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                         labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                         placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.establishmentType}
-                        setText={(text) => onValueChange(text, 'establishmentType')}
+                        text={data.establishment_type}
+                        setText={(text) => onValueChange(text, 'establishment_type')}
                         rightIconName='chevron-down'
-                        errorMessage={showErrors && !data.establishmentType ? 'Select the establishment type' : undefined}
+                        errorMessage={showErrors && !data.establishment_type ? 'Select the establishment type' : undefined}
                     />
                 </View>
 

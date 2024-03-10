@@ -97,18 +97,18 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
         }
 
         if (
-            !changedPersonalDetails.dateOfBirth
+            !changedPersonalDetails.date_of_birth
             || !changedPersonalDetails.sexuality
             || !changedPersonalDetails.nationality
             || changedPersonalDetails.languages.length === 0
             || !changedPersonalDetails.height
             || !changedPersonalDetails.weight
-            || !changedPersonalDetails.bodyType
-            || !changedPersonalDetails.pubicHair
-            || !changedPersonalDetails.breastSize
-            || !changedPersonalDetails.breastType
-            || !changedPersonalDetails.hairColor
-            || !changedPersonalDetails.eyeColor
+            || !changedPersonalDetails.body_type
+            || !changedPersonalDetails.pubic_hair
+            || !changedPersonalDetails.breast_size
+            || !changedPersonalDetails.breast_type
+            || !changedPersonalDetails.hair_color
+            || !changedPersonalDetails.eye_color
         ) {
             setShowErrorMessage(true)
             return
@@ -118,7 +118,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
         setShowErrorMessage(false)
 
         try {
-            await updateDoc(doc(db, 'users', userId), {...changedPersonalDetails, lastModifiedDate: new Date()})
+            await updateDoc(doc(db, 'users', userId), {...changedPersonalDetails, last_modified_date: new Date()})
 
             closeModal()
 
@@ -128,7 +128,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                 text: 'Personal Details were changed successfully.'
             })
 
-            updateRedux({...changedPersonalDetails, id: userId, lastModifiedDate: new Date()})
+            updateRedux({...changedPersonalDetails, id: userId, last_modified_date: new Date()})
         } catch(e) {
             console.error(e)
             modalToastRef.current.show({
@@ -142,29 +142,29 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
     }
 
     const getDateOfBirth = useCallback(() => {
-        switch (changedPersonalDetails.dateOfBirth.length) {
+        switch (changedPersonalDetails.date_of_birth.length) {
             case 0:
                 return ''
             case 1:
-                return changedPersonalDetails.dateOfBirth
+                return changedPersonalDetails.date_of_birth
             case 2:
-                return changedPersonalDetails.dateOfBirth //+ '.'
+                return changedPersonalDetails.date_of_birth //+ '.'
             case 3:
-                return changedPersonalDetails.dateOfBirth[0] + changedPersonalDetails.dateOfBirth[1] + '.' + changedPersonalDetails.dateOfBirth[2]
+                return changedPersonalDetails.date_of_birth[0] + changedPersonalDetails.date_of_birth[1] + '.' + changedPersonalDetails.date_of_birth[2]
             case 4:
-                return changedPersonalDetails.dateOfBirth[0] + changedPersonalDetails.dateOfBirth[1] + '.' + changedPersonalDetails.dateOfBirth[2] + changedPersonalDetails.dateOfBirth[3] //+ '.'
+                return changedPersonalDetails.date_of_birth[0] + changedPersonalDetails.date_of_birth[1] + '.' + changedPersonalDetails.date_of_birth[2] + changedPersonalDetails.date_of_birth[3] //+ '.'
             case 5:
-                return changedPersonalDetails.dateOfBirth[0] + changedPersonalDetails.dateOfBirth[1] + '.' + changedPersonalDetails.dateOfBirth[2] + changedPersonalDetails.dateOfBirth[3] + '.' + changedPersonalDetails.dateOfBirth[4]
+                return changedPersonalDetails.date_of_birth[0] + changedPersonalDetails.date_of_birth[1] + '.' + changedPersonalDetails.date_of_birth[2] + changedPersonalDetails.date_of_birth[3] + '.' + changedPersonalDetails.date_of_birth[4]
             case 6:
-                return changedPersonalDetails.dateOfBirth[0] + changedPersonalDetails.dateOfBirth[1] + '.' + changedPersonalDetails.dateOfBirth[2] + changedPersonalDetails.dateOfBirth[3] + '.' + changedPersonalDetails.dateOfBirth[4] + changedPersonalDetails.dateOfBirth[5]
+                return changedPersonalDetails.date_of_birth[0] + changedPersonalDetails.date_of_birth[1] + '.' + changedPersonalDetails.date_of_birth[2] + changedPersonalDetails.date_of_birth[3] + '.' + changedPersonalDetails.date_of_birth[4] + changedPersonalDetails.date_of_birth[5]
             case 7:
-                return changedPersonalDetails.dateOfBirth[0] + changedPersonalDetails.dateOfBirth[1] + '.' + changedPersonalDetails.dateOfBirth[2] + changedPersonalDetails.dateOfBirth[3] + '.' + changedPersonalDetails.dateOfBirth[4] + changedPersonalDetails.dateOfBirth[5] + changedPersonalDetails.dateOfBirth[6]
+                return changedPersonalDetails.date_of_birth[0] + changedPersonalDetails.date_of_birth[1] + '.' + changedPersonalDetails.date_of_birth[2] + changedPersonalDetails.date_of_birth[3] + '.' + changedPersonalDetails.date_of_birth[4] + changedPersonalDetails.date_of_birth[5] + changedPersonalDetails.date_of_birth[6]
             case 8:
-                return changedPersonalDetails.dateOfBirth[0] + changedPersonalDetails.dateOfBirth[1] + '.' + changedPersonalDetails.dateOfBirth[2] + changedPersonalDetails.dateOfBirth[3] + '.' + changedPersonalDetails.dateOfBirth[4] + changedPersonalDetails.dateOfBirth[5] + changedPersonalDetails.dateOfBirth[6] + changedPersonalDetails.dateOfBirth[7]
+                return changedPersonalDetails.date_of_birth[0] + changedPersonalDetails.date_of_birth[1] + '.' + changedPersonalDetails.date_of_birth[2] + changedPersonalDetails.date_of_birth[3] + '.' + changedPersonalDetails.date_of_birth[4] + changedPersonalDetails.date_of_birth[5] + changedPersonalDetails.date_of_birth[6] + changedPersonalDetails.date_of_birth[7]
             default:
-                return changedPersonalDetails.dateOfBirth[0] + changedPersonalDetails.dateOfBirth[1] + '.' + changedPersonalDetails.dateOfBirth[2] + changedPersonalDetails.dateOfBirth[3] + '.' + changedPersonalDetails.dateOfBirth[4] + changedPersonalDetails.dateOfBirth[5] + changedPersonalDetails.dateOfBirth[5] + changedPersonalDetails.dateOfBirth[7]
+                return changedPersonalDetails.date_of_birth[0] + changedPersonalDetails.date_of_birth[1] + '.' + changedPersonalDetails.date_of_birth[2] + changedPersonalDetails.date_of_birth[3] + '.' + changedPersonalDetails.date_of_birth[4] + changedPersonalDetails.date_of_birth[5] + changedPersonalDetails.date_of_birth[5] + changedPersonalDetails.date_of_birth[7]
         }
-    }, [changedPersonalDetails.dateOfBirth])
+    }, [changedPersonalDetails.date_of_birth])
 
     const updateIsChanged = (value, attribute) => {
         setIsChanged(!areValuesEqual(value, personalDetails[attribute]))
@@ -177,8 +177,8 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
             return
         }
 
-        onValueChange(strippedText, 'dateOfBirth')
-        updateIsChanged(strippedText, 'dateOfBirth')
+        onValueChange(strippedText, 'date_of_birth')
+        updateIsChanged(strippedText, 'date_of_birth')
     }
 
     const onMultiPicklistChange = (value, attribute) => {
@@ -254,7 +254,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     text={getDateOfBirth()}
                                     setText={(text) => onBirthdateChange(text)}
-                                    errorMessage={showErrorMessage && !changedPersonalDetails.dateOfBirth ? 'Enter your date of birth' : showErrorMessage && changedPersonalDetails.dateOfBirth.length !== 8 ? 'Enter a date in DD.MM.YYYY format.' : undefined}
+                                    errorMessage={showErrorMessage && !changedPersonalDetails.date_of_birth ? 'Enter your date of birth' : showErrorMessage && changedPersonalDetails.date_of_birth.length !== 8 ? 'Enter a date in DD.MM.YYYY format.' : undefined}
                                 />
                                 <DropdownSelect
                                     containerRef={containerRef}
@@ -364,10 +364,10 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                                     labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                                    text={changedPersonalDetails.bodyType}
-                                    setText={(text) => onValueChange(text, 'bodyType')}
+                                    text={changedPersonalDetails.body_type}
+                                    setText={(text) => onValueChange(text, 'body_type')}
                                     rightIconName='chevron-down'
-                                    errorMessage={showErrorMessage && !changedPersonalDetails.bodyType ? 'Select your body type' : undefined}
+                                    errorMessage={showErrorMessage && !changedPersonalDetails.body_type ? 'Select your body type' : undefined}
                                 />
                                 <DropdownSelect
                                     containerRef={containerRef}
@@ -381,10 +381,10 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                                     labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                                    text={changedPersonalDetails.pubicHair}
-                                    setText={(text) => onValueChange(text, 'pubicHair')}
+                                    text={changedPersonalDetails.pubic_hair}
+                                    setText={(text) => onValueChange(text, 'pubic_hair')}
                                     rightIconName='chevron-down'
-                                    errorMessage={showErrorMessage && !changedPersonalDetails.pubicHair ? 'Select your pubic hair' : undefined}
+                                    errorMessage={showErrorMessage && !changedPersonalDetails.pubic_hair ? 'Select your pubic hair' : undefined}
                                 />
                             </View>
 
@@ -401,10 +401,10 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                                     labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                                    text={changedPersonalDetails.breastSize}
-                                    setText={(text) => onValueChange(text, 'breastSize')}
+                                    text={changedPersonalDetails.breast_size}
+                                    setText={(text) => onValueChange(text, 'breast_size')}
                                     rightIconName='chevron-down'
-                                    errorMessage={showErrorMessage && !changedPersonalDetails.breastSize ? 'Select your breast size' : undefined}
+                                    errorMessage={showErrorMessage && !changedPersonalDetails.breast_size ? 'Select your breast size' : undefined}
                                 />
                                 <DropdownSelect
                                     containerRef={containerRef}
@@ -418,10 +418,10 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                                     labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                                    text={changedPersonalDetails.breastType}
-                                    setText={(text) => onValueChange(text, 'breastType')}
+                                    text={changedPersonalDetails.breast_type}
+                                    setText={(text) => onValueChange(text, 'breast_type')}
                                     rightIconName='chevron-down'
-                                    errorMessage={showErrorMessage && !changedPersonalDetails.breastType ? 'Select your breast type' : undefined}
+                                    errorMessage={showErrorMessage && !changedPersonalDetails.breast_type ? 'Select your breast type' : undefined}
                                 />
                             </View>
 
@@ -438,10 +438,10 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                                     labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                                    text={changedPersonalDetails.hairColor}
-                                    setText={(text) => onValueChange(text, 'hairColor')}
+                                    text={changedPersonalDetails.hair_color}
+                                    setText={(text) => onValueChange(text, 'hair_color')}
                                     rightIconName='chevron-down'
-                                    errorMessage={showErrorMessage && !changedPersonalDetails.hairColor ? 'Select your hair color' : undefined}
+                                    errorMessage={showErrorMessage && !changedPersonalDetails.hair_color ? 'Select your hair color' : undefined}
                                 />
                                 <DropdownSelect
                                     containerRef={containerRef}
@@ -455,10 +455,10 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                                     labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                                    text={changedPersonalDetails.eyeColor}
-                                    setText={(text) => onValueChange(text, 'eyeColor')}
+                                    text={changedPersonalDetails.eye_color}
+                                    setText={(text) => onValueChange(text, 'eye_color')}
                                     rightIconName='chevron-down'
-                                    errorMessage={showErrorMessage && !changedPersonalDetails.eyeColor ? 'Select your eye color' : undefined}
+                                    errorMessage={showErrorMessage && !changedPersonalDetails.eye_color ? 'Select your eye color' : undefined}
                                 />
                             </View>
                             

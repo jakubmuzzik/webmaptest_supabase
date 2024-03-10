@@ -28,7 +28,7 @@ const AccountSettings = ({ currentUser }) => {
         { key: 'videos', title: 'Videos', height: '100%', path: '/account/videos' },
         { key: 'settings', title: 'Settings', height: '100%', path: '/account/settings' },
     ]
-    .filter(route => route.key === 'ladies' ? currentUser.accountType === 'establishment' : true)
+    .filter(route => route.key === 'ladies' ? currentUser.account_type === 'establishment' : true)
     .map((route, index) => ({ ...route, index })))
 
     const navigate = useNavigate()

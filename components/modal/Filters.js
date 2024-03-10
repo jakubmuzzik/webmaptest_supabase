@@ -56,12 +56,12 @@ const DEFAULT_FILTERS = {
     outcall: false,
     incall: false,
     services: [],
-    bodyType: [],
-    hairColor: [],
-    eyeColor: [],
-    pubicHair: [],
-    breastSize: [],
-    breastType: [],
+    body_type: [],
+    hair_color: [],
+    eye_color: [],
+    pubic_hair: [],
+    breast_size: [],
+    breast_type: [],
     speaks: [],
     nationality: [],
     sexualOrientation: []
@@ -297,17 +297,17 @@ const Filters = forwardRef((props, ref) => {
                                 </Text>
 
                                 <ScrollView horizontal contentContainerStyle={{ marginHorizontal: SPACING.small }} showsHorizontalScrollIndicator={false} style={{ marginBottom: SPACING.x_small }}>
-                                    {BODY_TYPES.map((bodyType) => {
-                                        const selected = filters.bodyType.includes(bodyType)
+                                    {BODY_TYPES.map((body_type) => {
+                                        const selected = filters.body_type.includes(body_type)
                                         return (
-                                            <Chip key={bodyType}
+                                            <Chip key={body_type}
                                                 style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
                                                 mode="outlined"
                                                 textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
-                                                onPress={() => onMultiPicklistPress(bodyType, 'bodyType')}
+                                                onPress={() => onMultiPicklistPress(body_type, 'body_type')}
                                                 rippleColor= "rgba(220, 46, 46, .10)"
                                             >
-                                                {bodyType}
+                                                {body_type}
                                             </Chip>
                                         )
                                     })}
@@ -318,17 +318,17 @@ const Filters = forwardRef((props, ref) => {
                                 </Text>
 
                                 <ScrollView horizontal contentContainerStyle={{ marginHorizontal: SPACING.small }} showsHorizontalScrollIndicator={false} style={{ marginBottom: SPACING.x_small }}>
-                                    {HAIR_COLORS.map((hairColor) => {
-                                        const selected = filters.hairColor.includes(hairColor)
+                                    {HAIR_COLORS.map((hair_color) => {
+                                        const selected = filters.hair_color.includes(hair_color)
                                         return (
-                                            <Chip key={hairColor}
+                                            <Chip key={hair_color}
                                                 style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
                                                 mode="outlined"
                                                 textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
-                                                onPress={() => onMultiPicklistPress(hairColor, 'hairColor')}
+                                                onPress={() => onMultiPicklistPress(hair_color, 'hair_color')}
                                                 rippleColor= "rgba(220, 46, 46, .10)"
                                             >
-                                                {hairColor}
+                                                {hair_color}
                                             </Chip>
                                         )
                                     })}
@@ -339,17 +339,17 @@ const Filters = forwardRef((props, ref) => {
                                 </Text>
 
                                 <ScrollView horizontal contentContainerStyle={{ marginHorizontal: SPACING.small }} showsHorizontalScrollIndicator={false} style={{ marginBottom: SPACING.x_small }}>
-                                    {EYE_COLORS.map((eyeColor) => {
-                                        const selected = filters.eyeColor.includes(eyeColor)
+                                    {EYE_COLORS.map((eye_color) => {
+                                        const selected = filters.eye_color.includes(eye_color)
                                         return (
-                                            <Chip key={eyeColor}
+                                            <Chip key={eye_color}
                                                 style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : 'transparent' }}
                                                 mode="outlined"
                                                 textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
-                                                onPress={() => onMultiPicklistPress(eyeColor, 'eyeColor')}
+                                                onPress={() => onMultiPicklistPress(eye_color, 'eye_color')}
                                                 rippleColor= "rgba(220, 46, 46, .10)"
                                             >
-                                                {eyeColor}
+                                                {eye_color}
                                             </Chip>
                                         )
                                     })}
@@ -360,17 +360,17 @@ const Filters = forwardRef((props, ref) => {
                                 </Text>
 
                                 <ScrollView horizontal contentContainerStyle={{ marginHorizontal: SPACING.small }} showsHorizontalScrollIndicator={false} style={{ marginBottom: SPACING.x_small }}>
-                                    {PUBIC_HAIR_VALUES.map((pubicHair) => {
-                                        const selected = filters.pubicHair.includes(pubicHair)
+                                    {PUBIC_HAIR_VALUES.map((pubic_hair) => {
+                                        const selected = filters.pubic_hair.includes(pubic_hair)
                                         return (
-                                            <Chip key={pubicHair}
+                                            <Chip key={pubic_hair}
                                                 style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
                                                 mode="outlined"
                                                 textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
-                                                onPress={() => onMultiPicklistPress(pubicHair, 'pubicHair')}
+                                                onPress={() => onMultiPicklistPress(pubic_hair, 'pubic_hair')}
                                                 rippleColor= "rgba(220, 46, 46, .10)"
                                             >
-                                                {pubicHair}
+                                                {pubic_hair}
                                             </Chip>
                                         )
                                     })}
@@ -381,17 +381,17 @@ const Filters = forwardRef((props, ref) => {
                                 </Text>
 
                                 <ScrollView horizontal contentContainerStyle={{ marginHorizontal: SPACING.small }} showsHorizontalScrollIndicator={false} style={{ marginBottom: SPACING.x_small }}>
-                                    {BREAST_SIZES.map((breastSize) => {
-                                        const selected = filters.breastSize.includes(breastSize)
+                                    {BREAST_SIZES.map((breast_size) => {
+                                        const selected = filters.breast_size.includes(breast_size)
                                         return (
-                                            <Chip key={breastSize}
+                                            <Chip key={breast_size}
                                                 style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
                                                 mode="outlined"
                                                 textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
-                                                onPress={() => onMultiPicklistPress(breastSize, 'breastSize')}
+                                                onPress={() => onMultiPicklistPress(breast_size, 'breast_size')}
                                                 rippleColor= "rgba(220, 46, 46, .10)"
                                             >
-                                                {breastSize}
+                                                {breast_size}
                                             </Chip>
                                         )
                                     })}
@@ -402,17 +402,17 @@ const Filters = forwardRef((props, ref) => {
                                 </Text>
 
                                 <ScrollView horizontal contentContainerStyle={{ marginHorizontal: SPACING.small }} showsHorizontalScrollIndicator={false}>
-                                    {BREAST_TYPES.map((breastType) => {
-                                        const selected = filters.breastType.includes(breastType)
+                                    {BREAST_TYPES.map((breast_type) => {
+                                        const selected = filters.breast_type.includes(breast_type)
                                         return (
-                                            <Chip key={breastType}
+                                            <Chip key={breast_type}
                                                 style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
                                                 mode="outlined"
                                                 textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
-                                                onPress={() => onMultiPicklistPress(breastType, 'breastType')}
+                                                onPress={() => onMultiPicklistPress(breast_type, 'breast_type')}
                                                 rippleColor= "rgba(220, 46, 46, .10)"
                                             >
-                                                {breastType}
+                                                {breast_type}
                                             </Chip>
                                         )
                                     })}

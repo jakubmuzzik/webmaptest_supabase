@@ -142,12 +142,12 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
 
         currentImages.push(imageData)
         
-        await updateDoc(doc(db, 'users', userData.id), { images: currentImages, lastModifiedDate: new Date() })
+        await updateDoc(doc(db, 'users', userData.id), { images: currentImages, last_modified_date: new Date() })
 
         if (userData.establishmentId) {
-            updateLadyInRedux({ images: currentImages, id: userData.id, lastModifiedDate: new Date() })
+            updateLadyInRedux({ images: currentImages, id: userData.id, last_modified_date: new Date() })
         } else {
-            updateCurrentUserInRedux({ images: currentImages, id: userData.id, lastModifiedDate: new Date() })
+            updateCurrentUserInRedux({ images: currentImages, id: userData.id, last_modified_date: new Date() })
         }
     }
 
@@ -197,12 +197,12 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
         await deleteObject(imageRef)
 
         const newImages = userData.images.filter(image => image.id !== imageId)
-        await updateDoc(doc(db, 'users', userData.id), { images: newImages, lastModifiedDate: new Date() })
+        await updateDoc(doc(db, 'users', userData.id), { images: newImages, last_modified_date: new Date() })
 
         if (userData.establishmentId) {
-            updateLadyInRedux({ images: newImages, id: userData.id, lastModifiedDate: new Date() })
+            updateLadyInRedux({ images: newImages, id: userData.id, last_modified_date: new Date() })
         } else {
-            updateCurrentUserInRedux({ images: newImages, id: userData.id, lastModifiedDate: new Date() })
+            updateCurrentUserInRedux({ images: newImages, id: userData.id, last_modified_date: new Date() })
         }
 
         toastRef.current.show({
@@ -218,7 +218,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
 
     //ALL ACTIVE PHOTOS
     const hasAllCoverActivePhotos = () => {
-        for (let i=0; i< (userData.accountType === 'establishment' ? 1 : 5); i++) {
+        for (let i=0; i< (userData.account_type === 'establishment' ? 1 : 5); i++) {
             if (!data.active[i]) {
                 return false
             }
@@ -229,7 +229,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
 
     //ALL ACTIVE + IN REVIEW PHOTOS
     const hasAllCoverPhotos = () => {
-        if (userData.accountType === 'establishment') {
+        if (userData.account_type === 'establishment') {
             const coverImage = userData.images.find(image => image.index === 0 && image.status === ACTIVE || image.status === IN_REVIEW)
             return !!coverImage
         } else {
@@ -505,9 +505,9 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
     const renderActive = () => {
         const photos = (
             (userData.status === ACTIVE || userData.status === INACTIVE)
-                ? data.active.slice(0, userData.accountType === 'establishment' ? 1 : 5) 
+                ? data.active.slice(0, userData.account_type === 'establishment' ? 1 : 5) 
                 //For REJECTED Concat active and in review -> user is uploading missing cover images one by one
-                : data.active.slice(0, userData.accountType === 'establishment' ? 1 : 5).concat(data.inReview.slice(0, userData.accountType === 'establishment' ? 1 : 5))
+                : data.active.slice(0, userData.account_type === 'establishment' ? 1 : 5).concat(data.inReview.slice(0, userData.account_type === 'establishment' ? 1 : 5))
         ).reduce((out, current) => {
             out[current.index] = current
 
@@ -548,9 +548,9 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
                         </Text>
                     </View>
                 </>}
-                {userData.accountType === 'establishment' && renderCoverPhoto(photos[0])}
-                {userData.accountType === 'lady' && renderPhotosGrid(photos)}
-                {renderAdditionalPhotos(data.active.slice(userData.accountType === 'establishment' ? 1 : 5), activeImageActions)}
+                {userData.account_type === 'establishment' && renderCoverPhoto(photos[0])}
+                {userData.account_type === 'lady' && renderPhotosGrid(photos)}
+                {renderAdditionalPhotos(data.active.slice(userData.account_type === 'establishment' ? 1 : 5), activeImageActions)}
             </View>
         )
     }

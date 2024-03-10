@@ -21,6 +21,7 @@ import EstablishmentRegistrationCompleted from './steps/EstablishmentRegistratio
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, setDoc, doc, db, ref, uploadBytes, storage, getDownloadURL, runTransaction } from '../../firebase/config'
+import { supabase } from '../../supabase/config'
 
 const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
     const [searchParams] = useSearchParams()
@@ -102,7 +103,7 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
 
         //upload user assets
         try {
-            await uploadUserAssets(data)
+            //await uploadUserAssets(data)
         } catch(e) {
             console.error(e)
             toastRef.current.show({
@@ -126,6 +127,54 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
         routes.slice(0, routes.length - 1).forEach(route => data = { ...data, ...route.ref.current.data })
         data.status = IN_REVIEW
 
+        const { data: { user }, error: signUpError } = await supabase.auth.signUp({
+            email: data.email,
+            password: data.password,
+        })
+        
+        if (signUpError) {
+            throw new Error(signUpError)
+        }
+
+        delete data.password
+
+        console.log('registered user: ', user)
+
+        data = {
+            ...data,
+            id: user.id,
+            name_lowercase: data.name.toLowerCase(),
+            created_date: new Date(),
+            account_type: 'establishment'
+        }
+
+        //extract assets before uploading
+        const images = data.images
+        const videos = data.videos
+        data.images = []
+        data.videos = []
+
+        const { error: insertUserError } = await supabase
+            .from('users')
+            .insert(data)
+
+        if (insertUserError) {
+            //TODO - delete user
+            throw new Error(insertUserError)
+        }
+
+        //put assets back for further processing
+        data.images = images
+        data.videos = videos
+
+        return data
+    }
+
+    const uploadUserData2 = async () => {
+        let data = {}
+        routes.slice(0, routes.length - 1).forEach(route => data = { ...data, ...route.ref.current.data })
+        data.status = IN_REVIEW
+
         const response = await createUserWithEmailAndPassword(getAuth(), data.email, data.password)
 
         delete data.password
@@ -135,9 +184,9 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
         data = {
             ...data,
             id: getAuth().currentUser.uid,
-            nameLowerCase: data.name.toLowerCase(),
-            createdDate: new Date(),
-            accountType: 'establishment'
+            name_lowercase: data.name.toLowerCase(),
+            created_date: new Date(),
+            account_type: 'establishment'
         }
 
         //extract assets before uploading
@@ -170,6 +219,33 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
     }
 
     const uploadUserAssets = async (data) => {
+        let urls = await Promise.all([
+            ...data.images.map(image => uploadAssetToFirestore(image.image, 'photos/' + data.id + '/' + image.id)),
+            ...data.videos.map(video => uploadAssetToFirestore(video.video, 'videos/' + data.id + '/' + video.id + '/video')),
+            ...data.videos.map(video => uploadAssetToFirestore(video.thumbnail, 'videos/' + data.id + '/' + video.id + '/thumbnail')),
+        ])
+
+        const imageURLs = urls.splice(0, data.images.length)
+        const videoURLs = urls.splice(0, data.videos.length)
+        const thumbanilURLs = urls.splice(0, data.videos.length)
+
+        data.images.forEach((image, index) => {
+            delete image.image
+            image.downloadUrl = imageURLs[index]
+        })
+
+        data.videos.forEach((video, index) => {
+            delete video.video
+            delete video.thumbnail
+
+            video.downloadUrl = videoURLs[index]
+            video.thumbnailDownloadUrl = thumbanilURLs[index]
+        })
+
+        await setDoc(doc(db, 'users', data.id), data)
+    }
+
+    const uploadUserAssets2 = async (data) => {
         let urls = await Promise.all([
             ...data.images.map(image => uploadAssetToFirestore(image.image, 'photos/' + data.id + '/' + image.id)),
             ...data.videos.map(video => uploadAssetToFirestore(video.video, 'videos/' + data.id + '/' + video.id + '/video')),

@@ -97,8 +97,8 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
 
         setResubmitting(true)
         try {
-            await updateDoc(doc(db, 'users', ladyData.id), { status: IN_REVIEW, lastSubmittedDate: new Date() })
-            updateLadyInRedux({ status: IN_REVIEW, id: ladyData.id, lastSubmittedDate: new Date() })
+            await updateDoc(doc(db, 'users', ladyData.id), { status: IN_REVIEW, last_submitted_date: new Date() })
+            updateLadyInRedux({ status: IN_REVIEW, id: ladyData.id, last_submitted_date: new Date() })
 
             toastRef.current.show({
                 type: 'success',

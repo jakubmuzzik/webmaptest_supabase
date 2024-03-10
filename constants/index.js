@@ -130,7 +130,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/CATEGORY1.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -140,7 +140,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/CATEGORY1.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -150,7 +150,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/CATEGORY1.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -160,7 +160,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/CATEGORY1.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -170,7 +170,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -180,7 +180,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -190,7 +190,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -200,7 +200,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -210,7 +210,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -220,7 +220,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -230,7 +230,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -240,7 +240,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -250,7 +250,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -260,7 +260,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -270,7 +270,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -280,7 +280,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -290,7 +290,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -300,7 +300,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -310,7 +310,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -320,7 +320,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -330,7 +330,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -340,7 +340,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -350,7 +350,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -360,7 +360,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -370,7 +370,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -380,7 +380,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -390,7 +390,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -400,7 +400,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -410,7 +410,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -420,7 +420,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -430,7 +430,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -440,7 +440,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
     {
@@ -450,7 +450,7 @@ export const MOCK_DATA = [
         images: [require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png'),require('../assets/dummy_photo.png')],
         text1: 'Prague',
         text2: 'from 2000 CZK/hour',
-        dateOfBirth: '25071996',
+        date_of_birth: '25071996',
         address: {city: 'Praha'}
     },
 

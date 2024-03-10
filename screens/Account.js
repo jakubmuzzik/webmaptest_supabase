@@ -79,7 +79,7 @@ const Account = ({ navigation, route, currentUser={}, toastRef, updateCurrentUse
                 location.pathname.includes('add-lady') 
                 || location.pathname.includes('edit-lady')
             )
-            && currentUser.accountType !== 'establishment'
+            && currentUser.account_type !== 'establishment'
         ) {
             navigate({
                 pathname: '/account',
@@ -116,7 +116,7 @@ const Account = ({ navigation, route, currentUser={}, toastRef, updateCurrentUse
     }
 
     const hasAllCoverPhotos = () => {
-        if (currentUser.accountType === 'establishment') {
+        if (currentUser.account_type === 'establishment') {
             const coverImage = currentUser.images.find(image => image.index === 0 && image.status === ACTIVE || image.status === IN_REVIEW)
             return coverImage
         } else {
@@ -142,8 +142,8 @@ const Account = ({ navigation, route, currentUser={}, toastRef, updateCurrentUse
 
         setResubmitting(true)
         try {
-            await updateDoc(doc(db, 'users', getAuth().currentUser.uid), { status: IN_REVIEW, lastSubmittedDate: new Date() })
-            updateCurrentUserInRedux({ status: IN_REVIEW, id: getAuth().currentUser.uid, lastSubmittedDate: new Date() })
+            await updateDoc(doc(db, 'users', getAuth().currentUser.uid), { status: IN_REVIEW, last_submitted_date: new Date() })
+            updateCurrentUserInRedux({ status: IN_REVIEW, id: getAuth().currentUser.uid, last_submitted_date: new Date() })
 
             toastRef.current.show({
                 type: 'success',

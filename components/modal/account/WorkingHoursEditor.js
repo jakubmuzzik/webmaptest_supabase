@@ -33,10 +33,10 @@ import { Button, Switch, HelperText } from 'react-native-paper'
 
 const window = Dimensions.get('window')
 
-const WorkingHoursEditor = ({ visible, setVisible, workingHours, toastRef, userId, updateRedux }) => {
+const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, userId, updateRedux }) => {
     const [isSaving, setIsSaving] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
-    const [changedWorkingHours, setChangedWorkingHours] = useState(workingHours)
+    const [changedWorkingHours, setChangedWorkingHours] = useState(working_hours)
     const [isChanged, setIsChanged] = useState(false)
 
     const modalToastRef = useRef()
@@ -46,7 +46,7 @@ const WorkingHoursEditor = ({ visible, setVisible, workingHours, toastRef, userI
             translateY.value = withTiming(0, {
                 useNativeDriver: true
             })
-            setChangedWorkingHours(workingHours)
+            setChangedWorkingHours(working_hours)
         } else {
             translateY.value = withTiming(window.height, {
                 useNativeDriver: true
@@ -150,7 +150,7 @@ const WorkingHoursEditor = ({ visible, setVisible, workingHours, toastRef, userI
         setShowErrorMessage(false)
 
         try {
-            await updateDoc(doc(db, 'users', userId), {workingHours: wh, lastModifiedDate: new Date()})
+            await updateDoc(doc(db, 'users', userId), {working_hours: wh, last_modified_date: new Date()})
 
             closeModal()
 
@@ -160,7 +160,7 @@ const WorkingHoursEditor = ({ visible, setVisible, workingHours, toastRef, userI
                 text: 'Working Hours were changed successfully.'
             })
 
-            updateRedux({workingHours: wh, id: userId, lastModifiedDate: new Date()})
+            updateRedux({working_hours: wh, id: userId, last_modified_date: new Date()})
         } catch(e) {
             console.error(e)
             modalToastRef.current.show({
@@ -182,7 +182,7 @@ const WorkingHoursEditor = ({ visible, setVisible, workingHours, toastRef, userI
                 data[index].until = ''
             }
 
-            setIsChanged(!areValuesEqual(data, workingHours))
+            setIsChanged(!areValuesEqual(data, working_hours))
             return data
         })
     }

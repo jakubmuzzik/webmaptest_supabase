@@ -39,17 +39,17 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
     const personalDetails = useMemo(() => ({
         nationality: userData.nationality,
         languages: userData.languages,
-        hairColor: userData.hairColor,
-        eyeColor: userData.eyeColor,
-        breastSize: userData.breastSize,
-        breastType: userData.breastType,
-        bodyType: userData.bodyType,
-        pubicHair: userData.pubicHair,
+        hair_color: userData.hair_color,
+        eye_color: userData.eye_color,
+        breast_size: userData.breast_size,
+        breast_type: userData.breast_type,
+        body_type: userData.body_type,
+        pubic_hair: userData.pubic_hair,
         weight: userData.weight,
         height: userData.height,
-        dateOfBirth: userData.dateOfBirth,
+        date_of_birth: userData.date_of_birth,
         sexuality: userData.sexuality
-    }), [userData.nationality, userData.languages, userData.hairColor, userData.eyeColor, userData.breastSize, userData.breastType, userData.bodyType, userData.pubicHair, userData.weight, userData.height, userData.dateOfBirth, userData.sexuality])
+    }), [userData.nationality, userData.languages, userData.hair_color, userData.eye_color, userData.breast_size, userData.breast_type, userData.body_type, userData.pubic_hair, userData.weight, userData.height, userData.date_of_birth, userData.sexuality])
 
     const pricing = useMemo(() => ({
         prices: userData.prices,
@@ -60,8 +60,8 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
 
     const address = useMemo(() => ({
         ...userData.address,
-        hiddenAddress: userData.hiddenAddress
-    }), [userData.address, userData.hiddenAddress])
+        hidden_address: userData.hidden_address
+    }), [userData.address, userData.hidden_address])
 
     const contactInformation = useMemo(() => ({
         phone: userData.phone,
@@ -86,7 +86,7 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
     const mapRef = useRef()
 
     useEffect(() => {
-        if (!userData.hiddenAddress && mapRef.current) {
+        if (!userData.hidden_address && mapRef.current) {
             mapRef.current.animateCamera({
                 center: {
                     latitude: userData.address.lat,
@@ -95,7 +95,7 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
                 zoom: 13,
             }, 500)
         }
-    }, [userData.address, userData.hiddenAddress, mapRef.current])
+    }, [userData.address, userData.hidden_address, mapRef.current])
 
     const onTextLayout = (e) => {
         const element = e.nativeEvent.target
@@ -192,7 +192,7 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
                     </View>}
                 </View>
             </View>
-            {userData.accountType === 'establishment' && <View style={styles.row}>
+            {userData.account_type === 'establishment' && <View style={styles.row}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <MaterialCommunityIcons name="web" size={FONT_SIZES.medium} color="white" style={{ marginRight: SPACING.xxx_small }} />
                     <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#FFF', marginRight: SPACING.x_small }}>
@@ -261,7 +261,7 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Age</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{calculateAgeFromDate(userData.dateOfBirth)}</Text>
+                        <Text style={styles.attributeValue}>{calculateAgeFromDate(userData.date_of_birth)}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Sexual orientation</Text>
@@ -293,32 +293,32 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Body type</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{userData.bodyType}</Text>
+                        <Text style={styles.attributeValue}>{userData.body_type}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Pubic hair</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{userData.pubicHair}</Text>
+                        <Text style={styles.attributeValue}>{userData.pubic_hair}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Breast size</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{userData.breastSize}</Text>
+                        <Text style={styles.attributeValue}>{userData.breast_size}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Breast type</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{userData.breastType}</Text>
+                        <Text style={styles.attributeValue}>{userData.breast_type}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Hair color</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{userData.hairColor}</Text>
+                        <Text style={styles.attributeValue}>{userData.hair_color}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.attributeName} numberOfLines={1}>Eye color</Text>
                         <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{userData.eyeColor}</Text>
+                        <Text style={styles.attributeValue}>{userData.eye_color}</Text>
                     </View>
                 </View>
             </View>
@@ -462,25 +462,25 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
                         <Text style={styles.tableHeaderText}>Availability</Text>
                     </View>
                     <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                        <Text style={[styles.tableHeaderValue, { color: userData.workingHours[0].enabled ? COLORS.white : COLORS.greyText }]}>{userData.workingHours[0].enabled ? (userData.workingHours[0].from + ' - ' + userData.workingHours[0].until) : 'Not available'}</Text>
+                        <Text style={[styles.tableHeaderValue, { color: userData.working_hours[0].enabled ? COLORS.white : COLORS.greyText }]}>{userData.working_hours[0].enabled ? (userData.working_hours[0].from + ' - ' + userData.working_hours[0].until) : 'Not available'}</Text>
                     </HoverableView>
                     <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                        <Text style={[styles.tableHeaderValue, { color: userData.workingHours[1].enabled ? COLORS.white : COLORS.greyText }]}>{userData.workingHours[1].enabled ? (userData.workingHours[1].from + ' - ' + userData.workingHours[1].until) : 'Not available'}</Text>
+                        <Text style={[styles.tableHeaderValue, { color: userData.working_hours[1].enabled ? COLORS.white : COLORS.greyText }]}>{userData.working_hours[1].enabled ? (userData.working_hours[1].from + ' - ' + userData.working_hours[1].until) : 'Not available'}</Text>
                     </HoverableView>
                     <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                        <Text style={[styles.tableHeaderValue, { color: userData.workingHours[2].enabled ? COLORS.white : COLORS.greyText }]}>{userData.workingHours[2].enabled ? (userData.workingHours[2].from + ' - ' + userData.workingHours[2].until) : 'Not available'}</Text>
+                        <Text style={[styles.tableHeaderValue, { color: userData.working_hours[2].enabled ? COLORS.white : COLORS.greyText }]}>{userData.working_hours[2].enabled ? (userData.working_hours[2].from + ' - ' + userData.working_hours[2].until) : 'Not available'}</Text>
                     </HoverableView>
                     <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                        <Text style={[styles.tableHeaderValue, { color: userData.workingHours[3].enabled ? COLORS.white : COLORS.greyText }]}>{userData.workingHours[3].enabled ? (userData.workingHours[3].from + ' - ' + userData.workingHours[3].until) : 'Not available'}</Text>
+                        <Text style={[styles.tableHeaderValue, { color: userData.working_hours[3].enabled ? COLORS.white : COLORS.greyText }]}>{userData.working_hours[3].enabled ? (userData.working_hours[3].from + ' - ' + userData.working_hours[3].until) : 'Not available'}</Text>
                     </HoverableView>
                     <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                        <Text style={[styles.tableHeaderValue, { color: userData.workingHours[4].enabled ? COLORS.white : COLORS.greyText }]}>{userData.workingHours[4].enabled ? (userData.workingHours[4].from + ' - ' + userData.workingHours[4].until) : 'Not available'}</Text>
+                        <Text style={[styles.tableHeaderValue, { color: userData.working_hours[4].enabled ? COLORS.white : COLORS.greyText }]}>{userData.working_hours[4].enabled ? (userData.working_hours[4].from + ' - ' + userData.working_hours[4].until) : 'Not available'}</Text>
                     </HoverableView>
                     <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                        <Text style={[styles.tableHeaderValue, { color: userData.workingHours[5].enabled ? COLORS.white : COLORS.greyText }]}>{userData.workingHours[5].enabled ? (userData.workingHours[5].from + ' - ' + userData.workingHours[5].until) : 'Not available'}</Text>
+                        <Text style={[styles.tableHeaderValue, { color: userData.working_hours[5].enabled ? COLORS.white : COLORS.greyText }]}>{userData.working_hours[5].enabled ? (userData.working_hours[5].from + ' - ' + userData.working_hours[5].until) : 'Not available'}</Text>
                     </HoverableView>
                     <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                        <Text style={[styles.tableHeaderValue, { color: userData.workingHours[6].enabled ? COLORS.white : COLORS.greyText }]}>{userData.workingHours[6].enabled ? (userData.workingHours[6].from + ' - ' + userData.workingHours[6].until) : 'Not available'}</Text>
+                        <Text style={[styles.tableHeaderValue, { color: userData.working_hours[6].enabled ? COLORS.white : COLORS.greyText }]}>{userData.working_hours[6].enabled ? (userData.working_hours[6].from + ' - ' + userData.working_hours[6].until) : 'Not available'}</Text>
                     </HoverableView>
                 </View>
             </View>
@@ -507,11 +507,11 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
             <View style={{ flexDirection: 'row', alignItems: 'center', flexShrink: 1, marginBottom: SPACING.x_small }}>
                 <MaterialCommunityIcons name="map-marker" size={20} color={COLORS.white} style={{ marginRight: 3 }} />
                 <Text numberOfLines={1} style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: userData.address ? COLORS.white : COLORS.error }}>
-                    {userData.address ? (userData.hiddenAddress ? userData.address.city : userData.address.title) : 'Enter your address'}
+                    {userData.address ? (userData.hidden_address ? userData.address.city : userData.address.title) : 'Enter your address'}
                 </Text>
             </View>
 
-            {!userData.hiddenAddress && <View style={{ width: '100%', height: 300, borderRadius: 5, overflow: 'hidden' }}>
+            {!userData.hidden_address && <View style={{ width: '100%', height: 300, borderRadius: 5, overflow: 'hidden' }}>
                 <MapView
                     ref={mapRef}
                     googleMapsApiKey="AIzaSyCA1Gw6tQbTOm9ME6Ru0nulUNFAOotVY3s"
@@ -550,7 +550,7 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
                 </MapView>
             </View>}
         </View>
-    ), [userData.name, userData.address, userData.hiddenAddress])
+    ), [userData.name, userData.address, userData.hidden_address])
 
     return (
         <View onLayout={(event) => setTabHeight(event.nativeEvent.layout.height)}>
@@ -558,23 +558,23 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
 
             {renderAbout()}
 
-            {userData.accountType === 'lady' && renderPersonalDetails()}
+            {userData.account_type === 'lady' && renderPersonalDetails()}
 
-            {userData.accountType === 'lady' && renderPricing()}
+            {userData.account_type === 'lady' && renderPricing()}
 
-            {userData.accountType === 'lady' && renderServices()}
+            {userData.account_type === 'lady' && renderServices()}
 
             {renderWorkingHours()}
 
             {renderAddress()}
 
             <AboutEditor visible={aboutEditorVisible} setVisible={setAboutEditorVisible} about={userData.description} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />
-            {userData.accountType === 'lady' && <PersonalDetailsEditor visible={personalDetailsEditorVisible} setVisible={setPersonalDetailsEditorVisible} personalDetails={personalDetails} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            {userData.accountType === 'lady' && <PricingEditor visible={pricingEditorVisible} setVisible={setPricingEditorVisible} pricing={pricing} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            {userData.accountType === 'lady' && <ServicesEditor visible={servicesEditorVisible} setVisible={setServicesEditorVisible} services={userData.services} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            <WorkingHoursEditor visible={workingHoursEditorVisible} setVisible={setWorkingHoursEditorVisible} workingHours={userData.workingHours} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />
-            <AddressEditor visible={addressEditorVisible} setVisible={setAddressEditorVisible} address={address} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} isEstablishment={userData.accountType === 'establishment'}/>
-            <ContactInformationEditor visible={contactInformationEditorVisible} setVisible={setContactInformationEditorVisible} contactInformation={contactInformation} toastRef={toastRef} userId={userData.id} isEstablishment={userData.accountType === 'establishment'} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />
+            {userData.account_type === 'lady' && <PersonalDetailsEditor visible={personalDetailsEditorVisible} setVisible={setPersonalDetailsEditorVisible} personalDetails={personalDetails} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />}
+            {userData.account_type === 'lady' && <PricingEditor visible={pricingEditorVisible} setVisible={setPricingEditorVisible} pricing={pricing} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />}
+            {userData.account_type === 'lady' && <ServicesEditor visible={servicesEditorVisible} setVisible={setServicesEditorVisible} services={userData.services} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />}
+            <WorkingHoursEditor visible={workingHoursEditorVisible} setVisible={setWorkingHoursEditorVisible} working_hours={userData.working_hours} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />
+            <AddressEditor visible={addressEditorVisible} setVisible={setAddressEditorVisible} address={address} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} isEstablishment={userData.account_type === 'establishment'}/>
+            <ContactInformationEditor visible={contactInformationEditorVisible} setVisible={setContactInformationEditorVisible} contactInformation={contactInformation} toastRef={toastRef} userId={userData.id} isEstablishment={userData.account_type === 'establishment'} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />
         </View>
     )
 }

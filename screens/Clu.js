@@ -108,13 +108,13 @@ const Clu = ({ updateEstablishmentsCount, resetAllPaginationData, updateEstablis
     }
 
     const getOrdering = () => {
-        return orderBy("createdDate")
+        return orderBy("created_date")
     }
 
     const loadMockDataForPage = () => {
         updateEstablishmentsData(new Array(MAX_ITEMS_PER_PAGE).fill({
             name: 'llll',
-            dateOfBirth: '25071996',
+            date_of_birth: '25071996',
             address: {city: 'Praha'},
             images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
         }, 0), params.page)
@@ -147,7 +147,7 @@ const Clu = ({ updateEstablishmentsCount, resetAllPaginationData, updateEstablis
                 //query all data from the beginning till the last one
                 const q = query(
                     collection(db, "users"), 
-                    where('accountType', '==', 'establishment'), 
+                    where('account_type', '==', 'establishment'), 
                     where('status', '==', ACTIVE),
                     ...getWhereConditions(),
                     getOrdering(),
@@ -181,7 +181,7 @@ const Clu = ({ updateEstablishmentsCount, resetAllPaginationData, updateEstablis
             const snapshot = await getDocs(
                 query(
                     collection(db, "users"), 
-                    where('accountType', '==', 'establishment'), 
+                    where('account_type', '==', 'establishment'), 
                     where('status', '==', ACTIVE),
                     ...getWhereConditions(),
                     getOrdering(),
@@ -215,7 +215,7 @@ const Clu = ({ updateEstablishmentsCount, resetAllPaginationData, updateEstablis
             const snapshot = await getDocs(
                 query(
                     collection(db, "users"), 
-                    where('accountType', '==', 'establishment'), 
+                    where('account_type', '==', 'establishment'), 
                     where('status', '==', ACTIVE),
                     ...getWhereConditions(),
                     getOrdering(),
@@ -248,7 +248,7 @@ const Clu = ({ updateEstablishmentsCount, resetAllPaginationData, updateEstablis
             const snapshot = await getCountFromServer(
                 query(
                     collection(db, "users"), 
-                    where('accountType', '==', 'establishment'), 
+                    where('account_type', '==', 'establishment'), 
                     where('status', '==', ACTIVE),
                     ...getWhereConditions()
                 )
