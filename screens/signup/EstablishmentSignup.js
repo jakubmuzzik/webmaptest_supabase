@@ -103,7 +103,7 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
 
         //upload user assets
         try {
-            //await uploadUserAssets(data)
+            await uploadUserAssets(data)
         } catch(e) {
             console.error(e)
             toastRef.current.show({
@@ -159,7 +159,7 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
             .insert(data)
 
         if (insertUserError) {
-            //TODO - delete user
+            //TODO - delete user ?
             throw new Error(insertUserError)
         }
 
@@ -170,79 +170,38 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
         return data
     }
 
-    const uploadUserData2 = async () => {
-        let data = {}
-        routes.slice(0, routes.length - 1).forEach(route => data = { ...data, ...route.ref.current.data })
-        data.status = IN_REVIEW
-
-        const response = await createUserWithEmailAndPassword(getAuth(), data.email, data.password)
-
-        delete data.password
-
-        await sendEmailVerification(response.user)
-
-        data = {
-            ...data,
-            id: getAuth().currentUser.uid,
-            name_lowercase: data.name.toLowerCase(),
-            created_date: new Date(),
-            account_type: 'establishment'
-        }
-
-        //extract assets before uploading
-        const images = data.images
-        const videos = data.videos
-        data.images = []
-        data.videos = []
-
-        await setDoc(doc(db, 'users', data.id), data)
-
-        const infoRef = doc(db, 'info', 'webwide')
-
-        await runTransaction(db, async (transaction) => {
-            const infoDoc = await transaction.get(infoRef)
-
-            const cities = infoDoc.data().establishmentCities
-
-            if (cities.includes(data.address.city)) {
-                return
-            }
-
-            transaction.update(infoRef, { establishmentCities: cities.concat([data.address.city]) })
-        })
-
-        //put assets back for further processing
-        data.images = images
-        data.videos = videos
-
-        return data
-    }
-
     const uploadUserAssets = async (data) => {
-        let urls = await Promise.all([
-            ...data.images.map(image => uploadAssetToFirestore(image.image, 'photos/' + data.id + '/' + image.id)),
-            ...data.videos.map(video => uploadAssetToFirestore(video.video, 'videos/' + data.id + '/' + video.id + '/video')),
-            ...data.videos.map(video => uploadAssetToFirestore(video.thumbnail, 'videos/' + data.id + '/' + video.id + '/thumbnail')),
+        await Promise.all([
+            ...data.images.map(image => uploadAssetToFirestore(image.image, 'photos', 'photos/' + data.id + '/' + image.id)),
+            ...data.videos.map(video => uploadAssetToFirestore(video.video, 'videos', 'videos/' + data.id + '/' + video.id + '/video')),
+            ...data.videos.map(video => uploadAssetToFirestore(video.thumbnail, 'videos', 'videos/' + data.id + '/' + video.id + '/thumbnail')),
         ])
 
-        const imageURLs = urls.splice(0, data.images.length)
-        const videoURLs = urls.splice(0, data.videos.length)
-        const thumbanilURLs = urls.splice(0, data.videos.length)
+        //const imageURLs = urls.splice(0, data.images.length)
+        //const videoURLs = urls.splice(0, data.videos.length)
+        //const thumbanilURLs = urls.splice(0, data.videos.length)
 
         data.images.forEach((image, index) => {
             delete image.image
-            image.downloadUrl = imageURLs[index]
+            //image.downloadUrl = imageURLs[index]
         })
 
         data.videos.forEach((video, index) => {
             delete video.video
             delete video.thumbnail
 
-            video.downloadUrl = videoURLs[index]
-            video.thumbnailDownloadUrl = thumbanilURLs[index]
+            //video.downloadUrl = videoURLs[index]
+            //video.thumbnailDownloadUrl = thumbanilURLs[index]
         })
 
-        await setDoc(doc(db, 'users', data.id), data)
+        const { error: updateError } = await supabase
+            .from('users')
+            .update(data)
+            .eq('id', data.id)
+        
+        if (updateError) {
+            throw new Error(updateError)
+        }
     }
 
     const uploadUserAssets2 = async (data) => {
@@ -288,17 +247,16 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
         await setDoc(doc(db, 'users', data.id), data)
     }
 
-    const uploadAssetToFirestore = async (assetUri, assetPath) => {
-        const imageRef = ref(storage, assetPath)
-    
-        const response = await fetch(assetUri)
-        const blob = await response.blob()
+    const uploadAssetToFirestore = async (asset, from, assetPath) => {
+        const { data, error } = await supabase
+            .storage
+            .from(from)
+            .upload(assetPath, asset, {
+                cacheControl: '3600',
+                upsert: false
+            })
 
-        const result = await uploadBytes(imageRef, blob)
-
-        const downloadURL = await getDownloadURL(result.ref)
-    
-        return downloadURL
+        console.log(error)
     }
 
     const renderScene = ({ route }) => {
