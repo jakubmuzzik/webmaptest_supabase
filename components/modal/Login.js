@@ -25,6 +25,7 @@ import { Button } from 'react-native-paper'
 import { TabView } from 'react-native-tab-view'
 import { fetchUser } from '../../redux/actions'
 import { connect } from 'react-redux'
+import * as Linking from 'expo-linking'
 
 import Toast from '../Toast'
 
@@ -49,7 +50,6 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
     const location = useLocation()
   
     let from = location.state?.from?.pathname || "/account"
-    from = from === '/verify-email' ? '/account' : from
 
     const params = useMemo(() => ({
         language: getParam(SUPPORTED_LANGUAGES, searchParams.get('language'), '')
@@ -150,26 +150,6 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
     }
 
     const onLoginPress = async () => {
-        supabase.auth.getSession().then(async ({ data: { session } }) => {
-           if (session) {
-            supabase.auth.signOut()
-           } else {
-            const { error } = await supabase.auth.signInWithPassword({
-                email: data.email,
-                password: data.password,
-            })
-    
-            console.log('error: ', error)
-            console.log(supabase.auth.getSession().session)
-           }
-          })
-
-        return
-
-        
-
-        return
-
         if (buttonIsLoading) {
             return
         }
@@ -184,11 +164,27 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
         const { email, password } = data
 
         try {
-            await signInWithEmailAndPassword(getAuth(), email, password)
-            updateDoc(doc(db, 'users', getAuth().currentUser.uid), {
-                email
+            const { error: signInError, data: sessionData } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
             })
-            fetchUser()
+
+            if (signInError) {
+                throw signInError
+            }
+
+            console.log(sessionData.user.email)
+
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({ email })
+                .eq('id', sessionData.user.id)
+
+            if (updateError) {
+                throw updateError
+            }
+
+            fetchUser(sessionData.user)
 
             closeModal()
 
@@ -199,8 +195,16 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
             navigate(from, {
                 replace: true
             })
+
+            if (sessionData.user.email_confirmed_at) {
+                toastRef.current?.show({
+                    type: 'success',
+                    text: 'Successfully logged in.'
+                })
+            }
         } catch(error) { 
-            if (error.code?.includes('auth')) {
+            console.error(error)
+            if (error.message?.includes('Invalid login credentials')) {
                 modalToastRef.current.show({
                     type: 'error',
                     text: 'Invalid Username or Password.'
@@ -230,17 +234,29 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
         setResetPasswordButtonIsLoading(true)
 
         try {
-            await sendPasswordResetEmail(getAuth(), data.emailForReset)
-            
+            //await sendPasswordResetEmail(getAuth(), data.emailForReset)
+            const redirectTo = Linking.createURL("/change-password")
+            console.log(redirectTo)
+
+            //TODO - change to production URL - change to expo variable ?
+            const { error } = await supabase.auth.resetPasswordForEmail(data.emailForReset, {
+                redirectTo
+            })
+
+            if (error) {
+                throw error
+            }
+
             toastRef.current.show({
                 type: 'success',
                 text: 'Instructions to reset your password have been sent to your Email address.'
             })
             closeModal()
         } catch(e) {
+            console.error(e)
             modalToastRef.current.show({
                 type: 'error',
-                text: 'Provided Email address is invalid.'
+                text: 'Something went wrong. Please try again later.'
             })
         } finally {
             setResetPasswordButtonIsLoading(false)

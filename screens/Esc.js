@@ -20,6 +20,7 @@ import {
     MAX_HEIGHT,
     MIN_WEIGHT,
     MAX_WEIGHT,
+    DEFAULT_FILTERS
 } from '../constants'
 import { 
     ACTIVE, 
@@ -36,7 +37,7 @@ import {
 } from '../labels'
 import RenderLady from '../components/list/RenderLady'
 import { MOCK_DATA } from '../constants'
-import { normalize, getParam, chunkArray, areValuesEqual, getFilterParams } from '../utils'
+import { normalize, getParam, buildFiltersForQuery, areValuesEqual, getFilterParams, stripDefaultFilters } from '../utils'
 import { useSearchParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getCountFromServer, db, collection, query, where, startAfter, startAt, limit, orderBy, getDocs, getDoc, doc } from '../firebase/config'
@@ -46,63 +47,60 @@ import SwappableText from '../components/animated/SwappableText'
 import Pagination from '../components/Pagination'
 import LottieView from 'lottie-react-native'
 
+import { supabase } from '../supabase/config'
+
 const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladiesCount, ladiesData, ladyCities=[] }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
         language: getParam(SUPPORTED_LANGUAGES, searchParams.get('language'), ''),
-        city: searchParams.get('city'),
         page: searchParams.get('page') && !isNaN(searchParams.get('page')) ? searchParams.get('page') : 1
     }), [searchParams, ladyCities])
 
-    const previousCity = useRef(searchParams.get('city'))
+    const filters = useMemo(() => ({
+        city: searchParams.get('city'),
+        ...stripDefaultFilters(DEFAULT_FILTERS, getFilterParams(searchParams))
+    }), [searchParams])
+
+    const previousFilters = useRef(filters)
 
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
     const [isLoading, setIsLoading] = useState(true)
     
     useEffect(() => {
-        if (!ladiesCount) {
+        if (isNaN(ladiesCount)) {
             getLadiesCount()
         }
     }, [ladiesCount])
 
     useLayoutEffect(() => {
         //filters changed
-        if (previousCity.current !== params.city) {
-            console.log('city changed')
+        if (!areValuesEqual(filters, previousFilters.current)) {
+            console.log('filters changed')
+            console.log(filters)
             
             setIsLoading(true)
 
             //trigger useEffect to update ladies count
             updateLadiesCount()
 
-            loadDataForPage()
             resetAllPaginationData()
+            loadDataForCurrentPage()
 
-            previousCity.current = params.city
+            previousFilters.current = filters
         } 
-        //pagination changed
+        //pagination changed or init load
         else {
-            console.log('pagination changed')
+            console.log('pagination changed or init load')
             if (!ladiesData[params.page]) {
                 console.log('does not have data for page: ' + params.page)
                 setIsLoading(true)
-                loadDataForPage()
+                loadDataForCurrentPage()
             } else {
                 setIsLoading(false)
             }
         } 
-    }, [params.page, params.city])
-
-    const getWhereConditions = () => {
-        let whereConditions = []
-
-        if (params.city) {
-            whereConditions.push(where('address.city', '==', params.city))
-        }
-
-        return whereConditions
-    }
+    }, [params.page, filters])
 
     const getOrdering = () => {
         return orderBy("created_date")
@@ -118,131 +116,23 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
         setIsLoading(false)
     }
 
-    const loadDataForPage = async () => {
-        if (Number(params.page) === 1) {
-            loadDataForFirstPage()
-            return
-        }
-
-        //previous page has data and is the last one
-        if (ladiesData[Number(params.page) - 1] && ladiesData[Number(params.page) - 1].length < MAX_ITEMS_PER_PAGE) {
-            updateLadiesData([], params.page)
-            return
-        }
-
+    const loadDataForCurrentPage = async () => {
         try {
-            let lastVisibleSnapshot
+            let query = supabase
+                .from('users')
+                .select()
+                .match({ account_type: 'lady', status: ACTIVE })  
 
-            //previous page has data - use last doc from previous page
-            if (ladiesData[Number(params.page) - 1]) {
-                const lastVisibleId = ladiesData[Number(params.page) - 1][MAX_ITEMS_PER_PAGE - 1].id
-                lastVisibleSnapshot = await getDoc(doc(db, 'users', lastVisibleId))
-            } 
-            //previous page does not have data
-            else {
-                //try to find the closest previous page that has data
-                /*
-                //possible improvement - not implemented yet
-                for (let i=Number(params.page); i>0; i--) {
-                    if (ladiesData[i]) {
-                        const lastVisibleId = ladiesData[i][MAX_ITEMS_PER_PAGE - 1].id
-                        const numberOfPagesSkipped = Number(params.page) - i
-                    }
-                }*/
+            query = buildFiltersForQuery(query, filters)
 
-                const dataCountFromBeginning = (Number(params.page) - 1) * MAX_ITEMS_PER_PAGE
-    
-                //query all data from the beginning till the last one
-                const q = query(
-                    collection(db, "users"), 
-                    where('account_type', '==', 'lady'), 
-                    where('status', '==', ACTIVE),
-                    ...getWhereConditions(),
-                    getOrdering(),
-                    limit(dataCountFromBeginning)
-                )
-    
-                const previousDataSnapshot = await getDocs(q)
-                //requested page number from url might exceeds data size
-                if (previousDataSnapshot.empty || previousDataSnapshot.size !== dataCountFromBeginning) {
-                    updateLadiesData([], params.page)
-                    return
-                }
-    
-                lastVisibleSnapshot = previousDataSnapshot.docs[previousDataSnapshot.docs.length-1]
+            query = query.range((Number(params.page) - 1) * MAX_ITEMS_PER_PAGE, Number(params.page) * MAX_ITEMS_PER_PAGE)
 
-                //store data from previous pages in redux
-                chunkArray(previousDataSnapshot.docs, MAX_ITEMS_PER_PAGE).forEach((chunk, index) => {
-                    if (!ladiesData[Number(index) + 1]) {
-                        const data = chunk.map(doc => {                    
-                            return ({
-                                ...doc.data(),
-                                id: doc.id
-                            })
-                        })
-        
-                        updateLadiesData(data, Number(index) + 1)
-                    }
-                })
-            }
+            const { data } = await query
 
-            const snapshot = await getDocs(
-                query(
-                    collection(db, "users"), 
-                    where('account_type', '==', 'lady'), 
-                    where('status', '==', ACTIVE),
-                    ...getWhereConditions(),
-                    getOrdering(),
-                    startAfter(lastVisibleSnapshot),
-                    limit(MAX_ITEMS_PER_PAGE)
-                )
-            )
-            
-            if (snapshot.empty) {
-                updateLadiesData([], params.page)
-            } else {
-                //store data from the requested page in redux
-                const data = snapshot.docs.map(doc => {                    
-                    return ({
-                        ...doc.data(),
-                        id: doc.id
-                    })
-                })
-
+            if (data && data.length > 0) {
                 updateLadiesData(data, params.page)
-            }
-        } catch(error) {
-            console.error(error)
-        } finally {
-            setIsLoading(false)
-        } 
-    }
-
-    const loadDataForFirstPage = async () => {
-        try {
-            const snapshot = await getDocs(
-                query(
-                    collection(db, "users"), 
-                    where('account_type', '==', 'lady'), 
-                    where('status', '==', ACTIVE),
-                    ...getWhereConditions(),
-                    getOrdering(),
-                    startAt(0),
-                    limit(MAX_ITEMS_PER_PAGE)
-                )
-            )
-            
-            if (snapshot.empty) {
-                updateLadiesData([], 1)
             } else {
-                const data = snapshot.docs.map(doc => {                    
-                    return ({
-                        ...doc.data(),
-                        id: doc.id
-                    })
-                })
-    
-                updateLadiesData(data, 1)
+                updateLadiesData([], params.page)
             }
         } catch(error) {
             console.error(error)
@@ -253,15 +143,18 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
 
     const getLadiesCount = async () => {
         try {
-            const snapshot = await getCountFromServer(
-                query(
-                    collection(db, "users"),
-                    where('account_type', '==', 'lady'),
-                    where('status', '==', ACTIVE),
-                    ...getWhereConditions(),
-                )
-            )
-            updateLadiesCount(snapshot.data().count)
+            let query = supabase
+                .from('users')
+                .select('*', { count: 'exact', head: true })
+                .match({ account_type: 'lady', status: ACTIVE })      
+
+            query = buildFiltersForQuery(query, filters)
+                
+            const { count } = await query
+
+            if (!isNaN(count)) {
+                updateLadiesCount(count)
+            }
         } catch(e) {
             console.error(e)
         }

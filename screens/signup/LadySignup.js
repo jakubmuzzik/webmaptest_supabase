@@ -1,7 +1,7 @@
 import React, { useState, createRef, useMemo, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { COLORS, FONTS, FONT_SIZES, SPACING, SUPPORTED_LANGUAGES } from '../../constants'
-import { normalize, encodeImageToBlurhash, getParam, stripEmptyParams } from '../../utils'
+import { normalize, getMimeType, getParam, stripEmptyParams } from '../../utils'
 import { ProgressBar, Button } from 'react-native-paper'
 
 import LoginInformation from './steps/LoginInformation'
@@ -21,8 +21,8 @@ import { updateCurrentUserInRedux, updateLadyInRedux } from '../../redux/actions
 import { IN_REVIEW } from '../../labels'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import uuid from 'react-native-uuid'
+import { supabase } from '../../supabase/config'
 
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, setDoc, doc, db, ref, uploadBytes, storage, getDownloadURL, runTransaction } from '../../firebase/config'
 
 const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, updateCurrentUserInRedux, updateLadyInRedux, toastRef }) => {
     const [searchParams] = useSearchParams()
@@ -31,7 +31,6 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
     const params = useMemo(() => ({
         language: getParam(SUPPORTED_LANGUAGES, searchParams.get('language'), '')
     }), [searchParams])
-
 
     const [nextButtonIsLoading, setNextButtonIsLoading] = useState(false)
     const [uploading, setUploading] = useState(false)
@@ -136,16 +135,22 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
         data.status = IN_REVIEW
 
         if (independent) {
-            const response = await createUserWithEmailAndPassword(getAuth(), data.email, data.password)
+            const { data: { user }, error: signUpError } = await supabase.auth.signUp({
+                email: data.email,
+                password: data.password,
+            })
+            
+            if (signUpError) {
+                throw signUpError
+            }
 
             delete data.password
-    
-            await sendEmailVerification(response.user)
 
-            data.id = getAuth().currentUser.uid
+            data.id = user.id
         } else {
+            const { data } = await supabase.auth.getSession()
             data.id = uuid.v4(),
-            data.establishmentId = getAuth().currentUser.uid
+            data.establishmentId = data.session.user.id
         }
 
         data = {
@@ -162,21 +167,13 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
         data.images = []
         data.videos = []
 
-        await setDoc(doc(db, 'users', data.id), data)
+        const { error: insertUserError } = await supabase
+            .from('users')
+            .insert(data)
 
-        const infoRef = doc(db, 'info', 'webwide')
-
-        await runTransaction(db, async (transaction) => {
-            const infoDoc = await transaction.get(infoRef)
-
-            const cities = infoDoc.data().ladyCities
-
-            if (cities.includes(data.address.city)) {
-                return
-            }
-
-            transaction.update(infoRef, { ladyCities: cities.concat([data.address.city]) })
-        })
+        if (insertUserError) {
+            throw insertUserError
+        }
 
         //put assets back for further processing
         data.images = images
@@ -187,26 +184,10 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
 
     const uploadUserAssets = async (data) => {
         let urls = await Promise.all([
-            ...data.images.map(image => uploadAssetToFirestore(image.image, 'photos/' + data.id + '/' + image.id)),
-            ...data.videos.map(video => uploadAssetToFirestore(video.video, 'videos/' + data.id + '/' + video.id + '/video')),
-            ...data.videos.map(video => uploadAssetToFirestore(video.thumbnail, 'videos/' + data.id + '/' + video.id + '/thumbnail')),
+            ...data.images.map(image => uploadAssetToSupabase(image.image, 'photos', data.id + '/' + image.id)),
+            ...data.videos.map(video => uploadAssetToSupabase(video.video, 'videos', data.id + '/' + video.id + '/video')),
+            ...data.videos.map(video => uploadAssetToSupabase(video.thumbnail, 'videos', data.id + '/' + video.id + '/thumbnail')),
         ])
-
-        /*const imageBlurhashes = await Promise.all([
-            ...data.images.map(image => encodeImageToBlurhash(image.image))
-        ])
-
-        for (let i = 0; i < data.images.length; i++) {
-            data.images[i] = {...data.images[i], blurhash: imageBlurhashes[i]}
-        }
-
-        const videoThumbnailsBlurhashes = await Promise.all([
-            ...data.videos.map(video => encodeImageToBlurhash(video.thumbnail))
-        ])
-
-        for (let i = 0; i < data.videos.length; i++) {
-            data.videos[i] = {...data.videos[i], blurhash: videoThumbnailsBlurhashes[i]}
-        }*/
 
         const imageURLs = urls.splice(0, data.images.length)
         const videoURLs = urls.splice(0, data.videos.length)
@@ -225,50 +206,35 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
             video.thumbnailDownloadUrl = thumbanilURLs[index]
         })
 
-        await setDoc(doc(db, 'users', data.id), data)
+        const { error: updateError } = await supabase
+            .from('users')
+            .update(data)
+            .eq('id', data.id)
+        
+        if (updateError) {
+            throw updateError
+        }
     }
 
-    const uploadAssetToFirestore = async (assetUri, assetPath) => {
-        const imageRef = ref(storage, assetPath)
-    
-        const response = await fetch(assetUri)
-        const blob = await response.blob()
+    const uploadAssetToSupabase = async (asset, from, assetPath) => {
+        const arraybuffer = await fetch(asset).then((res) => res.arrayBuffer())
 
-        /*const uploadTask = uploadBytesResumable(imageRef, blob)
+        const { data, error: uploadError } = await supabase
+            .storage
+            .from(from)
+            .upload(assetPath, arraybuffer, {
+                cacheControl: '3600',
+                upsert: false,
+                contentType: getMimeType(asset),
+            })
 
-        uploadTask.on('state_changed',
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
-                switch (snapshot.state) {
-                    case 'paused':
-                        console.log('Upload is paused');
-                        break;
-                    case 'running':
-                        console.log('Upload is running');
-                        break;
-                }
-            },
-            (error) => {
-                console.error('upload error: ', error)
-            },
-            () => {
-                console.log('upload finished')
-            }
-        );
+        if (uploadError) {
+            throw uploadError
+        }
 
-        await uploadTask
-        
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
-        */
+        const { data: publicUrlData } = supabase.storage.from(from).getPublicUrl(assetPath)
 
-        const result = await uploadBytes(imageRef, blob)
-
-        const downloadURL = await getDownloadURL(result.ref)
-
-        
-    
-        return downloadURL
+        return publicUrlData.publicUrl
     }
 
     const renderScene = ({ route }) => {

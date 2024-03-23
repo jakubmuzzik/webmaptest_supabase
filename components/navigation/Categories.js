@@ -51,7 +51,7 @@ const Categories = ({ ladyCities, establishmentCities, resetEstablishmentsData, 
 
     const params = useMemo(() => ({
         language: getParam(SUPPORTED_LANGUAGES, searchParams.get('language'), ''),
-        city: getParam(cities, searchParams.get('city'), ''),
+        city: searchParams.get('city'),
         page: searchParams.get('page') && !isNaN(searchParams.get('page')) ? searchParams.get('page') : 1
     }), [searchParams, cities])
 

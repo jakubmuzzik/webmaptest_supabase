@@ -77,8 +77,8 @@ const Mas = ({ updateMasseusesCount, updateMasseusesData, masseusesCount, masseu
             //trigger useEffect to update ladies count
             updateMasseusesCount()
 
-            loadDataForPage()
             resetAllPaginationData()
+            loadDataForPage()
 
             previousCity.current = params.city
         }

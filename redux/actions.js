@@ -2,6 +2,7 @@ import {
     ROUTE_STATE_CHANGE,
     SCROLL_DISABLED_STATE_CHANGE,
     USER_STATE_CHANGE,
+    USER_AUTH_STATE_CHANGE,
     CLEAR_DATA,
     LADIES_STATE_CHANGE,
     STORE_TOAST_REF,
@@ -20,6 +21,7 @@ import {
 } from './actionTypes'
 import { getAuth, getDoc, doc, db, signOut, getDocs, query, collection, where, getCountFromServer } from '../firebase/config'
 import { ACTIVE, DELETED } from '../labels'
+import { supabase } from '../supabase/config'
 
 export const updateRoute = (route) => ({
     type: ROUTE_STATE_CHANGE,
@@ -101,19 +103,28 @@ export const resetAllPaginationData = () => ({
     type: RESET_ALL_PAGINATION_DATA
 })
 
+export const updateCurrentAuthUser = (currentAuthUser) => ({
+    type: USER_AUTH_STATE_CHANGE,
+    currentAuthUser
+})
+
 /**
  * 
  * @description Redux thunk functions
  */
-export const fetchUser = () => (dispatch, getState) => {
-    return getDoc(doc(db, 'users', getAuth().currentUser.uid))
-        .then((snapshot) => {
-            if (snapshot.exists()) {
-                dispatch({ type: USER_STATE_CHANGE, data: snapshot.data() })
-            } else {
-                dispatch(logOut())
-            }
-        })
+export const fetchUser = (userId) => async (dispatch, getState) => {
+    const { data, error } = await supabase
+        .from('users')
+        .select()
+        .eq('id', userId)
+        .limit(1)
+
+    if (error || !data || data.length === 0) {
+        dispatch(logOut())
+        return
+    }
+
+    dispatch({ type: USER_STATE_CHANGE, data: data[0] })
 }
 
 export const fetchLadies = () => (dispatch, getState) => {

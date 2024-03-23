@@ -14,7 +14,6 @@ import {
     RESET_MASSEUSES_PAGINATION_DATA,
     RESET_ESTABLISHMENTS_PAGINATION_DATA,
     RESET_ALL_PAGINATION_DATA
-
 } from '../actionTypes'
 
 const INITIAL_STATE = {
@@ -117,7 +116,7 @@ export const app = (state = INITIAL_STATE, action) => {
                 ...state,
                 establishentsData: {},
                 masseusesData: {},
-                adiesData: {}
+                ladiesData: {}
             }
         default:
             return state

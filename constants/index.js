@@ -122,6 +122,27 @@ export const MAX_HEIGHT = 190
 export const MIN_WEIGHT = 50
 export const MAX_WEIGHT = 90
 
+export const DEFAULT_FILTERS = {
+    ageRange: [MIN_AGE, MAX_AGE],
+    heightRange: [MIN_HEIGHT, MAX_HEIGHT],
+    weightRange: [MIN_WEIGHT, MAX_WEIGHT],
+    //onlyVerified: false,
+    onlyIndependent: false,
+    //onlyPremium: false,
+    outcall: false,
+    incall: false,
+    services: [],
+    body_type: [],
+    hair_color: [],
+    eye_color: [],
+    pubic_hair: [],
+    breast_size: [],
+    breast_type: [],
+    speaks: [],
+    nationality: [],
+    sexualOrientation: []
+}
+
 export const MOCK_DATA = [
     {
         id: 1,

@@ -91,7 +91,7 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
     }
 
     const onSavePress = async () => {
-        if (!data.newPassword || !data.currentPassword || data.newPassword !== data.confirmNewPassword) {
+        if (!data.newPassword || !data.currentPassword || data.newPassword !== data.confirmNewPassword || data.newPassword.length < 8) {
             setShowErrorMessage(true)
             return
         }

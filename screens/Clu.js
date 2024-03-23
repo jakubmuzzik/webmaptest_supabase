@@ -79,8 +79,8 @@ const Clu = ({ updateEstablishmentsCount, resetAllPaginationData, updateEstablis
             //trigger useEffect to update ladies count
             updateEstablishmentsCount()
 
-            loadDataForPage()
             resetAllPaginationData()
+            loadDataForPage()
 
             previousCity.current = params.city
         } 

@@ -63,40 +63,42 @@ const UploadPhotos = forwardRef((props, ref) => {
             quality: 0.8,
         })
 
-        if (!result.canceled) {
-            try {
-                const fileSizeMb = getFileSizeInMb(result.assets[0].uri)
-                if (fileSizeMb > MAX_PHOTO_SIZE_MB) {
-                    toastRef.current.show({
-                        type: 'error',
-                        headerText: 'File Size Error',
-                        text:`Maximum file size allowed is ${MAX_PHOTO_SIZE_MB}MB.`
-                    })
-                    return
-                }
+        if (result.canceled || !result.assets || result.assets.length === 0) {
+            return
+        }
 
-                const dataType = getDataType(result.assets[0].uri)
-                if (dataType !== 'image') {
-                    toastRef.current.show({
-                        type: 'error',
-                        headerText: 'Invalid File Type',
-                        text:`Please upload a supported file type.`
-                    })
-                    return
-                }
-
-                const blurhash = await encodeImageToBlurhash(result.assets[0].uri)
-
-                setData(d => {
-                    d.images[index] = {image: result.assets[0].uri, id: uuid.v4(), status: IN_REVIEW, blurhash}
-                    if (index > 4 && d.images.length < MAX_PHOTOS) {
-                        d.images.push(null)
-                    }
-                    return { ...d }
+        try {
+            const fileSizeMb = getFileSizeInMb(result.assets[0].uri)
+            if (fileSizeMb > MAX_PHOTO_SIZE_MB) {
+                toastRef.current.show({
+                    type: 'error',
+                    headerText: 'File Size Error',
+                    text: `Maximum file size allowed is ${MAX_PHOTO_SIZE_MB}MB.`
                 })
-            } catch (e) {
-                console.error(e)
+                return
             }
+
+            const dataType = getDataType(result.assets[0].uri)
+            if (dataType !== 'image') {
+                toastRef.current.show({
+                    type: 'error',
+                    headerText: 'Invalid File Type',
+                    text: `Please upload a supported file type.`
+                })
+                return
+            }
+
+            const blurhash = await encodeImageToBlurhash(result.assets[0].uri)
+
+            setData(d => {
+                d.images[index] = { image: result.assets[0].uri, id: uuid.v4(), status: IN_REVIEW, blurhash }
+                if (index > 4 && d.images.length < MAX_PHOTOS) {
+                    d.images.push(null)
+                }
+                return { ...d }
+            })
+        } catch (e) {
+            console.error(e)
         }
     }
 

@@ -24,6 +24,7 @@ import {
     MAX_HEIGHT,
     MIN_WEIGHT,
     MAX_WEIGHT,
+    DEFAULT_FILTERS
 } from '../../constants'
 import { 
     BODY_TYPES,
@@ -46,27 +47,6 @@ import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 
 const window = Dimensions.get('window')
 
-const DEFAULT_FILTERS = {
-    ageRange: [MIN_AGE, MAX_AGE],
-    heightRange: [MIN_HEIGHT, MAX_HEIGHT],
-    weightRange: [MIN_WEIGHT, MAX_WEIGHT],
-    //onlyVerified: false,
-    onlyIndependent: false,
-    //onlyPremium: false,
-    outcall: false,
-    incall: false,
-    services: [],
-    body_type: [],
-    hair_color: [],
-    eye_color: [],
-    pubic_hair: [],
-    breast_size: [],
-    breast_type: [],
-    speaks: [],
-    nationality: [],
-    sexualOrientation: []
-}
-
 const Filters = forwardRef((props, ref) => {
     const { visible, setVisible } = props
 
@@ -80,9 +60,9 @@ const Filters = forwardRef((props, ref) => {
     const navigate = useNavigate()
     const location = useLocation()
 
-    const filterParams = useMemo(() => {
-        return getFilterParams(searchParams)
-    }, [searchParams])
+    const filterParams = useMemo(() => ({
+        ...getFilterParams(searchParams)
+    }), [searchParams])
 
     useImperativeHandle(ref, () => ({
         filterParams
@@ -150,16 +130,16 @@ const Filters = forwardRef((props, ref) => {
         setVisible(false)
     }
 
-    const onFiltersChange = useCallback((filterName, value) => {
+    const onFiltersChange = (filterName, value) => {
         setFilters(filters => ({
             ...filters,
             [filterName]: value
         }))
-    }, [])
+    }
 
-    const onClearFiltersPress = useCallback(() => {
+    const onClearFiltersPress = () => {
         setFilters(DEFAULT_FILTERS)
-    }, [])
+    }
 
     const onApplyFiltersPress = () => {
         navigate({
@@ -176,14 +156,14 @@ const Filters = forwardRef((props, ref) => {
         setVisible(false)
     }
 
-    const onMultiPicklistPress = useCallback((value, filterName) => {
+    const onMultiPicklistPress = (value, filterName) => {
         setFilters(filters => ({
             ...filters,
             [filterName]: filters[filterName].includes(value) 
              ?  filters[filterName].filter(s => s !== value)
              : filters[filterName].concat(value)
         }))
-    }, [])
+    }
 
     return (
         <Modal transparent={true}

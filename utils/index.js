@@ -53,21 +53,37 @@ export const getFileSizeInMb = (uri) => {
 }
 
 export const getDataType = (uri) => {
-  const parts = uri.split(',')
-  return parts[0].split('/')[0].split(':')[1]
+  try {
+    const parts = uri.split(',')
+    return parts[0].split('/')[0].split(':')[1]
+  } catch(e) {
+    console.error('Could not get file type')
+    return ''
+  }
+}
+
+export const getFileExtension = (uri) => {
+  try {
+    const parts = uri.split(',')
+    return parts[0].split('/')[1].split(';')[0]
+  } catch(e) {
+    console.error('Could not get file extension')
+    return ''
+  }
+}
+
+export const getMimeType = (uri) => {
+  try {
+    const parts = uri.split(',')
+    return parts[0].split(':')[1].split(';')[0]
+  } catch(e) {
+    console.error('Could not get file mime type')
+    return ''
+  }
 }
 
 export const normalize = (size, inverse = false) => {
   return isSmallScreen ? size - 5 * (inverse ? -1 : 1) : size
-}
-
-export const stripEmptyParams = (params) => {
-  return Object.keys(params).reduce((out, param) => params[param] ? {...out, [param]: params[param]} : out, {})
-  //return params.reduce((out, param) => param ? {...out, [param]: }, {})
-}
-
-export const stripDefaultFilters = (defaultFilters, filters) => {
-  return Object.keys(filters).reduce((out, filter) => areValuesEqual(filters[filter], defaultFilters[filter]) ? out : {...out, [filter]: filters[filter]}, {})
 }
 
 export const getParam = (supportedValues, param, fallbackValue) => {
@@ -176,29 +192,38 @@ export const chunkArray = (arr, chunkSize) => {
   return chunks
 }
 
+export const stripEmptyParams = (params) => {
+  return Object.keys(params).reduce((out, param) => params[param] ? {...out, [param]: params[param]} : out, {})
+  //return params.reduce((out, param) => param ? {...out, [param]: }, {})
+}
+
+export const stripDefaultFilters = (defaultFilters, filters) => {
+  return Object.keys(filters).reduce((out, filter) => areValuesEqual(filters[filter], defaultFilters[filter]) ? out : {...out, [filter]: filters[filter]}, {})
+}
+
 export const getFilterParams = (searchParams) => {
   const ageRangeParam = decodeURIComponent(searchParams.get('ageRange'))?.split(',')
   let ageRange = undefined
   if (Array.isArray(ageRangeParam) && ageRangeParam.length === 2) {
     ageRange = []
-    ageRange[0] = !isNaN(ageRangeParam[0]) && ageRangeParam[0] >= MIN_AGE && ageRangeParam[0] < MAX_AGE ? ageRangeParam[0] : MIN_AGE
-    ageRange[1] = !isNaN(ageRangeParam[1]) && ageRangeParam[1] > ageRange[0] && ageRangeParam[1] <= MAX_AGE ? ageRangeParam[1] : MAX_AGE
+    ageRange[0] = !isNaN(ageRangeParam[0]) && ageRangeParam[0] >= MIN_AGE && ageRangeParam[0] < MAX_AGE ? Number(ageRangeParam[0]) : MIN_AGE
+    ageRange[1] = !isNaN(ageRangeParam[1]) && ageRangeParam[1] > ageRange[0] && ageRangeParam[1] <= MAX_AGE ? Number(ageRangeParam[1]) : MAX_AGE
   }
 
   const heightRangeParam = decodeURIComponent(searchParams.get('heightRange'))?.split(',')
   let heightRange = undefined
   if (Array.isArray(heightRangeParam) && heightRangeParam.length === 2) {
     heightRange = []
-    heightRange[0] = !isNaN(heightRangeParam[0]) && heightRangeParam[0] >= MIN_HEIGHT && heightRangeParam[0] < MAX_HEIGHT ? heightRangeParam[0] : MIN_HEIGHT
-    heightRange[1] = !isNaN(heightRangeParam[1]) && heightRangeParam[1] > heightRange[0] && heightRangeParam[1] <= MAX_HEIGHT ? heightRangeParam[1] : MAX_HEIGHT
+    heightRange[0] = !isNaN(heightRangeParam[0]) && heightRangeParam[0] >= MIN_HEIGHT && heightRangeParam[0] < MAX_HEIGHT ? Number(heightRangeParam[0]) : MIN_HEIGHT
+    heightRange[1] = !isNaN(heightRangeParam[1]) && heightRangeParam[1] > heightRange[0] && heightRangeParam[1] <= MAX_HEIGHT ? Number(heightRangeParam[1]) : MAX_HEIGHT
   }
 
   const weightRangeParam = decodeURIComponent(searchParams.get('weightRange'))?.split(',')
   let weightRange = undefined
   if (Array.isArray(weightRangeParam) && weightRangeParam.length === 2) {
     weightRange = []
-    weightRange[0] = !isNaN(weightRangeParam[0]) && weightRangeParam[0] >= MIN_WEIGHT && weightRangeParam[0] < MAX_WEIGHT ? weightRangeParam[0] : MIN_WEIGHT
-    weightRange[1] = !isNaN(weightRangeParam[1]) && weightRangeParam[1] > weightRange[0] && weightRangeParam[1] <= MAX_WEIGHT ? weightRangeParam[1] : MAX_WEIGHT
+    weightRange[0] = !isNaN(weightRangeParam[0]) && weightRangeParam[0] >= MIN_WEIGHT && weightRangeParam[0] < MAX_WEIGHT ? Number(weightRangeParam[0]) : MIN_WEIGHT
+    weightRange[1] = !isNaN(weightRangeParam[1]) && weightRangeParam[1] > weightRange[0] && weightRangeParam[1] <= MAX_WEIGHT ? Number(weightRangeParam[1]) : MAX_WEIGHT
   }
 
   const isBoolean = (value) => value === 'true' || value === 'false'
@@ -224,67 +249,82 @@ export const getFilterParams = (searchParams) => {
   })
 }
 
-export const buildWhereConditions = (filterParams) => {
-  let whereConditions = []
+export const buildFiltersForQuery = (query, filterParams) => {
+  let whereConditions = {}
 
   const filterNames = Object.keys(filterParams)
   console.log(filterNames)
 
-  if (filterNames.includes('ageRange')) {
+  if (filterParams.city) {
+    query = query.eq('address->>city', filterParams.city)
+  }
 
-  } else {
+  if (filterNames.includes('ageRange')) {
 
   }
 
   if (filterNames.includes('heightRange')) {
-
-  } else {
-
+    query = query.gte('height', filterParams.heightRange[0])
+    query = query.lte('height', filterParams.heightRange[1])
   }
 
   if (filterNames.includes('weightRange')) {
-
-  } else {
-
+    query = query.gte('weight', filterParams.heightRange[0])
+    query = query.lte('weight', filterParams.heightRange[1])
   }
 
   if (filterNames.includes('onlyIndependent')) {
     //whereConditions.push(where('independent', '==', true), )
-  } else {
-
   }
 
   if (filterNames.includes('outcall')) {
-
-  } else {
-
+    query = query.eq('outcall', true)
   }
 
   if (filterNames.includes('incall')) {
-
-  } else {
-
+    query = query.eq('incall', true)
   }
 
-  whereConditions.push(where('services', 'array-contains-any', filterNames.includes('services') ? filterParams.services : [...SERVICES, ...MASSAGE_SERVICES]))
+  if (filterNames.includes('services')) {
+    query = query.overlaps('services', filterParams.services)
+  }
 
-  whereConditions.push(where('body_type', 'array-contains-any', filterNames.includes('body_type') ? filterParams.body_type : BODY_TYPES))
+  if (filterNames.includes('body_type')) {
+    query = query.overlaps('body_type', filterParams.body_type)
+  }
 
-  whereConditions.push(where('hair_color', 'array-contains-any', filterNames.includes('hair_color') ? filterParams.hair_color : HAIR_COLORS))
+  if (filterNames.includes('hair_color')) {
+    query = query.overlaps('hair_color', filterParams.hair_color)
+  }
 
-  whereConditions.push(where('eye_color', 'array-contains-any', filterNames.includes('eye_color') ? filterParams.eye_color : EYE_COLORS))
+  if (filterNames.includes('eye_color')) {
+    query = query.overlaps('eye_color', filterParams.eye_color)
+  }
 
-  whereConditions.push(where('pubic_hair', 'array-contains-any', filterNames.includes('pubic_hair') ? filterParams.pubic_hair : PUBIC_HAIR_VALUES))
+  if (filterNames.includes('pubic_hair')) {
+    query = query.overlaps('pubic_hair', filterParams.pubic_hair)
+  }
 
-  whereConditions.push(where('breast_size', 'array-contains-any', filterNames.includes('breast_size') ? filterParams.breast_size : BREAST_SIZES))
+  if (filterNames.includes('breast_size')) {
+    query = query.overlaps('breast_size', filterParams.breast_size)
+  }
 
-  whereConditions.push(where('breast_type', 'array-contains-any', filterNames.includes('breast_type') ? filterParams.breast_type : BREAST_TYPES))
+  if (filterNames.includes('breast_type')) {
+    query = query.overlaps('breast_type', filterParams.breast_type)
+  }
 
-  whereConditions.push(where('languages', 'array-contains-any', filterNames.includes('speaks') ? filterParams.speaks : LANGUAGES))
+  if (filterNames.includes('languages')) {
+    query = query.overlaps('languages', filterParams.languages)
+  }
 
-  whereConditions.push(where('nationality', 'array-contains-any', filterNames.includes('nationality') ? filterParams.nationality : NATIONALITIES))
+  if (filterNames.includes('nationality')) {
+    query = query.overlaps('nationality', filterParams.nationality)
+  }
 
-  whereConditions.push(where('sexuality', 'array-contains-any', filterNames.includes('sexualOrientation') ? filterParams.sexualOrientation : SEXUAL_ORIENTATION))
+  /*
 
-  return whereConditions
+
+  whereConditions.push(where('sexuality', 'array-contains-any', filterNames.includes('sexualOrientation') ? filterParams.sexualOrientation : SEXUAL_ORIENTATION))*/
+
+  return query
 }

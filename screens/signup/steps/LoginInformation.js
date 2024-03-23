@@ -12,7 +12,7 @@ import HoverableInput from '../../../components/HoverableInput'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { normalize } from '../../../utils'
 import { HelperText } from 'react-native-paper'
-import { fetchSignInMethodsForEmail, getAuth } from '../../../firebase/config'
+import { supabase } from '../../../supabase/config'
 
 const LoginInformation = forwardRef((props, ref) => {
     const {i, contentWidth, toastRef} = props
@@ -27,17 +27,43 @@ const LoginInformation = forwardRef((props, ref) => {
     const [secureTextEntry, setSecureTextEntry] = useState(true)
     const [confirmSecureTextEntry, setConfirmSecureTextEntry] = useState(true)
 
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        return emailRegex.test(email)
+    }
+
     const validate = async () => {
         if (!data.email || !data.password || !data.confirmPassword || data.password !== data.confirmPassword || data.password.length < 8 || !agreed) {
             setShowErrors(true)
             return false
         }
 
-        return true
+        const isEmailValid = isValidEmail(data.email)
+        if (!isEmailValid) {
+            toastRef.current.show({
+                type: 'error',
+                text: 'Invalid email address.'
+            })
+            return false
+        }
 
         try {
-            const result = await fetchSignInMethodsForEmail(getAuth(), data.email)
-            if (result.length > 0) {
+            const { data: authData, error } = await supabase
+                .from('users')
+                .select('email')
+                .eq('email', data.email)
+
+            if (error) {
+                console.error(error)
+                toastRef.current.show({
+                    type: 'error',
+                    text: 'Could not validate the email.'
+                })
+
+                return false
+            }
+
+            if (authData && authData.length > 0) {
                 toastRef.current.show({
                     type: 'error',
                     text: 'Email address is already in use.'
@@ -45,17 +71,13 @@ const LoginInformation = forwardRef((props, ref) => {
                 return false
             }
         } catch(error) {
-            if (error.code?.includes('auth')) {
-                toastRef.current.show({
-                    type: 'error',
-                    text: 'Invalid Email.'
-                })
-            } else {
-                toastRef.current.show({
-                    type: 'error',
-                    text: 'Could not validate the email.'
-                })
-            }
+            console.error(error)
+
+            toastRef.current.show({
+                type: 'error',
+                text: 'Could not validate the email.'
+            })
+
             return false
         }
 

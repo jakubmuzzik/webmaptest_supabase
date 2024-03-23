@@ -1,7 +1,7 @@
 import React, { useState, createRef, useEffect, useMemo } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { COLORS, FONTS, FONT_SIZES, SPACING, SUPPORTED_LANGUAGES} from '../../constants'
-import { normalize, encodeImageToBlurhash, getParam } from '../../utils'
+import { normalize, getMimeType, getParam, getFileExtension } from '../../utils'
 import { ProgressBar, Button } from 'react-native-paper'
 import { TabView } from 'react-native-tab-view'
 import { MotiView } from 'moti'
@@ -20,7 +20,6 @@ import EstablishmentRegistrationCompleted from './steps/EstablishmentRegistratio
 
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, setDoc, doc, db, ref, uploadBytes, storage, getDownloadURL, runTransaction } from '../../firebase/config'
 import { supabase } from '../../supabase/config'
 
 const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
@@ -133,7 +132,7 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
         })
         
         if (signUpError) {
-            throw new Error(signUpError)
+            throw signUpError
         }
 
         delete data.password
@@ -160,7 +159,7 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
 
         if (insertUserError) {
             //TODO - delete user ?
-            throw new Error(insertUserError)
+            throw insertUserError
         }
 
         //put assets back for further processing
@@ -171,61 +170,11 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
     }
 
     const uploadUserAssets = async (data) => {
-        await Promise.all([
-            ...data.images.map(image => uploadAssetToFirestore(image.image, 'photos', 'photos/' + data.id + '/' + image.id)),
-            ...data.videos.map(video => uploadAssetToFirestore(video.video, 'videos', 'videos/' + data.id + '/' + video.id + '/video')),
-            ...data.videos.map(video => uploadAssetToFirestore(video.thumbnail, 'videos', 'videos/' + data.id + '/' + video.id + '/thumbnail')),
-        ])
-
-        //const imageURLs = urls.splice(0, data.images.length)
-        //const videoURLs = urls.splice(0, data.videos.length)
-        //const thumbanilURLs = urls.splice(0, data.videos.length)
-
-        data.images.forEach((image, index) => {
-            delete image.image
-            //image.downloadUrl = imageURLs[index]
-        })
-
-        data.videos.forEach((video, index) => {
-            delete video.video
-            delete video.thumbnail
-
-            //video.downloadUrl = videoURLs[index]
-            //video.thumbnailDownloadUrl = thumbanilURLs[index]
-        })
-
-        const { error: updateError } = await supabase
-            .from('users')
-            .update(data)
-            .eq('id', data.id)
-        
-        if (updateError) {
-            throw new Error(updateError)
-        }
-    }
-
-    const uploadUserAssets2 = async (data) => {
         let urls = await Promise.all([
-            ...data.images.map(image => uploadAssetToFirestore(image.image, 'photos/' + data.id + '/' + image.id)),
-            ...data.videos.map(video => uploadAssetToFirestore(video.video, 'videos/' + data.id + '/' + video.id + '/video')),
-            ...data.videos.map(video => uploadAssetToFirestore(video.thumbnail, 'videos/' + data.id + '/' + video.id + '/thumbnail')),
+            ...data.images.map(image => uploadAssetToSupabase(image.image, 'photos', data.id + '/' + image.id)),
+            ...data.videos.map(video => uploadAssetToSupabase(video.video, 'videos', data.id + '/' + video.id + '/video')),
+            ...data.videos.map(video => uploadAssetToSupabase(video.thumbnail, 'videos', data.id + '/' + video.id + '/thumbnail')),
         ])
-
-        /*const imageBlurhashes = await Promise.all([
-            ...data.images.map(image => encodeImageToBlurhash(image.image))
-        ])
-
-        for (let i = 0; i < data.images.length; i++) {
-            data.images[i] = {...data.images[i], blurhash: imageBlurhashes[i]}
-        }
-
-        const videoThumbnailsBlurhashes = await Promise.all([
-            ...data.videos.map(video => encodeImageToBlurhash(video.thumbnail))
-        ])
-
-        for (let i = 0; i < data.videos.length; i++) {
-            data.videos[i] = {...data.videos[i], blurhash: videoThumbnailsBlurhashes[i]}
-        }*/
 
         const imageURLs = urls.splice(0, data.images.length)
         const videoURLs = urls.splice(0, data.videos.length)
@@ -244,19 +193,35 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
             video.thumbnailDownloadUrl = thumbanilURLs[index]
         })
 
-        await setDoc(doc(db, 'users', data.id), data)
+        const { error: updateError } = await supabase
+            .from('users')
+            .update(data)
+            .eq('id', data.id)
+        
+        if (updateError) {
+            throw updateError
+        }
     }
 
-    const uploadAssetToFirestore = async (asset, from, assetPath) => {
-        const { data, error } = await supabase
+    const uploadAssetToSupabase = async (asset, from, assetPath) => {
+        const arraybuffer = await fetch(asset).then((res) => res.arrayBuffer())
+
+        const { data, error: uploadError } = await supabase
             .storage
             .from(from)
-            .upload(assetPath, asset, {
+            .upload(assetPath, arraybuffer, {
                 cacheControl: '3600',
-                upsert: false
+                upsert: false,
+                contentType: getMimeType(asset),
             })
 
-        console.log(error)
+        if (uploadError) {
+            throw uploadError
+        }
+
+        const { data: publicUrlData } = supabase.storage.from(from).getPublicUrl(assetPath)
+
+        return publicUrlData.publicUrl
     }
 
     const renderScene = ({ route }) => {

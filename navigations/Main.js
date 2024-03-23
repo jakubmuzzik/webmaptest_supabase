@@ -3,7 +3,7 @@ import { StyleSheet, View, useWindowDimensions, Dimensions } from 'react-native'
 import { normalize, stripEmptyParams, getParam } from '../utils'
 
 import { connect } from 'react-redux'
-import { updateScrollDisabled, fetchUser, storeToastRef, updateLadyCities, updateEstablishmentCities } from '../redux/actions'
+import { updateScrollDisabled, fetchUser, storeToastRef, updateLadyCities, updateEstablishmentCities, updateCurrentAuthUser } from '../redux/actions'
 
 import { getAuth, onAuthStateChanged, getDoc, doc, db } from '../firebase/config'
 
@@ -21,8 +21,9 @@ import Account from '../screens/Account'
 import EstablishmentSignup from '../screens/signup/EstablishmentSignup'
 import SignUpOrLogin from '../screens/SignUpOrLogin'
 import SearchResults from '../screens/SearchResults'
-import VerifyEmail from '../screens/VerifyEmail'
 import Home from '../screens/Home'
+import ChangePassword from '../screens/ChangePassword'
+import RequireAuth from './RequireAuth'
 
 import { COLORS, FONTS, FONT_SIZES, SMALL_SCREEN_THRESHOLD, SPACING, SUPPORTED_LANGUAGES } from '../constants'
 
@@ -33,8 +34,6 @@ import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, O
 import { supabase } from '../supabase/config'
 
 const { height: initialHeight } = Dimensions.get('window')
-
-const auth = getAuth()
 
 const LayoutWithHeader = ({ children }) => (
     <>
@@ -65,39 +64,7 @@ const Redirect = ({ replace, to }) => {
     return <Navigate to={to} replace={replace} />
 }
 
-const RequireAuth = ({ children }) => {
-    const location = useLocation()
-    const [searchParams] = useSearchParams()
-
-    const params = {
-        language: getParam(SUPPORTED_LANGUAGES, searchParams.get('language'), '')
-    }
-
-    const isLoggedIn = getAuth()?.currentUser
-    const isVerified = isLoggedIn?.emailVerified
-
-    if (isLoggedIn && !isVerified && location.pathname !== '/verify-email') {
-        let to = '/verify-email'
-        //need to hardcode => search param on Navigate component didn't work
-        if (params.language) {
-            to += '?language=' + params.language
-        }
-
-        return <Navigate to={to} state={{ from: location }} replace />
-    } else if (!isLoggedIn) {
-        let to = '/auth'
-        //need to hardcode => search param on Navigate component didn't work
-        if (params.language) {
-            to += '?language=' + params.language
-        }
-
-        return <Navigate to={to} state={{ from: location }} replace />
-    }
-
-    return children
-}
-
-const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities, updateLadyCities, fetchUser, storeToastRef }) => {
+const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities, updateLadyCities, fetchUser, storeToastRef, updateCurrentAuthUser }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(null)
 
     const toastRef = useRef()
@@ -118,81 +85,28 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
                 }
             })
 
-
-       
-
-        const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data } = supabase.auth.onAuthStateChange((_event, session) => {
             console.log(_event)
-            console.log('sess2: ', session)
+            console.log('session: ', session)
 
             if (!session) {
                 setIsLoggedIn(false)
             } else {
+                updateCurrentAuthUser(session.user)
                 //fetch only on page reloads and when already signed in
                 if (!hasLoadedRef.current) {
-                    //fetchUser()
+                    fetchUser(session.user.id)
                 }
                 setIsLoggedIn(true)
-
-                /*if (user.emailVerified && hasLoadedRef.current) {
-                    toastRef.current?.show({
-                        type: 'success',
-                        text: 'Successfully logged in.'
-                    })
-                }*/
             }
 
             hasLoadedRef.current = true
         })
 
         return () => {
-            unsubscribe()
+            data.subscription.unsubscribe()
         }
-        /*const unsubscribe = onAuthStateChanged(auth, user => {
-            if (!user) {
-                setIsLoggedIn(false)
-            } else {
-                //fetch only on page reloads and when already signed in
-                if (!hasLoadedRef.current) {
-                    fetchUser()
-                }
-                setIsLoggedIn(true)
-
-                if (user.emailVerified && hasLoadedRef.current) {
-                    toastRef.current?.show({
-                        type: 'success',
-                        text: 'Successfully logged in.'
-                    })
-                }
-            }
-
-            hasLoadedRef.current = true
-        })
-
-        return () => {
-            unsubscribe()
-        }*/
     }, [])
-
-    /*const ProhibitsAuth = useCallback(({ children }) => {
-        const [searchParams] = useSearchParams()
-
-        const params = {
-            language: getParam(SUPPORTED_LANGUAGES, searchParams.get('language'), '')
-        }
-
-        if (isLoggedIn) {
-            let to = '/account'
-            //need to hardcode => search param on Navigate component didn't work
-            if (params.language) {
-                to += '?language=' + params.language
-            }
-
-            return <Navigate to={to} replace />
-        }
-
-        return children
-    }, [isLoggedIn])*/
     
     const router = createBrowserRouter(createRoutesFromElements(
         <>
@@ -263,10 +177,10 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
                 </LayoutWithHeader>
             } />
 
-            <Route path='/verify-email' element={
+            <Route path='/change-password' element={
                 <RequireAuth>
                     <LayoutWithHeader>
-                        <VerifyEmail />
+                        <ChangePassword />
                     </LayoutWithHeader>
                 </RequireAuth>
             } />
@@ -320,4 +234,4 @@ const mapStateToProps = (store) => ({
     toastData: store.appState.toastData
 })
 
-export default connect(mapStateToProps, { updateScrollDisabled, fetchUser, storeToastRef, updateEstablishmentCities, updateLadyCities })(Main)
+export default connect(mapStateToProps, { updateScrollDisabled, fetchUser, storeToastRef, updateEstablishmentCities, updateLadyCities, updateCurrentAuthUser })(Main)
