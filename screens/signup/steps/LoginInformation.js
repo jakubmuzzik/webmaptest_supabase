@@ -42,7 +42,7 @@ const LoginInformation = forwardRef((props, ref) => {
         if (!isEmailValid) {
             toastRef.current.show({
                 type: 'error',
-                text: 'Invalid email address.'
+                text: 'Provided Email address is invalid.'
             })
             return false
         }

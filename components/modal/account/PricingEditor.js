@@ -28,11 +28,7 @@ import Toast from '../../Toast'
 
 import { Button, IconButton, HelperText, SegmentedButtons } from 'react-native-paper'
 
-import {
-    db,
-    doc,
-    updateDoc,
-} from '../../../firebase/config'
+import { supabase } from '../../../supabase/config'
 
 const HOURS = ['0.5 hour', '1 hour', '1.5 hour', '2 hours', '2.5 hour', '3 hours', '3.5 hour', '4 hours', '4.5 hour', '5 hours', '5.5 hour', '6 hours', '6.5 hour', '7 hours', '7.5 hour', '8 hours', '8.5 hour', '9 hours', '9.5 hour', '10 hours', '10.5 hour', '11 hours', '11.5 hour', '12 hours', '12.5 hour', '13 hours', '13.5 hour', '14 hours', '14.5 hour', '15 hours', '15.5 hour', '16 hours', '16.5 hour', '17 hours', '17.5 hour', '18 hours', '18.5 hour', '19 hours', '19.5 hour', '20 hours', '20.5 hour', '21 hours', '21.5 hour', '22 hours', '22.5 hour', '23 hours', '23.5 hour', '24 hours']
 
@@ -95,7 +91,14 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
         setIsSaving(true)
 
         try {
-            await updateDoc(doc(db, 'users', userId), {...changedPricing, last_modified_date: new Date()})
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({...changedPricing, last_modified_date: new Date()})
+                .eq('id', userId)
+
+            if (updateError) {
+                throw updateError
+            }
 
             closeModal()
 

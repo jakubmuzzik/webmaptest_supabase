@@ -20,21 +20,24 @@ import {
     SUPPORTED_LANGUAGES,
     DEFAULT_LANGUAGE
 } from '../../../constants'
-import { getAuth, verifyBeforeUpdateEmail, reauthenticateWithCredential, EmailAuthProvider } from '../../../firebase/config'
 
 import { Button } from 'react-native-paper'
 
 import Toast from '../../Toast'
 
+import { supabase } from '../../../supabase/config'
+
+import * as Linking from 'expo-linking'
+
 const window = Dimensions.get('window')
 
-const EmailEditor = ({ visible, setVisible, toastRef }) => {
+const EmailEditor = ({ visible, setVisible, toastRef, currentEmail }) => {
 
     const [isSaving, setIsSaving] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [data, setData] = useState({
         newEmail: '',
-        password: '',
+        confirmNewEmail: '',
         secureTextEntry: true
     })
 
@@ -47,7 +50,7 @@ const EmailEditor = ({ visible, setVisible, toastRef }) => {
             })
             setData({
                 newEmail: '',
-                password: '',
+                confirmNewEmail: '',
                 secureTextEntry: true
             })
         } else {
@@ -80,13 +83,8 @@ const EmailEditor = ({ visible, setVisible, toastRef }) => {
         setVisible(false)
     }
 
-    const reauthenticate = async () => {
-        const cred = EmailAuthProvider.credential(getAuth().currentUser.email, data.password)
-        return reauthenticateWithCredential(getAuth().currentUser, cred)
-    }
-
     const onSavePress = async () => {
-        if (!data.newEmail || !data.password) {
+        if (!data.newEmail || !data.confirmNewEmail) {
             setShowErrorMessage(true)
             return
         }
@@ -95,10 +93,11 @@ const EmailEditor = ({ visible, setVisible, toastRef }) => {
             return
         }
 
-        if (data.newEmail === getAuth().currentUser.email) {
+        if (data.newEmail === currentEmail) {
             modalToastRef.current.show({
                 type: 'error',
-                text: 'Provided Email address is already in use.'
+                headerText: 'Email already in use',
+                text: 'A user with this email address has already been registered.'
             })
             return
         }
@@ -107,32 +106,29 @@ const EmailEditor = ({ visible, setVisible, toastRef }) => {
         setShowErrorMessage(false)
 
         try {
-            await reauthenticate()
-        } catch(e) {
-            console.error(e)
-            modalToastRef.current.show({
-                type: 'error',
-                text: 'Invalid password.'
-            })
-            setIsSaving(false)
-            return
-        }
+            const emailRedirectTo = Linking.createURL("/account/settings")
 
-        try {
-            await verifyBeforeUpdateEmail(getAuth().currentUser, data.newEmail)
+            const { error } = await supabase.auth.updateUser({
+                email: data.newEmail,
+                options: { emailRedirectTo }
+            })
+
+            if (error) {
+                throw error
+            }
 
             toastRef.current.show({
                 type: 'success',
-                text: 'Verification email was sent to the provided email address.'
+                text: 'Confirmation link was sent to the provided email address.'
             })
             closeModal()
         } catch(e) {
-            if (e.code === 'auth/email-already-in-use') {
+            if (e.message === 'A user with this email address has already been registered') {
                 modalToastRef.current.show({
                     type: 'error',
-                    text: 'Provided Email address is already in use.'
+                    text: e.message
                 })
-            } else if (e.code === 'auth/invalid-new-email') {
+            } else if (e.message.includes('Unable to validate email address')) {
                 modalToastRef.current.show({
                     type: 'error',
                     text: 'Provided Email address is invalid.'
@@ -161,13 +157,6 @@ const EmailEditor = ({ visible, setVisible, toastRef }) => {
             transform: [{ translateY: translateY.value }]
         }
     })
-
-    const updateSecureTextEntry = () => {
-        setData((data) => ({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
-        }))
-    }
 
     return (
         <Modal transparent={true}
@@ -199,7 +188,7 @@ const EmailEditor = ({ visible, setVisible, toastRef }) => {
                             </Text>
 
                             <HoverableInput
-                                placeholder="Enter your email"
+                                placeholder="Enter new email"
                                 label="New email"
                                 borderColor={COLORS.placeholder}
                                 hoveredBorderColor={COLORS.red}
@@ -216,22 +205,19 @@ const EmailEditor = ({ visible, setVisible, toastRef }) => {
                             />
 
                             <HoverableInput
-                                containerStyle={{ marginTop: SPACING.xxx_small, marginHorizontal: SPACING.small }}
-                                placeholder="Enter your password"
-                                label="Confirm your password"
+                                placeholder="Confirm new email"
+                                label="Confirm new email"
                                 borderColor={COLORS.placeholder}
                                 hoveredBorderColor={COLORS.red}
                                 textColor='#000'
                                 textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
                                 labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                 placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                text={data.password}
-                                setText={(text) => setData({ ...data, ['password']: text })}
-                                leftIconName="lock-outline"
-                                rightIconName={data.secureTextEntry ? 'eye-off' : 'eye'}
-                                onRightIconPress={updateSecureTextEntry}
-                                secureTextEntry={data.secureTextEntry}
-                                errorMessage={showErrorMessage && !data.password ? 'Enter your Password' : undefined}
+                                containerStyle={{ marginHorizontal: SPACING.small }}
+                                text={data.confirmNewEmail}
+                                setText={(text) => setData({ ...data, ['confirmNewEmail']: text })}
+                                leftIconName="email-outline"
+                                errorMessage={showErrorMessage && !data.confirmNewEmail ? 'Confirm your new email' : undefined}
                                 onSubmitEditing={onSavePress}
                             />
                         </Animated.ScrollView>
@@ -255,7 +241,7 @@ const EmailEditor = ({ visible, setVisible, toastRef }) => {
                                 mode="contained"
                                 onPress={onSavePress}
                                 loading={isSaving}
-                                disabled={isSaving || !data.password || !data.newEmail}
+                                disabled={isSaving || !data.confirmNewEmail || !data.newEmail || data.newEmail !== data.confirmNewEmail}
                             >
                                 Save
                             </Button>

@@ -37,11 +37,7 @@ import {
     EYE_COLORS
 } from '../../../labels'
 
-import {
-    db,
-    doc,
-    updateDoc,
-} from '../../../firebase/config'
+import { supabase } from '../../../supabase/config'
 
 const window = Dimensions.get('window')
 
@@ -118,7 +114,14 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
         setShowErrorMessage(false)
 
         try {
-            await updateDoc(doc(db, 'users', userId), {...changedPersonalDetails, last_modified_date: new Date()})
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({...changedPersonalDetails, last_modified_date: new Date()})
+                .eq('id', userId)
+
+            if (updateError) {
+                throw updateError
+            }
 
             closeModal()
 

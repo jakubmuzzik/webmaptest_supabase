@@ -149,7 +149,7 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment, logOut 
     }
 
     const deleteEstablishmentData = async () => {
-        const snapshot = await getDocs(query(collection(db, "users"), where('establishmentId', '==', getAuth().currentUser.uid), where('status', '!=', DELETED)))
+        const snapshot = await getDocs(query(collection(db, "users"), where('establishment_id', '==', getAuth().currentUser.uid), where('status', '!=', DELETED)))
 
         if (snapshot.empty) {
             return

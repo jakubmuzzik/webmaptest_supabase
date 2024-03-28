@@ -126,10 +126,17 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
         routes.slice(0, routes.length - 1).forEach(route => data = { ...data, ...route.ref.current.data })
         data.status = IN_REVIEW
 
-        const { data: { user }, error: signUpError } = await supabase.auth.signUp({
-            email: data.email,
-            password: data.password,
-        })
+        const { data: { user }, error: signUpError } = await supabase.auth.signUp(
+            {
+                email: data.email,
+                password: data.password,
+            },
+            {
+                data: {
+                    name: data.name
+                }
+            }
+        )
         
         if (signUpError) {
             throw signUpError

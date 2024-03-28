@@ -12,6 +12,7 @@ import {
   PUBIC_HAIR_VALUES,
   SEXUAL_ORIENTATION,
   SERVICES,
+  MASSAGE_SERVICES,
   HAIR_COLORS,
   BREAST_SIZES,
   BREAST_TYPES,
@@ -19,10 +20,8 @@ import {
   LANGUAGES,
   NATIONALITIES
 } from '../labels'
-import { where } from '../firebase/config'
 
 import { encode } from "blurhash"
-import { MASSAGE_SERVICES } from '../labels'
 
 const loadImage = async src =>
   new Promise((resolve, reject) => {
@@ -236,7 +235,7 @@ export const getFilterParams = (searchParams) => {
     onlyIndependent: isBoolean(searchParams.get('onlyIndependent')) ? Boolean(searchParams.get('onlyIndependent')) : undefined,
     outcall: isBoolean(searchParams.get('outcall')) ? Boolean(searchParams.get('outcall')) : undefined,
     incall: isBoolean(searchParams.get('incall')) ? Boolean(searchParams.get('incall')) : undefined,
-    services: searchParams.get('services') ? decodeURIComponent(searchParams.get('services')).split(',').filter(val => SERVICES.includes(val)) : undefined,
+    services: searchParams.get('services') ? decodeURIComponent(searchParams.get('services')).split(',').filter(val => [...SERVICES, ...MASSAGE_SERVICES].includes(val)) : undefined,
     body_type: searchParams.get('body_type') ? decodeURIComponent(searchParams.get('body_type')).split(',').filter(val => BODY_TYPES.includes(val)) : undefined,
     hair_color: searchParams.get('hair_color') ? decodeURIComponent(searchParams.get('hair_color')).split(',').filter(val => HAIR_COLORS.includes(val)) : undefined,
     eye_color: searchParams.get('eye_color') ? decodeURIComponent(searchParams.get('eye_color')).split(',').filter(val => EYE_COLORS.includes(val)) : undefined,
@@ -250,10 +249,7 @@ export const getFilterParams = (searchParams) => {
 }
 
 export const buildFiltersForQuery = (query, filterParams) => {
-  let whereConditions = {}
-
   const filterNames = Object.keys(filterParams)
-  console.log(filterNames)
 
   if (filterParams.city) {
     query = query.eq('address->>city', filterParams.city)
@@ -274,7 +270,7 @@ export const buildFiltersForQuery = (query, filterParams) => {
   }
 
   if (filterNames.includes('onlyIndependent')) {
-    //whereConditions.push(where('independent', '==', true), )
+    query = query.is('establishment_id', null)
   }
 
   if (filterNames.includes('outcall')) {

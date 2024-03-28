@@ -23,13 +23,6 @@ import {
 
 import { TabView } from 'react-native-tab-view'
 
-import {
-    db,
-    doc,
-    updateDoc,
-    runTransaction
-} from '../../../firebase/config'
-
 import Toast from '../../Toast'
 
 import { Button, TouchableRipple, ActivityIndicator, Switch } from 'react-native-paper'
@@ -37,6 +30,8 @@ import BouncyCheckbox from "react-native-bouncy-checkbox"
 import * as Location from 'expo-location'
 
 const window = Dimensions.get('window')
+
+import { supabase } from '../../../supabase/config'
 
 const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateRedux, isEstablishment }) => {
     const [routes] = useState([
@@ -124,9 +119,16 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
         delete addr.hidden_address
 
         try {
-            await updateDoc(doc(db, 'users', userId), {address: addr, hidden_address: hidden, last_modified_date: new Date()})
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({address: addr, hidden_address: hidden, last_modified_date: new Date()})
+                .eq('id', userId)
 
-            const infoRef = doc(db, 'info', 'webwide')
+            if (updateError) {
+                throw updateError
+            }
+
+            /*const infoRef = doc(db, 'info', 'webwide')
 
             await runTransaction(db, async (transaction) => {
                 const infoDoc = await transaction.get(infoRef)
@@ -142,7 +144,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                 } else {
                     transaction.update(infoRef, { ladyCities: cities.concat([addr.city]) })
                 }
-            })
+            })*/
 
             closeModal()
 

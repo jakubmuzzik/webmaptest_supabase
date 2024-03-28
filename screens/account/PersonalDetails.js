@@ -23,10 +23,6 @@ import ContactInformationEditor from '../../components/modal/account/ContactInfo
 
 import { updateCurrentUserInRedux, updateLadyInRedux } from '../../redux/actions'
 
-import {
-    getAuth
-  } from '../../firebase/config'
-
 const LOCATION_LATITUDE_DELTA = 0.9735111002971948 // default value just for map init -> later is used minLatitudeDelta.current
 const LOCATION_LONGITUDE_DELTA = 0.6 // == 50 Km 
 const INITIAL_LATITUDE = 50.0646126
@@ -568,13 +564,13 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
 
             {renderAddress()}
 
-            <AboutEditor visible={aboutEditorVisible} setVisible={setAboutEditorVisible} about={userData.description} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />
-            {userData.account_type === 'lady' && <PersonalDetailsEditor visible={personalDetailsEditorVisible} setVisible={setPersonalDetailsEditorVisible} personalDetails={personalDetails} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            {userData.account_type === 'lady' && <PricingEditor visible={pricingEditorVisible} setVisible={setPricingEditorVisible} pricing={pricing} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            {userData.account_type === 'lady' && <ServicesEditor visible={servicesEditorVisible} setVisible={setServicesEditorVisible} services={userData.services} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            <WorkingHoursEditor visible={workingHoursEditorVisible} setVisible={setWorkingHoursEditorVisible} working_hours={userData.working_hours} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />
-            <AddressEditor visible={addressEditorVisible} setVisible={setAddressEditorVisible} address={address} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} isEstablishment={userData.account_type === 'establishment'}/>
-            <ContactInformationEditor visible={contactInformationEditorVisible} setVisible={setContactInformationEditorVisible} contactInformation={contactInformation} toastRef={toastRef} userId={userData.id} isEstablishment={userData.account_type === 'establishment'} updateRedux={userData.establishmentId ? updateLadyInRedux : updateCurrentUserInRedux} />
+            <AboutEditor visible={aboutEditorVisible} setVisible={setAboutEditorVisible} about={userData.description} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />
+            {userData.account_type === 'lady' && <PersonalDetailsEditor visible={personalDetailsEditorVisible} setVisible={setPersonalDetailsEditorVisible} personalDetails={personalDetails} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
+            {userData.account_type === 'lady' && <PricingEditor visible={pricingEditorVisible} setVisible={setPricingEditorVisible} pricing={pricing} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
+            {userData.account_type === 'lady' && <ServicesEditor visible={servicesEditorVisible} setVisible={setServicesEditorVisible} services={userData.services} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
+            <WorkingHoursEditor visible={workingHoursEditorVisible} setVisible={setWorkingHoursEditorVisible} working_hours={userData.working_hours} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />
+            <AddressEditor visible={addressEditorVisible} setVisible={setAddressEditorVisible} address={address} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} isEstablishment={userData.account_type === 'establishment'}/>
+            <ContactInformationEditor visible={contactInformationEditorVisible} setVisible={setContactInformationEditorVisible} contactInformation={contactInformation} toastRef={toastRef} userId={userData.id} isEstablishment={userData.account_type === 'establishment'} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />
         </View>
     )
 }

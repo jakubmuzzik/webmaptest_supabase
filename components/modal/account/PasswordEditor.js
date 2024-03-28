@@ -20,19 +20,21 @@ import {
     SUPPORTED_LANGUAGES,
     DEFAULT_LANGUAGE
 } from '../../../constants'
-import { getAuth, reauthenticateWithCredential, EmailAuthProvider, updatePassword } from '../../../firebase/config'
 import Toast from '../../Toast'
 
 import { Button } from 'react-native-paper'
 
+import { supabase } from '../../../supabase/config'
+import { useNavigate } from 'react-router-dom'
+
 const window = Dimensions.get('window')
 
 const PasswordEditor = ({ visible, setVisible, toastRef }) => {
+    const navigate = useNavigate()
 
     const [isSaving, setIsSaving] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [data, setData] = useState({
-        currentPassword: '',
         newPassword: '',
         confirmNewPassword: '',
         currentSecureTextEntry: true,
@@ -48,7 +50,6 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
                 useNativeDriver: true
             })
             setData({
-                currentPassword: '',
                 newPassword: '',
                 confirmNewPassword: '',
                 currentSecureTextEntry: true,
@@ -85,13 +86,8 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
         setVisible(false)
     }
 
-    const reauthenticate = async () => {
-        const cred = EmailAuthProvider.credential(getAuth().currentUser.email, data.currentPassword)
-        return reauthenticateWithCredential(getAuth().currentUser, cred)
-    }
-
     const onSavePress = async () => {
-        if (!data.newPassword || !data.currentPassword || data.newPassword !== data.confirmNewPassword || data.newPassword.length < 8) {
+        if (!data.newPassword || data.newPassword !== data.confirmNewPassword || data.newPassword.length < 8) {
             setShowErrorMessage(true)
             return
         }
@@ -104,19 +100,11 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
         setShowErrorMessage(false)
 
         try {
-            await reauthenticate()
-        } catch(e) {
-            console.error(e)
-            modalToastRef.current.show({
-                type: 'error',
-                text: 'Invalid password.'
-            })
-            setIsSaving(false)
-            return
-        }
+            const { error } = await supabase.auth.updateUser({ password: data.newPassword })
 
-        try {
-            await updatePassword(getAuth().currentUser, data.newPassword)
+            if (error) {
+                throw error
+            }
             
             toastRef.current.show({
                 type: 'success',
@@ -124,11 +112,15 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
             })
 
             closeModal()
+
+            navigate('/account/settings', {
+                replace: true
+            })
         } catch(e) {
-            if (e.code?.includes('auth')) {
+            if (e.message?.includes('New password should be different from the old password')) {
                 modalToastRef.current.show({
                     type: 'error',
-                    text: 'Invalid password.'
+                    text: e.message
                 })
             } else {
                 modalToastRef.current.show({
@@ -190,26 +182,6 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
                             </Text>
 
                             <HoverableInput
-                                placeholder="Enter your password"
-                                label="Current password"
-                                borderColor={COLORS.placeholder}
-                                hoveredBorderColor={COLORS.red}
-                                textColor='#000'
-                                containerStyle={{ marginTop: SPACING.xxx_small, marginHorizontal: SPACING.small }}
-                                textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                text={data.currentPassword}
-                                setText={(text) => setData({ ...data, ['currentPassword']: text.replaceAll(' ', '') })}
-                                leftIconName='lock-outline'
-                                rightIconName={data.currentSecureTextEntry ? 'eye-off' : 'eye'}
-                                onRightIconPress={() => updateSecureTextEntry('currentSecureTextEntry')}
-                                errorMessage={showErrorMessage && !data.currentPassword ? 'Enter your password' : undefined}
-                                secureTextEntry={data.currentSecureTextEntry}
-                                onSubmitEditing={onSavePress}
-                            />
-
-                            <HoverableInput
                                 placeholder="8 or more characters"
                                 label="New password"
                                 borderColor={COLORS.placeholder}
@@ -269,7 +241,7 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
                                 mode="contained"
                                 onPress={onSavePress}
                                 loading={isSaving}
-                                disabled={isSaving || !data.currentPassword || !data.newPassword}
+                                disabled={isSaving || !data.newPassword}
                             >
                                 Save
                             </Button>

@@ -31,15 +31,6 @@ import Toast from '../Toast'
 
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 
-import {
-    db,
-    getAuth,
-    doc,
-    updateDoc,
-    signInWithEmailAndPassword,
-    sendPasswordResetEmail
-  } from '../../firebase/config'
-
 import { supabase } from '../../supabase/config'
 
 const window = Dimensions.get('window')
@@ -173,18 +164,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 throw signInError
             }
 
-            console.log(sessionData.user.email)
-
-            const { error: updateError } = await supabase
-                .from('users')
-                .update({ email })
-                .eq('id', sessionData.user.id)
-
-            if (updateError) {
-                throw updateError
-            }
-
-            fetchUser(sessionData.user)
+            fetchUser(sessionData.user.id)
 
             closeModal()
 
@@ -196,12 +176,10 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 replace: true
             })
 
-            if (sessionData.user.email_confirmed_at) {
-                toastRef.current?.show({
-                    type: 'success',
-                    text: 'Successfully logged in.'
-                })
-            }
+            toastRef.current?.show({
+                type: 'success',
+                text: 'Successfully logged in.'
+            })
         } catch(error) { 
             console.error(error)
             if (error.message?.includes('Invalid login credentials')) {
@@ -235,7 +213,8 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
 
         try {
             //await sendPasswordResetEmail(getAuth(), data.emailForReset)
-            const redirectTo = Linking.createURL("/change-password")
+            //const redirectTo = Linking.createURL("/change-password")
+            const redirectTo = Linking.createURL("/account/settings?change_password=true")
             console.log(redirectTo)
 
             //TODO - change to production URL - change to expo variable ?

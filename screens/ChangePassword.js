@@ -65,13 +65,8 @@ const ChangePassword = ({ toastRef }) => {
             if (error) {
                 throw error
             }
-
-            toastRef.current.show({
-                type: 'success',
-                text: 'Your password has been successfully changed.'
-            })
             
-            navigate('/account', {
+            navigate('/account/settings', {
                 replace: true
             })
         } catch (e) {
@@ -104,7 +99,7 @@ const ChangePassword = ({ toastRef }) => {
             <Animated.View style={{
                 backgroundColor: '#FFF',
                 borderRadius: 24,
-                width: normalize(400),
+                width: normalize(450),
                 maxWidth: '90%',
                 maxHeight: '90%',
                 overflow: 'hidden'

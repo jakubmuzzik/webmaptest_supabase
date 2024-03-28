@@ -30,11 +30,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox"
 
 import Toast from '../../Toast'
 
-import {
-    db,
-    doc,
-    updateDoc,
-} from '../../../firebase/config'
+import { supabase } from '../../../supabase/config'
 
 const window = Dimensions.get('window')
 
@@ -97,7 +93,14 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
         setIsSaving(true)
 
         try {
-            await updateDoc(doc(db, 'users', userId), {services: changedServices, last_modified_date: new Date()})
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({services: changedServices, last_modified_date: new Date()})
+                .eq('id', userId)
+
+            if (updateError) {
+                throw updateError
+            }
 
             closeModal()
 

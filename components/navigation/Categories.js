@@ -7,7 +7,6 @@ import Animated, { withTiming, useSharedValue, useAnimatedStyle } from 'react-na
 import { normalize, stripEmptyParams, getParam } from '../../utils'
 import { SUPPORTED_LANGUAGES } from '../../constants'
 import { CITY, ANYWHERE, SELECT_CITY, SEARCH, CZECH, translateLabels } from '../../labels'
-import { Badge } from 'react-native-paper'
 
 import HoverableView from '../../components/HoverableView'
 import Filters from '../modal/Filters'
@@ -15,11 +14,11 @@ import CityPicker from '../modal/CityPicker'
 
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
 import { connect } from 'react-redux'
-import { resetEstablishmentsData, resetLadiesData, resetMasseusesData } from '../../redux/actions'
+import { resetAllCurrentDataCount } from '../../redux/actions'
 
 import { Link, useSearchParams, useLocation, useNavigate } from 'react-router-dom'
 
-const Categories = ({ ladyCities, establishmentCities, resetEstablishmentsData, resetLadiesData, resetMasseusesData }) => {
+const Categories = ({ ladyCities, establishmentCities, resetAllCurrentDataCount }) => {
     const [searchParams] = useSearchParams()
 
     const [index, setIndex] = useState(0)
@@ -155,9 +154,8 @@ const Categories = ({ ladyCities, establishmentCities, resetEstablishmentsData, 
 
         setIndex(routes.indexOf(route))
 
-        //resetEstablishmentsData()
-        //resetLadiesData()
-        //resetMasseusesData()
+        //reset all current data count that's exposed to Explore component
+        resetAllCurrentDataCount()
 
         navigate({
             pathname: route.path,
@@ -259,7 +257,7 @@ const mapStateToProps = (store) => ({
     establishmentCities: store.appState.establishmentCities
 })
 
-export default connect(mapStateToProps,{ resetEstablishmentsData, resetLadiesData, resetMasseusesData })(Categories)
+export default connect(mapStateToProps,{ resetAllCurrentDataCount })(Categories)
 
 const styles = StyleSheet.create({
     categoryContainer: {

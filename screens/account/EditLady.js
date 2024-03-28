@@ -17,7 +17,6 @@ import PersonalDetails from './PersonalDetails'
 import Photos from './Photos'
 import Videos from './Videos'
 
-import { updateDoc, doc, db } from '../../firebase/config'
 import { REJECTED, IN_REVIEW, ACTIVE } from '../../labels'
 
 const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedux }) => {
@@ -97,7 +96,15 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
 
         setResubmitting(true)
         try {
-            await updateDoc(doc(db, 'users', ladyData.id), { status: IN_REVIEW, last_submitted_date: new Date() })
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({status: IN_REVIEW, last_submitted_date: new Date()})
+                .eq('id', ladyData.id)
+
+            if (updateError) {
+                throw updateError
+            }
+
             updateLadyInRedux({ status: IN_REVIEW, id: ladyData.id, last_submitted_date: new Date() })
 
             toastRef.current.show({

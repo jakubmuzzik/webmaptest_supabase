@@ -10,7 +10,7 @@ import SwappableText from '../components/animated/SwappableText'
 import { connect } from 'react-redux'
 import ContentLoader, { Rect } from "react-content-loader/native"
 
-const Explore = ({ ladiesCount, masseusesCount, establishmentsCount }) => {
+const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishmentsCount }) => {
     const [searchParams] = useSearchParams()
 
     const location = useLocation()
@@ -68,13 +68,13 @@ const Explore = ({ ladiesCount, masseusesCount, establishmentsCount }) => {
         }
     })
 
-    const dataCount = location.pathname === '/' ? ladiesCount : location.pathname === '/mas' ? masseusesCount : establishmentsCount
+    const currentDataCount = location.pathname === '/' ? currentLadiesCount : location.pathname === '/mas' ? currentMasseusesCount : currentEstablishmentsCount
 
     const getDataCountText = () => {
-        if (dataCount === 1) {
-            return location.pathname === '/' ? dataCount + ' lady' : location.pathname === '/mas' ? dataCount + ' masseuse' : dataCount + ' establishment'
+        if (currentDataCount === 1) {
+            return location.pathname === '/' ? currentDataCount + ' lady' : location.pathname === '/mas' ? currentDataCount + ' masseuse' : currentDataCount + ' establishment'
         } else {
-            return location.pathname === '/' ? dataCount + ' ladies' : location.pathname === '/mas' ? dataCount + ' masseuses' : dataCount + ' establishments'
+            return location.pathname === '/' ? currentDataCount + ' ladies' : location.pathname === '/mas' ? currentDataCount + ' masseuses' : currentDataCount + ' establishments'
         }
     }
 
@@ -93,7 +93,7 @@ const Explore = ({ ladiesCount, masseusesCount, establishmentsCount }) => {
                         &nbsp;•&nbsp;
                     </Text>
 
-                    {isNaN(dataCount) && <ContentLoader
+                    {isNaN(currentDataCount) && <ContentLoader
                         speed={2}
                         height={FONT_SIZES.large}
                         width={80}
@@ -104,7 +104,7 @@ const Explore = ({ ladiesCount, masseusesCount, establishmentsCount }) => {
                         <Rect x="0" y="0" rx="0" ry="0" width="100%" height={FONT_SIZES.large} />
                     </ContentLoader>}
 
-                    {!isNaN(dataCount) && (
+                    {!isNaN(currentDataCount) && (
                         <SwappableText
                             value={getDataCountText()}
                             style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium, textAlign: 'center' }}
@@ -137,9 +137,9 @@ const Explore = ({ ladiesCount, masseusesCount, establishmentsCount }) => {
 }
 
 const mapStateToProps = (store) => ({
-    ladiesCount: store.appState.ladiesCount,
-    masseusesCount: store.appState.masseusesCount,
-    establishmentsCount: store.appState.establishmentsCount
+    currentLadiesCount: store.appState.currentLadiesCount, 
+    currentMasseusesCount: store.appState.currentMasseusesCount, 
+    currentEstablishmentsCount: store.appState.currentEstablishmentsCount
 })
 
 export default connect(mapStateToProps)(Explore)

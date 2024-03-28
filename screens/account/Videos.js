@@ -134,7 +134,7 @@ const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLa
         
         await updateDoc(doc(db, 'users', userData.id), { videos, last_modified_date: new Date() })
 
-        if (userData.establishmentId) {
+        if (userData.establishment_id) {
             updateLadyInRedux({ videos, id: userData.id, last_modified_date: new Date() })
         } else {
             updateCurrentUserInRedux({ videos, id: userData.id, last_modified_date: new Date() })
@@ -182,7 +182,7 @@ const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLa
         const newVideos = userData.videos.filter(video => video.id !== videoId)
         await updateDoc(doc(db, 'users', userData.id), { videos: newVideos })
 
-        if (userData.establishmentId) {
+        if (userData.establishment_id) {
             updateLadyInRedux({ videos: newVideos, id: userData.id })
         } else {
             updateCurrentUserInRedux({ videos: newVideos, id: userData.id })

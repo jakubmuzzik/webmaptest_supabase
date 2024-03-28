@@ -11,7 +11,6 @@ import AssetsTabView from "../components/modal/profile/AssetsTabView"
 import { isBrowser } from 'react-device-detect'
 import { MotiText, MotiView } from "moti"
 import ContentLoader, { Rect } from "react-content-loader/native"
-import { getDoc, doc, db } from "../firebase/config"
 import Toast from "../components/Toast"
 import { Link } from 'react-router-dom'
 import RenderLady from "../components/list/RenderLady"
@@ -26,6 +25,8 @@ import Animated, {
 import { useParams, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { connect } from "react-redux"
 import { ACTIVE, MASSAGE_SERVICES } from "../labels"
+
+import { supabase } from "../supabase/config"
 
 const Profile = ({ toastRef }) => {
     const location = useLocation()
@@ -120,13 +121,11 @@ const Profile = ({ toastRef }) => {
     })
 
     useLayoutEffect(() => {
-        console.log(location.state)
         if (data) {
             setLoading(false)
-            console.log('has data')
 
-            if (data.establishmentId) {
-                fetchEstablishmentName(data.establishmentId)
+            if (data.establishment_id) {
+                fetchEstablishmentName(data.establishment_id)
             }
         } else {
             fetchUser()
@@ -203,19 +202,25 @@ const Profile = ({ toastRef }) => {
 
     const fetchUser = async () => {
         try {
-            const snapshot = await getDoc(doc(db, 'users', id))
-            if (snapshot.exists()) {
-                const snapshotData = snapshot.data()
-                setData({
-                    ...snapshotData,
-                    id: snapshotData.id
-                })
+            const { data, error } = await supabase
+                .from('users')
+                .select()
+                .eq('id', id)
 
-                if (snapshotData.establishmentId) {
-                    fetchEstablishmentName(snapshotData.establishmentId)
-                } else if (snapshotData.account_type === 'establishment') {
-                    fetchLadiesUnderEstablishment(snapshotData.id)
-                }
+            if (error) {
+                throw error
+            }
+
+            if (!data[0]) {
+                throw new Error('Profile was not found.')
+            }
+
+            setData(data[0])
+
+            if (data[0].establishment_id) {
+                fetchEstablishmentName(data[0].establishment_id)
+            } else if (data[0].account_type === 'establishment') {
+                fetchLadiesUnderEstablishment(data[0].id)
             }
         } catch (error) {
             console.error(error)
@@ -228,18 +233,28 @@ const Profile = ({ toastRef }) => {
         }
     }
 
-    const fetchEstablishmentName = async (establishmentId) => {
+    const fetchEstablishmentName = async (establishment_id) => {
         try {
-            let snapshot = await getDoc(doc(db, 'users', establishmentId))
-            if (snapshot.exists()) {
-                setEstablishmentName(snapshot.data().name)
+            const { data, error } = await supabase
+                .from('users')
+                .select()
+                .eq('id', establishment_id)
+
+            if (error) {
+                throw error
             }
+
+            if (!data[0]) {
+                throw new Error('Establishment name was not found.')
+            }
+
+            setEstablishmentName(data[0].name)
         } catch (error) {
             console.error(error)
         }
     }
 
-    const fetchLadiesUnderEstablishment = async (establishmentId) => {
+    const fetchLadiesUnderEstablishment = async (establishment_id) => {
         setTimeout(() => {
             setLadiesUnderEstablishment(new Array(30).fill({
                 name: 'lady xxx',
@@ -268,7 +283,7 @@ const Profile = ({ toastRef }) => {
         //setEstablishmentName(null)
         //setData(null)
         navigate({
-            pathname: '/profile/' + data.establishmentId,
+            pathname: '/profile/' + data.establishment_id,
             search: new URLSearchParams({ 
                 ...stripEmptyParams(params)
             }).toString(),
@@ -473,8 +488,8 @@ const Profile = ({ toastRef }) => {
                                     width: 'auto',
                                     borderRadius: 10
                                 }}
-                                source={images[0].downloadUrl}
-                                placeholder={images[0].blurhash}
+                                source={images[0]?.downloadUrl}
+                                placeholder={images[0]?.blurhash}
                                 resizeMode="cover"
                                 transition={200}
                             />
@@ -493,8 +508,8 @@ const Profile = ({ toastRef }) => {
                                         flex: 1,
                                         borderRadius: 10
                                     }}
-                                    source={images[1].downloadUrl}
-                                    placeholder={images[1].blurhash}
+                                    source={images[1]?.downloadUrl}
+                                    placeholder={images[1]?.blurhash}
                                     resizeMode="cover"
                                     transition={200}
                                 />
@@ -508,8 +523,8 @@ const Profile = ({ toastRef }) => {
                                         flex: 1,
                                         borderRadius: 10
                                     }}
-                                    source={images[2].downloadUrl}
-                                    placeholder={images[2].blurhash}
+                                    source={images[2]?.downloadUrl}
+                                    placeholder={images[2]?.blurhash}
                                     contentFit="cover"
                                     transition={200}
                                 />
@@ -527,8 +542,8 @@ const Profile = ({ toastRef }) => {
                                         flex: 1,
                                         borderRadius: 10
                                     }}
-                                    source={images[3].downloadUrl}
-                                    placeholder={images[3].blurhash}
+                                    source={images[3]?.downloadUrl}
+                                    placeholder={images[3]?.blurhash}
                                     resizeMode="cover"
                                     transition={200}
                                 />
@@ -542,8 +557,8 @@ const Profile = ({ toastRef }) => {
                                         flex: 1,
                                         borderRadius: 10
                                     }}
-                                    source={images[4].downloadUrl}
-                                    placeholder={images[4].blurhash}
+                                    source={images[4]?.downloadUrl}
+                                    placeholder={images[4]?.blurhash}
                                     resizeMode="cover"
                                     transition={200}
                                 />
@@ -623,13 +638,13 @@ const Profile = ({ toastRef }) => {
                 <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
                     About
                 </Text>
-                {!data.establishmentId && data.account_type === 'lady' && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
+                {!data.establishment_id && data.account_type === 'lady' && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
                     • Independent lady
                 </Text>}
                 {data.establishment_type && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
                     • {data.establishment_type}
                 </Text>}
-                {data.establishmentId && establishmentName && (
+                {data.establishment_id && establishmentName && (
                     <Animated.Text
                         numberOfLines={2}
                         style={establishmentNameAnimatedStyle}

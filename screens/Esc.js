@@ -1,9 +1,7 @@
 import React, { useState, useMemo, useLayoutEffect, useEffect, useRef } from 'react'
 import { 
     View, 
-    Dimensions, 
     StyleSheet,
-    ScrollView,
     Text
 } from 'react-native'
 import ContentLoader, { Rect } from "react-content-loader/native"
@@ -13,49 +11,30 @@ import {
     FONT_SIZES, 
     MAX_ITEMS_PER_PAGE, 
     SPACING, 
-    SUPPORTED_LANGUAGES ,
-    MIN_AGE,
-    MAX_AGE,
-    MIN_HEIGHT,
-    MAX_HEIGHT,
-    MIN_WEIGHT,
-    MAX_WEIGHT,
+    SUPPORTED_LANGUAGES,
     DEFAULT_FILTERS
 } from '../constants'
 import { 
-    ACTIVE, 
-    BODY_TYPES,
-    PUBIC_HAIR_VALUES,
-    SEXUAL_ORIENTATION,
-    SERVICES,
-    HAIR_COLORS,
-    BREAST_SIZES,
-    BREAST_TYPES,
-    EYE_COLORS,
-    LANGUAGES,
-    NATIONALITIES
+    ACTIVE,
 } from '../labels'
 import RenderLady from '../components/list/RenderLady'
 import { MOCK_DATA } from '../constants'
 import { normalize, getParam, buildFiltersForQuery, areValuesEqual, getFilterParams, stripDefaultFilters } from '../utils'
 import { useSearchParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getCountFromServer, db, collection, query, where, startAfter, startAt, limit, orderBy, getDocs, getDoc, doc } from '../firebase/config'
-import { MotiView, MotiText } from 'moti'
-import { updateLadiesCount, updateLadiesData, resetAllPaginationData } from '../redux/actions'
-import SwappableText from '../components/animated/SwappableText'
+import { updateCurrentLadiesCount } from '../redux/actions'
 import Pagination from '../components/Pagination'
 import LottieView from 'lottie-react-native'
 
 import { supabase } from '../supabase/config'
 
-const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladiesCount, ladiesData, ladyCities=[] }) => {
+const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
         language: getParam(SUPPORTED_LANGUAGES, searchParams.get('language'), ''),
         page: searchParams.get('page') && !isNaN(searchParams.get('page')) ? searchParams.get('page') : 1
-    }), [searchParams, ladyCities])
+    }), [searchParams])
 
     const filters = useMemo(() => ({
         city: searchParams.get('city'),
@@ -66,34 +45,32 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
 
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
     const [isLoading, setIsLoading] = useState(true)
+    const [ladiesData, setLadiesData] = useState({})
     
     useEffect(() => {
-        if (isNaN(ladiesCount)) {
+        if (isNaN(currentLadiesCount)) {
             getLadiesCount()
         }
-    }, [ladiesCount])
+    }, [currentLadiesCount])
 
     useLayoutEffect(() => {
         //filters changed
         if (!areValuesEqual(filters, previousFilters.current)) {
-            console.log('filters changed')
-            console.log(filters)
-            
             setIsLoading(true)
 
-            //trigger useEffect to update ladies count
-            updateLadiesCount()
+            //will trigger useEffect to re-fetch ladies count
+            updateCurrentLadiesCount()
 
-            resetAllPaginationData()
+            //reset pagination data as filters changed
+            setLadiesData({})
+            
             loadDataForCurrentPage()
 
             previousFilters.current = filters
         } 
         //pagination changed or init load
         else {
-            console.log('pagination changed or init load')
             if (!ladiesData[params.page]) {
-                console.log('does not have data for page: ' + params.page)
                 setIsLoading(true)
                 loadDataForCurrentPage()
             } else {
@@ -102,17 +79,16 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
         } 
     }, [params.page, filters])
 
-    const getOrdering = () => {
-        return orderBy("created_date")
-    }
-
     const loadMockDataForPage = () => {
-        updateLadiesData(new Array(MAX_ITEMS_PER_PAGE).fill({
-            name: 'llll',
-            date_of_birth: '25071996',
-            address: {city: 'Praha'},
-            images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
-        }, 0), params.page)
+        setLadiesData((current) => ({
+            ...current,
+            [params.page] : new Array(MAX_ITEMS_PER_PAGE).fill({
+                name: 'llll',
+                date_of_birth: '25071996',
+                address: {city: 'Praha'},
+                images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
+            }, 0)
+        }))
         setIsLoading(false)
     }
 
@@ -130,9 +106,15 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
             const { data } = await query
 
             if (data && data.length > 0) {
-                updateLadiesData(data, params.page)
+                setLadiesData((current) => ({
+                    ...current,
+                    [params.page] : data
+                }))
             } else {
-                updateLadiesData([], params.page)
+                setLadiesData((current) => ({
+                    ...current,
+                    [params.page] : []
+                }))
             }
         } catch(error) {
             console.error(error)
@@ -153,7 +135,9 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
             const { count } = await query
 
             if (!isNaN(count)) {
-                updateLadiesCount(count)
+                updateCurrentLadiesCount(count)
+            } else {
+                updateCurrentLadiesCount(0)
             }
         } catch(e) {
             console.error(e)
@@ -218,7 +202,7 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
     }
 
     const renderNoResults = () => (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginRight: SPACING.large }}>
             <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, color: '#FFF' }}>Sorry, we couldn't find any results</Text>
             <LottieView
                 style={{ height: 180 }}
@@ -240,20 +224,18 @@ const Esc = ({ updateLadiesCount, updateLadiesData, resetAllPaginationData, ladi
             </View>
 
             <View style={{ marginTop: SPACING.large, marginBottom: SPACING.medium }}>
-               {ladiesCount && <Pagination dataCount={ladiesCount}/>}
-               {isNaN(ladiesCount) && renderPaginationSkeleton()}
+               {currentLadiesCount && <Pagination dataCount={currentLadiesCount}/>}
+               {isNaN(currentLadiesCount) && renderPaginationSkeleton()}
             </View>
         </View>
     )
 }
 
 const mapStateToProps = (store) => ({
-    ladiesCount: store.appState.ladiesCount,
-    ladiesData: store.appState.ladiesData,
-    ladyCities: store.appState.ladyCities,
+    currentLadiesCount: store.appState.currentLadiesCount
 })
 
-export default connect(mapStateToProps, { updateLadiesCount, updateLadiesData, resetAllPaginationData })(Esc)
+export default connect(mapStateToProps, { updateCurrentLadiesCount })(Esc)
 
 const styles = StyleSheet.create({
     cardContainer: {

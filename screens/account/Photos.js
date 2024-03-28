@@ -144,7 +144,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
         
         await updateDoc(doc(db, 'users', userData.id), { images: currentImages, last_modified_date: new Date() })
 
-        if (userData.establishmentId) {
+        if (userData.establishment_id) {
             updateLadyInRedux({ images: currentImages, id: userData.id, last_modified_date: new Date() })
         } else {
             updateCurrentUserInRedux({ images: currentImages, id: userData.id, last_modified_date: new Date() })
@@ -199,7 +199,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
         const newImages = userData.images.filter(image => image.id !== imageId)
         await updateDoc(doc(db, 'users', userData.id), { images: newImages, last_modified_date: new Date() })
 
-        if (userData.establishmentId) {
+        if (userData.establishment_id) {
             updateLadyInRedux({ images: newImages, id: userData.id, last_modified_date: new Date() })
         } else {
             updateCurrentUserInRedux({ images: newImages, id: userData.id, last_modified_date: new Date() })

@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react'
+import React, { useState, memo, useEffect } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { FONTS, FONT_SIZES, COLORS, SPACING } from '../../constants'
 import { MaterialCommunityIcons, Octicons } from '@expo/vector-icons'
@@ -9,13 +9,21 @@ import { logOut, updateCurrentUserInRedux } from '../../redux/actions'
 import { ACTIVE, IN_REVIEW, INACTIVE, REJECTED } from '../../labels'
 import ConfirmationModal from '../../components/modal/ConfirmationModal'
 
-import { updateDoc, doc, db, getAuth } from '../../firebase/config'
-
 import PasswordEditor from '../../components/modal/account/PasswordEditor'
 import EmailEditor from '../../components/modal/account/EmailEditor'
 import DeleteAccount from '../../components/modal/account/DeleteAccount'
 
-const Settings = ({ setTabHeight, toastRef, logOut, currentUser, updateCurrentUserInRedux }) => {
+import { useLocation } from 'react-router-dom'
+
+const Settings = ({ setTabHeight, toastRef, logOut, currentUser, currentAuthUser, updateCurrentUserInRedux }) => {
+    const location = useLocation()
+
+    useEffect(() => {
+        if (new URLSearchParams(location.search).get('change_password')) {
+            onPasswordEditPress()
+        }
+    }, [])
+
     const [passwordEditorVisible, setPasswordEditorVisible] = useState(false)
     const [emailEditorVisible, setEmailEditorVisible] = useState(false)
     const [deleteAccountVisible, setDeleteAccountVisible] = useState(false)
@@ -24,11 +32,6 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, updateCurrentUs
 
     const onLogoutPress = () => {
         logOut()
-
-        toastRef.current.show({
-            type: 'success',
-            text: "You've been logged out."
-        })
     }
 
     const onEmailEditPress = () => {
@@ -57,9 +60,16 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, updateCurrentUs
 
     const deactivateProfile = async () => {
         try {
-            await updateDoc(doc(db, 'users', getAuth().currentUser.uid), { status: INACTIVE })
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({status: INACTIVE})
+                .eq('id', currentUser.id)
 
-            updateCurrentUserInRedux({ status: INACTIVE, id: getAuth().currentUser.uid })
+            if (updateError) {
+                throw updateError
+            }
+
+            updateCurrentUserInRedux({ status: INACTIVE, id: currentUser.id })
 
             toastRef.current.show({
                 type: 'success',
@@ -78,9 +88,16 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, updateCurrentUs
 
     const activateProfile = async () => {
         try {
-            await updateDoc(doc(db, 'users', getAuth().currentUser.uid), { status: ACTIVE })
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({status: ACTIVE})
+                .eq('id', currentUser.id)
 
-            updateCurrentUserInRedux({ status: ACTIVE, id: getAuth().currentUser.uid })
+            if (updateError) {
+                throw updateError
+            }
+
+            updateCurrentUserInRedux({ status: ACTIVE, id: currentUser.id })
 
             toastRef.current.show({
                 type: 'success',
@@ -112,7 +129,7 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, updateCurrentUs
                         </Text>
                     </View>
                     <Text numberOfLines={1} onPress={onEmailEditPress} style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}>
-                        {getAuth().currentUser.email}
+                        {currentAuthUser.email}
                     </Text>
                 </View>
                 <View style={styles.row}>
@@ -164,7 +181,7 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, updateCurrentUs
             </View>
 
             <PasswordEditor visible={passwordEditorVisible} setVisible={setPasswordEditorVisible} toastRef={toastRef} />
-            <EmailEditor visible={emailEditorVisible} setVisible={setEmailEditorVisible} toastRef={toastRef} />
+            <EmailEditor visible={emailEditorVisible} setVisible={setEmailEditorVisible} toastRef={toastRef} currentEmail={currentAuthUser.email}/>
             <DeleteAccount visible={deleteAccountVisible} setVisible={setDeleteAccountVisible} toastRef={toastRef} isEstablishment={currentUser.account_type === 'establishment'} logOut={logOut} />
 
             <ConfirmationModal
@@ -195,7 +212,8 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, updateCurrentUs
 }
 
 const mapStateToProps = (store) => ({
-    toastRef: store.appState.toastRef
+    toastRef: store.appState.toastRef,
+    currentAuthUser: store.userState.currentAuthUser
 })
 
 export default connect(mapStateToProps, { logOut, updateCurrentUserInRedux })(memo(Settings))

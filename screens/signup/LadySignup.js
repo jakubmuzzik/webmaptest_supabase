@@ -135,11 +135,18 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
         data.status = IN_REVIEW
 
         if (independent) {
-            const { data: { user }, error: signUpError } = await supabase.auth.signUp({
-                email: data.email,
-                password: data.password,
-            })
-            
+            const { data: { user }, error: signUpError } = await supabase.auth.signUp(
+                {
+                    email: data.email,
+                    password: data.password,
+                },
+                {
+                    data: {
+                        name: data.name
+                    }
+                }
+            )
+
             if (signUpError) {
                 throw signUpError
             }
@@ -150,7 +157,7 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
         } else {
             const { data } = await supabase.auth.getSession()
             data.id = uuid.v4(),
-            data.establishmentId = data.session.user.id
+            data.establishment_id = data.session.user.id
         }
 
         data = {

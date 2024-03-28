@@ -22,16 +22,12 @@ import {
 } from '../../../constants'
 import BouncyCheckbox from "react-native-bouncy-checkbox"
 
-import {
-    db,
-    doc,
-    updateDoc,
-} from '../../../firebase/config'
-
 import Toast from '../../Toast'
 
 import { Button } from 'react-native-paper'
 import { ACTIVE } from '../../../labels'
+
+import { supabase } from '../../../supabase/config'
 
 const window = Dimensions.get('window')
 
@@ -101,7 +97,24 @@ const ContactInformationEditor = ({ visible, setVisible, contactInformation, toa
                 delete changedData.website
             }
 
-            await updateDoc(doc(db, 'users', userId), {...changedData, last_modified_date: new Date()})
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({...changedData, last_modified_date: new Date()})
+                .eq('id', userId)
+
+            if (updateError) {
+                throw updateError
+            }
+
+            if (changedData.name !== contactInformation.name) {
+                const { error: authUpdateError } = await supabase.auth.updateUser({
+                    data: { name: changedData.name }
+                })
+    
+                if (authUpdateError) {
+                    throw authUpdateError
+                }
+            }
 
             closeModal()
 

@@ -36,7 +36,6 @@ import { normalize } from '../../utils'
 import Categories from './Categories'
 import Login from '../modal/Login'
 import Signup from '../modal/Signup'
-import { getAuth } from '../../firebase/config'
 import { logOut } from '../../redux/actions'
 import { Avatar } from 'react-native-paper'
 import { connect } from 'react-redux'
@@ -47,7 +46,7 @@ const SCREENS_WITH_CITY_SELECTION = [
     'Esc', 'Pri', 'Mas', 'Clu', 'NotFound', 'Explore'
 ]
 
-const Header = ({ logOut, toastRef }) => {
+const Header = ({ logOut, toastRef, currentAuthUser }) => {
     const [searchParams] = useSearchParams()
     const location = useLocation()
     const navigate = useNavigate()
@@ -77,9 +76,9 @@ const Header = ({ logOut, toastRef }) => {
     const [loginVisible, setLoginVisible] = useState(false)
     const [signUpVisible, setSignUpVisible] = useState(false)
 
-    const [userData, setUserData] = useState({
-        name: 'J'
-    })//TODO - take user first letter form Redux instead and use it in user dropdown avatar
+    //const [userData, setUserData] = useState({
+    //    name: 'J'
+    //})//TODO - take user first letter form Redux instead and use it in user dropdown avatar
 
     const userDropdownRef = useRef()
     const userDropdownModalRef = useRef()
@@ -123,7 +122,7 @@ const Header = ({ logOut, toastRef }) => {
             },
         )
 
-        if (isLargeScreen && !getAuth()?.currentUser) {
+        if (isLargeScreen && !currentAuthUser.id) {
             loginButtonsRef.current.measure((_fx, _fy, _w, h, _px, py) => {
                 setLanguageDropdownRight(_w + SPACING.page_horizontal + SPACING.xx_small)
             })
@@ -173,14 +172,10 @@ const Header = ({ logOut, toastRef }) => {
 
     const onLogoutPress = () => {
         logOut()
-        toastRef.current.show({
-            type: 'success',
-            text: "You've been logged out."
-        })
     }
 
     const renderUserDropdown = () => {
-        if (getAuth().currentUser) {
+        if (currentAuthUser.id) {
             return (
                 <Modal visible={userDropdownVisible} transparent animationType="none">
                     <TouchableOpacity
@@ -207,13 +202,13 @@ const Header = ({ logOut, toastRef }) => {
                                     <TouchableOpacity onPress={onAccountPress} style={{ maxWidth: 250, paddingVertical: SPACING.xx_small, paddingHorizontal: SPACING.xx_small, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
                                         activeOpacity={0.8}
                                     >
-                                        <Avatar.Text size={normalize(38)} label={userData.name} style={{ backgroundColor: COLORS.red }} labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }} />
+                                        <Avatar.Text size={normalize(38)} label={currentAuthUser.user_metadata.name[0]} style={{ backgroundColor: COLORS.red }} labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }} />
                                         <View style={{ flexDirection: 'column', marginHorizontal: SPACING.xxx_small, flexShrink: 1, }}>
                                             <Text numberOfLines={1} style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.lightGrey }}>
                                                 Account
                                             </Text>
                                             <Text numberOfLines={1} style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium,  }}>
-                                                Jakub Muzik
+                                                {currentAuthUser.user_metadata.name}
                                             </Text>
                                         </View>
                                         <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
@@ -400,7 +395,7 @@ const Header = ({ logOut, toastRef }) => {
     }
 
     const renderRightHeader = () => {
-        return (isSmallScreen || getAuth().currentUser) ? (
+        return (isSmallScreen || currentAuthUser.id) ? (
             <>
                 {isSmallScreen && <HoverableView style={{ ...styles.searchWrapper, borderColor: searchBorderColor, flexGrow: 1, flexShrink: 1 }} hoveredBackgroundColor={COLORS.hoveredLightGrey} backgroundColor={COLORS.lightGrey}>
                     <Ionicons name="search" size={normalize(20)} color="white" />
@@ -425,13 +420,13 @@ const Header = ({ logOut, toastRef }) => {
                 </HoverableView>}
                 <HoverableView hoveredBackgroundColor={COLORS.hoveredLightGrey} backgroundColor={COLORS.lightGrey} style={{ marginLeft: SPACING.small, borderRadius: 20, justifyContent: 'center' }}>
                     <TouchableOpacity ref={userDropdownRef} onPress={toggleUserDropdown} activeOpacity={0.8} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: SPACING.xxx_small, paddingHorizontal: SPACING.xx_small }}>
-                        {getAuth().currentUser && <Avatar.Text size={normalize(28)} label={userData.name} style={{ backgroundColor: COLORS.red, marginRight: SPACING.xxx_small }} labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }} />}
-                        {/* {getAuth().currentUser ? (
-                            <Avatar.Text size={normalize(28)} label={userData.name} style={{ backgroundColor: COLORS.red }} labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }} />
+                        {/* {currentAuthUser.id && <Avatar.Text size={normalize(28)} label={currentAuthUser.user_metadata.name[0]} style={{ backgroundColor: COLORS.red, marginRight: SPACING.xxx_small }} labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }} />} */}
+                        {currentAuthUser.id ? (
+                            <Avatar.Text size={normalize(28)} label={currentAuthUser.user_metadata.name[0]} style={{ backgroundColor: COLORS.red }} labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }} />
                         ) : (
                             <Ionicons name="person-circle-outline" size={normalize(28)} color="white" />
-                        )} */}
-                        <MaterialIcons name="menu" size={normalize(20)} color="white" />
+                        )}
+                        <MaterialIcons style={{ paddingLeft: SPACING.xxx_small }} name="menu" size={normalize(20)} color="white" />
                     </TouchableOpacity>
                 </HoverableView>
             </>
@@ -537,7 +532,8 @@ const Header = ({ logOut, toastRef }) => {
 }
 
 const mapStateToProps = (store) => ({
-    toastRef: store.appState.toastRef
+    toastRef: store.appState.toastRef,
+    currentAuthUser: store.userState.currentAuthUser
 })
 
 export default connect(mapStateToProps, { logOut })(memo(Header))

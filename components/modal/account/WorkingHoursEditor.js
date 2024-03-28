@@ -21,11 +21,7 @@ import {
     DEFAULT_LANGUAGE
 } from '../../../constants'
 
-import {
-    db,
-    doc,
-    updateDoc,
-} from '../../../firebase/config'
+import { supabase } from '../../../supabase/config'
 
 import Toast from '../../Toast'
 
@@ -150,7 +146,14 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
         setShowErrorMessage(false)
 
         try {
-            await updateDoc(doc(db, 'users', userId), {working_hours: wh, last_modified_date: new Date()})
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({working_hours: wh, last_modified_date: new Date()})
+                .eq('id', userId)
+
+            if (updateError) {
+                throw updateError
+            }
 
             closeModal()
 

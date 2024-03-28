@@ -6,18 +6,12 @@ import {
     CLEAR_DATA,
     LADIES_STATE_CHANGE,
     STORE_TOAST_REF,
-    LADIES_COUNT_CHANGE,
-    MASSEUSES_COUNT_CHANGE,
-    ESTABLISHMENTS_COUNT_CHANGE,
+    CURRENT_LADIES_COUNT_CHANGE,
+    CURRENT_MASSEUSES_COUNT_CHANGE,
+    CURRENT_ESTABLISHMENTS_COUNT_CHANGE,
     LADY_CITIES_STATE_CHANGE,
     ESTABLISHMENT_CITIES_STATE_CHANGE,
-    LADIES_PAGINATION_DATA_STATE_CHANGE,
-    MASSEUSES_PAGINATION_DATA_STATE_CHANGE,
-    ESTABLISHMENT_PAGINATION_DATA_STATE_CHANGE,
-    RESET_LADIES_PAGINATION_DATA,
-    RESET_MASSEUSES_PAGINATION_DATA,
-    RESET_ESTABLISHMENTS_PAGINATION_DATA,
-    RESET_ALL_PAGINATION_DATA
+    CURRENT_DATA_COUNT_RESET
 } from './actionTypes'
 import { getAuth, getDoc, doc, db, signOut, getDocs, query, collection, where, getCountFromServer } from '../firebase/config'
 import { ACTIVE, DELETED } from '../labels'
@@ -44,37 +38,23 @@ export const updateCurrentUserInRedux = (data) => ({
     data
 })
 
-export const updateLadiesCount = (ladiesCount) => ({
-    type: LADIES_COUNT_CHANGE,
-    ladiesCount
+export const updateCurrentLadiesCount = (currentLadiesCount) => ({
+    type: CURRENT_LADIES_COUNT_CHANGE,
+    currentLadiesCount
 })
 
-export const updateMasseusesCount = (masseusesCount) => ({
-    type: MASSEUSES_COUNT_CHANGE,
-    masseusesCount
+export const updateCurrentMasseusesCount = (currentMasseusesCount) => ({
+    type: CURRENT_MASSEUSES_COUNT_CHANGE,
+    currentMasseusesCount
 })
 
-export const updateEstablishmentsCount = (establishmentsCount) => ({
-    type: ESTABLISHMENTS_COUNT_CHANGE,
-    establishmentsCount
+export const updateCurrentEstablishmentsCount = (currentEstablishmentsCount) => ({
+    type: CURRENT_ESTABLISHMENTS_COUNT_CHANGE,
+    currentEstablishmentsCount
 })
 
-export const updateLadiesData = (data, pageNumber) => ({
-    type: LADIES_PAGINATION_DATA_STATE_CHANGE,
-    data,
-    pageNumber
-})
-
-export const updateMasseusesData = (data, pageNumber) => ({
-    type: MASSEUSES_PAGINATION_DATA_STATE_CHANGE,
-    data,
-    pageNumber
-})
-
-export const updateEstablishmentsData = (data, pageNumber) => ({
-    type: ESTABLISHMENT_PAGINATION_DATA_STATE_CHANGE,
-    data,
-    pageNumber
+export const resetAllCurrentDataCount = () => ({
+    type: CURRENT_DATA_COUNT_RESET
 })
 
 export const updateLadyCities = (ladyCities) => ({
@@ -85,22 +65,6 @@ export const updateLadyCities = (ladyCities) => ({
 export const updateEstablishmentCities = (establishmentCities) => ({
     type: ESTABLISHMENT_CITIES_STATE_CHANGE,
     establishmentCities
-})
-
-export const resetLadiesData = () => ({
-    type: RESET_LADIES_PAGINATION_DATA
-})
-
-export const resetMasseusesData = () => ({
-    type: RESET_MASSEUSES_PAGINATION_DATA
-})
-
-export const resetEstablishmentsData = () => ({
-    type: RESET_ESTABLISHMENTS_PAGINATION_DATA
-})
-
-export const resetAllPaginationData = () => ({
-    type: RESET_ALL_PAGINATION_DATA
 })
 
 export const updateCurrentAuthUser = (currentAuthUser) => ({
@@ -128,7 +92,7 @@ export const fetchUser = (userId) => async (dispatch, getState) => {
 }
 
 export const fetchLadies = () => (dispatch, getState) => {
-    return getDocs(query(collection(db, "users"), where('establishmentId', '==', getAuth().currentUser.uid), where('status', '!=', DELETED)))
+    return getDocs(query(collection(db, "users"), where('establishment_id', '==', getAuth().currentUser.uid), where('status', '!=', DELETED)))
         .then(snapshot => {
             if (snapshot.empty) {
                 console.log('empty')
@@ -176,7 +140,10 @@ export const removeLadyFromRedux = (toRemoveId) => (dispatch, getState) => {
     dispatch({ type: LADIES_STATE_CHANGE, ladies })
 }
 
-export const logOut = () => (dispatch, getState) => {
-    signOut(getAuth())
+export const logOut = () => async (dispatch, getState) => {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+        return
+    }
     dispatch({ type: CLEAR_DATA })
 }

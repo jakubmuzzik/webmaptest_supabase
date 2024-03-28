@@ -2,32 +2,23 @@ import {
     ROUTE_STATE_CHANGE,
     SCROLL_DISABLED_STATE_CHANGE,
     STORE_TOAST_REF,
-    LADIES_COUNT_CHANGE,
-    MASSEUSES_COUNT_CHANGE,
-    ESTABLISHMENTS_COUNT_CHANGE,
+    CURRENT_LADIES_COUNT_CHANGE,
+    CURRENT_MASSEUSES_COUNT_CHANGE,
+    CURRENT_ESTABLISHMENTS_COUNT_CHANGE,
     LADY_CITIES_STATE_CHANGE,
     ESTABLISHMENT_CITIES_STATE_CHANGE,
-    ESTABLISHMENT_PAGINATION_DATA_STATE_CHANGE,
-    LADIES_PAGINATION_DATA_STATE_CHANGE,
-    MASSEUSES_PAGINATION_DATA_STATE_CHANGE,
-    RESET_LADIES_PAGINATION_DATA,
-    RESET_MASSEUSES_PAGINATION_DATA,
-    RESET_ESTABLISHMENTS_PAGINATION_DATA,
-    RESET_ALL_PAGINATION_DATA
+    CURRENT_DATA_COUNT_RESET
 } from '../actionTypes'
 
 const INITIAL_STATE = {
     route: {},
     scrollDisabled: false,
     toastRef: undefined,
-    ladiesCount: undefined,
-    masseusesCount: undefined,
-    establishmentsCount: undefined,
+    currentLadiesCount: undefined,
+    currentMasseusesCount: undefined,
+    currentEstablishmentsCount: undefined,
     ladyCities: undefined,
-    establishmentCities: undefined,
-    ladiesData: {},
-    masseusesData: {},
-    establishentsData: {}
+    establishmentCities: undefined
 }
 
 export const app = (state = INITIAL_STATE, action) => {
@@ -47,20 +38,27 @@ export const app = (state = INITIAL_STATE, action) => {
                 ...state,
                 toastRef: action.toastRef
             }
-        case LADIES_COUNT_CHANGE:
+        case CURRENT_LADIES_COUNT_CHANGE:
             return {
                 ...state,
-                ladiesCount: action.ladiesCount
+                currentLadiesCount: action.currentLadiesCount
             }
-        case MASSEUSES_COUNT_CHANGE:
+        case CURRENT_MASSEUSES_COUNT_CHANGE:
             return {
                 ...state,
-                masseusesCount: action.masseusesCount
+                currentMasseusesCount: action.currentMasseusesCount
             }
-        case ESTABLISHMENTS_COUNT_CHANGE:
+        case CURRENT_ESTABLISHMENTS_COUNT_CHANGE:
             return {
                 ...state,
-                establishmentsCount: action.establishmentsCount
+                currentEstablishmentsCount: action.currentEstablishmentsCount
+            }
+        case CURRENT_DATA_COUNT_RESET:
+            return {
+                ...state,
+                currentLadiesCount: undefined,
+                currentMasseusesCount: undefined,
+                currentEstablishmentsCount: undefined
             }
         case LADY_CITIES_STATE_CHANGE:
             return {
@@ -71,52 +69,6 @@ export const app = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 establishmentCities: action.establishmentCities
-            }
-        case ESTABLISHMENT_PAGINATION_DATA_STATE_CHANGE:
-            return {
-                ...state,
-                establishentsData: {
-                    ...state.establishentsData,
-                    [action.pageNumber] : action.data
-                }
-            }
-        case LADIES_PAGINATION_DATA_STATE_CHANGE:
-            return {
-                ...state,
-                ladiesData: {
-                    ...state.ladiesData,
-                    [action.pageNumber] : action.data
-                }
-            }
-        case MASSEUSES_PAGINATION_DATA_STATE_CHANGE:
-            return {
-                ...state,
-                masseusesData: {
-                    ...state.masseusesData,
-                    [action.pageNumber] : action.data
-                }
-            }
-        case RESET_LADIES_PAGINATION_DATA:
-            return {
-                ...state,
-                ladiesData: {}
-            }
-        case RESET_MASSEUSES_PAGINATION_DATA:
-            return {
-                ...state,
-                masseusesData: {}
-            }
-        case RESET_ESTABLISHMENTS_PAGINATION_DATA:
-            return {
-                ...state,
-                establishentsData: {}
-            }
-        case RESET_ALL_PAGINATION_DATA:
-            return {
-                ...state,
-                establishentsData: {},
-                masseusesData: {},
-                ladiesData: {}
             }
         default:
             return state

@@ -21,7 +21,6 @@ import EditLady from './account/EditLady'
 import ContentLoader, { Rect } from "react-content-loader/native"
 import { ACTIVE, IN_REVIEW, REJECTED } from '../labels'
 
-import { updateDoc, doc, db, getAuth } from '../firebase/config'
 import { updateCurrentUserInRedux } from '../redux/actions'
 
 //todo - create texts for each account statuses 
@@ -142,8 +141,16 @@ const Account = ({ navigation, route, currentUser={}, toastRef, updateCurrentUse
 
         setResubmitting(true)
         try {
-            await updateDoc(doc(db, 'users', getAuth().currentUser.uid), { status: IN_REVIEW, last_submitted_date: new Date() })
-            updateCurrentUserInRedux({ status: IN_REVIEW, id: getAuth().currentUser.uid, last_submitted_date: new Date() })
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({status: IN_REVIEW, last_submitted_date: new Date()})
+                .eq('id', currentUser.id)
+
+            if (updateError) {
+                throw updateError
+            }
+
+            updateCurrentUserInRedux({ status: IN_REVIEW, id: currentUser.id, last_submitted_date: new Date() })
 
             toastRef.current.show({
                 type: 'success',

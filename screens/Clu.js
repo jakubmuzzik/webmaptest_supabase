@@ -1,9 +1,7 @@
 import React, { useState, useMemo, useLayoutEffect, useEffect, useRef } from 'react'
 import { 
     View, 
-    Dimensions, 
     StyleSheet,
-    ScrollView,
     Text
 } from 'react-native'
 import ContentLoader, { Rect } from "react-content-loader/native"
@@ -13,228 +11,108 @@ import {
     FONT_SIZES, 
     MAX_ITEMS_PER_PAGE, 
     SPACING, 
-    SUPPORTED_LANGUAGES ,
-    MIN_AGE,
-    MAX_AGE,
-    MIN_HEIGHT,
-    MAX_HEIGHT,
-    MIN_WEIGHT,
-    MAX_WEIGHT,
+    SUPPORTED_LANGUAGES,
 } from '../constants'
 import { 
-    ACTIVE, 
-    BODY_TYPES,
-    PUBIC_HAIR_VALUES,
-    SEXUAL_ORIENTATION,
-    SERVICES,
-    HAIR_COLORS,
-    BREAST_SIZES,
-    BREAST_TYPES,
-    EYE_COLORS,
-    LANGUAGES,
-    NATIONALITIES,
-    MASSAGE_SERVICES
+    ACTIVE,
 } from '../labels'
 import RenderEstablishment from '../components/list/RenderEstablishment'
-import { MOCK_DATA } from '../constants'
-import { chunkArray, getParam } from '../utils'
+import { MOCK_DATA, DEFAULT_FILTERS } from '../constants'
+import { stripDefaultFilters, getParam, areValuesEqual, buildFiltersForQuery, getFilterParams } from '../utils'
 import { useSearchParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getCountFromServer, db, collection, query, where, startAt, limit, orderBy, getDocs, getDoc, startAfter, doc } from '../firebase/config'
-import { MotiView, MotiText } from 'moti'
-import { updateEstablishmentsCount, updateEstablishmentsData, resetAllPaginationData } from '../redux/actions'
-import SwappableText from '../components/animated/SwappableText'
+import { updateCurrentEstablishmentsCount } from '../redux/actions'
 import Pagination from '../components/Pagination'
 import LottieView from 'lottie-react-native'
+import { supabase } from '../supabase/config'
 
-const Clu = ({ updateEstablishmentsCount, resetAllPaginationData, updateEstablishmentsData, establishmentsCount, establishentsData, establishmentCities=[] }) => {
+const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
         language: getParam(SUPPORTED_LANGUAGES, searchParams.get('language'), ''),
-        city: searchParams.get('city'),
         page: searchParams.get('page') && !isNaN(searchParams.get('page')) ? searchParams.get('page') : 1
-    }), [searchParams, establishmentCities])
+    }), [searchParams])
 
-    const previousCity = useRef(searchParams.get('city'))
+    const filters = useMemo(() => ({
+        city: searchParams.get('city'),
+        ...stripDefaultFilters(DEFAULT_FILTERS, getFilterParams(searchParams))
+    }), [searchParams])
+
+    const previousFilters = useRef(filters)
 
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
     const [isLoading, setIsLoading] = useState(true)
-
-    const numberOfPages = Math.ceil(establishmentsCount / MAX_ITEMS_PER_PAGE)
+    const [establishentsData, setEstablishmentsData] = useState({})
     
     useEffect(() => {
-        if (!establishmentsCount) {
+        if (!currentEstablishmentsCount) {
             getEstablishmentsCount()
         }
-    }, [establishmentsCount])
+    }, [currentEstablishmentsCount])
 
     useLayoutEffect(() => {
         //filters changed
-        if (previousCity.current !== params.city) {
-            console.log('city changed')
-            
+        if (!areValuesEqual(filters, previousFilters.current)) {
             setIsLoading(true)
 
-            //trigger useEffect to update ladies count
-            updateEstablishmentsCount()
+            //will trigger useEffect to re-fetch ladies count
+            updateCurrentEstablishmentsCount()
 
-            resetAllPaginationData()
-            loadDataForPage()
+            //reset pagination data as filters changed
+            setEstablishmentsData({})
+            
+            loadDataForCurrentPage()
 
-            previousCity.current = params.city
+            previousFilters.current = filters
         } 
-        //pagination changed
+        //pagination changed or init load
         else {
-            console.log('pagination changed')
             if (!establishentsData[params.page]) {
-                console.log('does not have data for page: ' + params.page)
                 setIsLoading(true)
-                loadDataForPage()
+                loadDataForCurrentPage()
             } else {
                 setIsLoading(false)
             }
         } 
-    }, [params.page, params.city])
-
-    const getWhereConditions = () => {
-        let whereConditions = []
-
-        if (params.city) {
-            whereConditions.push(where('address.city', '==', params.city))
-        }
-
-        return whereConditions
-    }
-
-    const getOrdering = () => {
-        return orderBy("created_date")
-    }
+    }, [params.page, filters])
 
     const loadMockDataForPage = () => {
-        updateEstablishmentsData(new Array(MAX_ITEMS_PER_PAGE).fill({
-            name: 'llll',
-            date_of_birth: '25071996',
-            address: {city: 'Praha'},
-            images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
-        }, 0), params.page)
+        setEstablishmentsData((current) => ({
+            ...current,
+            [params.page] : new Array(MAX_ITEMS_PER_PAGE).fill({
+                name: 'llll',
+                date_of_birth: '25071996',
+                address: {city: 'Praha'},
+                images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
+            }, 0)
+        }))
         setIsLoading(false)
     }
 
-    const loadDataForPage = async () => {
-        if (Number(params.page) === 1) {
-            loadDataForFirstPage()
-            return
-        }
-
-        //previous page has data and is the last one
-        if (establishentsData[Number(params.page) - 1] && establishentsData[Number(params.page) - 1].length < MAX_ITEMS_PER_PAGE) {
-            updateEstablishmentsData([], params.page)
-            return
-        }
-
+    const loadDataForCurrentPage = async () => {
         try {
-            let lastVisibleSnapshot
-            //previous page has data - use last doc from previous page
-            if (establishentsData[Number(params.page) - 1]) {
-                const lastVisibleId = establishentsData[Number(params.page) - 1][MAX_ITEMS_PER_PAGE - 1].id
-                lastVisibleSnapshot = await getDoc(doc(db, 'users', lastVisibleId))
-            } 
-            //previous page does not have data
-            else {
-                const dataCountFromBeginning = (Number(params.page) - 1) * MAX_ITEMS_PER_PAGE
-    
-                //query all data from the beginning till the last one
-                const q = query(
-                    collection(db, "users"), 
-                    where('account_type', '==', 'establishment'), 
-                    where('status', '==', ACTIVE),
-                    ...getWhereConditions(),
-                    getOrdering(),
-                    limit(dataCountFromBeginning)
-                )
-    
-                const previousDataSnapshot = await getDocs(q)
-                //requested page number from url might exceeds data size
-                if (previousDataSnapshot.empty || previousDataSnapshot.size !== dataCountFromBeginning) {
-                    updateEstablishmentsData([], params.page)
-                    return
-                }
-    
-                lastVisibleSnapshot = previousDataSnapshot.docs[previousDataSnapshot.docs.length-1]
+            let query = supabase
+                .from('users')
+                .select()
+                .match({ account_type: 'establishment', status: ACTIVE })  
 
-                //store data from previous pages in redux
-                chunkArray(previousDataSnapshot.docs, MAX_ITEMS_PER_PAGE).forEach((chunk, index) => {
-                    if (!establishentsData[Number(index) + 1]) {
-                        const data = chunk.map(doc => {                    
-                            return ({
-                                ...doc.data(),
-                                id: doc.id
-                            })
-                        })
-        
-                        updateEstablishmentsData(data, Number(index) + 1)
-                    }
-                })
-            }
+            query = buildFiltersForQuery(query, filters)
 
-            const snapshot = await getDocs(
-                query(
-                    collection(db, "users"), 
-                    where('account_type', '==', 'establishment'), 
-                    where('status', '==', ACTIVE),
-                    ...getWhereConditions(),
-                    getOrdering(),
-                    startAfter(lastVisibleSnapshot),
-                    limit(MAX_ITEMS_PER_PAGE)
-                )
-            )
-            
-            if (snapshot.empty) {
-                updateEstablishmentsData([], params.page)
+            query = query.range((Number(params.page) - 1) * MAX_ITEMS_PER_PAGE, Number(params.page) * MAX_ITEMS_PER_PAGE)
+
+            const { data } = await query
+
+            if (data && data.length > 0) {
+                setEstablishmentsData((current) => ({
+                    ...current,
+                    [params.page] : data
+                }))
             } else {
-                 //store data from the requested page in redux
-                const data = snapshot.docs.map(doc => {                    
-                    return ({
-                        ...doc.data(),
-                        id: doc.id
-                    })
-                })
-
-                updateEstablishmentsData(data, params.page)
-            }
-        } catch(error) {
-            console.error(error)
-        } finally {
-            setIsLoading(false)
-        } 
-    }
-
-    const loadDataForFirstPage = async () => {
-        try {
-            const snapshot = await getDocs(
-                query(
-                    collection(db, "users"), 
-                    where('account_type', '==', 'establishment'), 
-                    where('status', '==', ACTIVE),
-                    ...getWhereConditions(),
-                    getOrdering(),
-                    startAt(0),
-                    limit(MAX_ITEMS_PER_PAGE)
-                )
-            )
-            
-            if (snapshot.empty) {
-                updateEstablishmentsData([], 1)
-            } else {
-                const data = snapshot.docs.map(doc => {                    
-                    return ({
-                        ...doc.data(),
-                        id: doc.id
-                    })
-                })
-    
-                updateEstablishmentsData(data, 1)
+                setEstablishmentsData((current) => ({
+                    ...current,
+                    [params.page] : []
+                }))
             }
         } catch(error) {
             console.error(error)
@@ -245,15 +123,20 @@ const Clu = ({ updateEstablishmentsCount, resetAllPaginationData, updateEstablis
 
     const getEstablishmentsCount = async () => {
         try {
-            const snapshot = await getCountFromServer(
-                query(
-                    collection(db, "users"), 
-                    where('account_type', '==', 'establishment'), 
-                    where('status', '==', ACTIVE),
-                    ...getWhereConditions()
-                )
-            )
-            updateEstablishmentsCount(snapshot.data().count)
+            let query = supabase
+                .from('users')
+                .select('*', { count: 'exact', head: true })
+                .match({ account_type: 'establishment', status: ACTIVE })      
+
+            query = buildFiltersForQuery(query, filters)
+                
+            const { count } = await query
+
+            if (!isNaN(count)) {
+                updateCurrentEstablishmentsCount(count)
+            } else {
+                updateCurrentEstablishmentsCount(0)
+            }
         } catch(e) {
             console.error(e)
         }
@@ -317,7 +200,7 @@ const Clu = ({ updateEstablishmentsCount, resetAllPaginationData, updateEstablis
     }
 
     const renderNoResults = () => (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginRight: SPACING.large }}>
             <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, color: '#FFF' }}>Sorry, we couldn't find any results</Text>
             <LottieView
                 style={{ height: 180 }}
@@ -339,20 +222,18 @@ const Clu = ({ updateEstablishmentsCount, resetAllPaginationData, updateEstablis
             </View>
 
             <View style={{ marginTop: SPACING.large, marginBottom: SPACING.medium }}>
-               {establishmentsCount && <Pagination dataCount={establishmentsCount}/>}
-               {isNaN(establishmentsCount) && renderPaginationSkeleton()}
+               {currentEstablishmentsCount && <Pagination dataCount={currentEstablishmentsCount}/>}
+               {isNaN(currentEstablishmentsCount) && renderPaginationSkeleton()}
             </View>
         </View>
     )
 }
 
 const mapStateToProps = (store) => ({
-    establishmentsCount: store.appState.establishmentsCount,
-    establishentsData: store.appState.establishentsData,
-    establishmentCities: store.appState.establishmentCities
+    currentEstablishmentsCount: store.appState.currentEstablishmentsCount
 })
 
-export default connect(mapStateToProps, { updateEstablishmentsCount, updateEstablishmentsData, resetAllPaginationData })(Clu)
+export default connect(mapStateToProps, { updateCurrentEstablishmentsCount })(Clu)
 
 const styles = StyleSheet.create({
     cardContainer: {

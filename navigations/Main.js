@@ -85,13 +85,27 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
                 }
             })
 
-        const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+        const subscription = supabase.auth.onAuthStateChange((_event, session) => {
             console.log(_event)
             console.log('session: ', session)
+
+            if (_event === 'SIGNED_OUT') {
+                toastRef.current?.show({
+                    type: 'success',
+                    text: "You've been logged out."
+                })
+            }
 
             if (!session) {
                 setIsLoggedIn(false)
             } else {
+                if (_event === 'USER_UPDATED') {
+                    toastRef.current?.show({
+                        type: 'success',
+                        text: 'Your data has been successfully updated.'
+                    })
+                }
+
                 updateCurrentAuthUser(session.user)
                 //fetch only on page reloads and when already signed in
                 if (!hasLoadedRef.current) {
@@ -104,10 +118,11 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
         })
 
         return () => {
-            data.subscription.unsubscribe()
+            subscription.unsubscribe()
         }
     }, [])
     
+    //todo - put one global app wrapper for each route - and do the on auth state change in there - so that I can e.g. redirect user when USER_UPDATED has been emmitted
     const router = createBrowserRouter(createRoutesFromElements(
         <>
             <Route path='/' element={

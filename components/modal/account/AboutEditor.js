@@ -21,15 +21,11 @@ import {
     DEFAULT_LANGUAGE
 } from '../../../constants'
 
-import {
-    db,
-    doc,
-    updateDoc,
-} from '../../../firebase/config'
-
 import { Button } from 'react-native-paper'
 
 import Toast from '../../Toast'
+
+import { supabase } from '../../../supabase/config'
 
 const window = Dimensions.get('window')
 
@@ -92,7 +88,14 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
         setShowErrorMessage(false)
 
         try {
-            await updateDoc(doc(db, 'users', userId), {description: changedAbout, last_modified_date: new Date()})
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({description: changedAbout, last_modified_date: new Date()})
+                .eq('id', userId)
+
+            if (updateError) {
+                throw updateError
+            }
 
             closeModal()
 

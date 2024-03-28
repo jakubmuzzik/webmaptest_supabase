@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { connect } from "react-redux"
 import { getParam } from '../utils'
 import { SUPPORTED_LANGUAGES } from '../constants'
@@ -7,6 +8,15 @@ const RequireAuth = ({ children, currentAuthUser }) => {
     const location = useLocation()
     const [searchParams] = useSearchParams()
 
+    useEffect(() => {
+        const hasParams = new URLSearchParams(location.hash)
+
+        //forgot password redirect
+        if (hasParams.get('error_code')?.startsWith('4')) {
+            window.alert(hasParams.get('error_description'))
+        }
+    }, [])
+
     const params = {
         language: getParam(SUPPORTED_LANGUAGES, searchParams.get('language'), '')
     }
@@ -14,6 +24,7 @@ const RequireAuth = ({ children, currentAuthUser }) => {
     const isLoggedIn = currentAuthUser.id
 
     if (!isLoggedIn) {
+        console.log('is not logged in')
         let to = '/auth'
         //need to hardcode => search param on Navigate component didn't work
         if (params.language) {
