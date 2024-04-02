@@ -20,7 +20,7 @@ import LottieView from 'lottie-react-native'
 
 import { updateDoc, doc, db, ref, uploadBytes, storage, getDownloadURL, deleteObject } from '../../firebase/config'
 
-const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCurrentUserInRedux, updateLadyInRedux }) => {
+const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRef, updateCurrentUserInRedux, updateLadyInRedux }) => {
     const [data, setData] = useState({
         active: [],
         inReview: [],
@@ -134,7 +134,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
         const url = await uploadAssetToFirestore(imageData.image, 'photos/' + userData.id + '/' + imageData.id)
 
         delete imageData.image
-        imageData.downloadUrl = url
+        imageData.download_url = url
 
         if (replaceImageId) {
             currentImages = currentImages.filter(img => img.id !== replaceImageId)
@@ -218,7 +218,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
 
     //ALL ACTIVE PHOTOS
     const hasAllCoverActivePhotos = () => {
-        for (let i=0; i< (userData.account_type === 'establishment' ? 1 : 5); i++) {
+        for (let i=0; i< (user_type === 'establishment' ? 1 : 5); i++) {
             if (!data.active[i]) {
                 return false
             }
@@ -229,7 +229,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
 
     //ALL ACTIVE + IN REVIEW PHOTOS
     const hasAllCoverPhotos = () => {
-        if (userData.account_type === 'establishment') {
+        if (user_type === 'establishment') {
             const coverImage = userData.images.find(image => image.index === 0 && image.status === ACTIVE || image.status === IN_REVIEW)
             return !!coverImage
         } else {
@@ -273,7 +273,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
                         width: 'auto',
                         borderRadius: 10
                     }}
-                    source={{ uri: photos[0].downloadUrl }}
+                    source={{ uri: photos[0].download_url }}
                     placeholder={photos[0].blurhash}
                     resizeMode="cover"
                     transition={200}
@@ -311,7 +311,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
                                         aspectRatio: 3 / 4,
                                         borderRadius: 10
                                     }}
-                                    source={{ uri: photos[1].downloadUrl }}
+                                    source={{ uri: photos[1].download_url }}
                                     placeholder={photos[1].blurhash}
                                     resizeMode="cover"
                                     transition={200}
@@ -347,7 +347,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
                                         borderRadius: 10,
                                         aspectRatio: 3 / 4
                                     }}
-                                    source={{ uri: photos[2].downloadUrl }}
+                                    source={{ uri: photos[2].download_url }}
                                     placeholder={photos[2].blurhash}
                                     resizeMode="cover"
                                     transition={200}
@@ -384,7 +384,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
                                         aspectRatio: 3 / 4,
                                         borderRadius: 10
                                     }}
-                                    source={{ uri: photos[3].downloadUrl }}
+                                    source={{ uri: photos[3].download_url }}
                                     laceholder={photos.blurhash}
                                     resizeMode="cover"
                                     transition={200}
@@ -419,7 +419,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
                                         borderRadius: 10,
                                         aspectRatio: 3 / 4
                                     }}
-                                    source={{ uri: photos[4].downloadUrl }}
+                                    source={{ uri: photos[4].download_url }}
                                     placeholder={photos[4].blurhash}
                                     resizeMode="cover"
                                     transition={200}
@@ -460,7 +460,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
                             borderRadius: 10,
                             aspectRatio: 16 / 9,
                         }}
-                        source={{ uri: photo.downloadUrl }}
+                        source={{ uri: photo.download_url }}
                         placeholder={photo.blurhash}
                         resizeMode="cover"
                         transition={200}
@@ -505,9 +505,9 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
     const renderActive = () => {
         const photos = (
             (userData.status === ACTIVE || userData.status === INACTIVE)
-                ? data.active.slice(0, userData.account_type === 'establishment' ? 1 : 5) 
+                ? data.active.slice(0, user_type === 'establishment' ? 1 : 5) 
                 //For REJECTED Concat active and in review -> user is uploading missing cover images one by one
-                : data.active.slice(0, userData.account_type === 'establishment' ? 1 : 5).concat(data.inReview.slice(0, userData.account_type === 'establishment' ? 1 : 5))
+                : data.active.slice(0, user_type === 'establishment' ? 1 : 5).concat(data.inReview.slice(0, user_type === 'establishment' ? 1 : 5))
         ).reduce((out, current) => {
             out[current.index] = current
 
@@ -548,9 +548,9 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateCu
                         </Text>
                     </View>
                 </>}
-                {userData.account_type === 'establishment' && renderCoverPhoto(photos[0])}
-                {userData.account_type === 'lady' && renderPhotosGrid(photos)}
-                {renderAdditionalPhotos(data.active.slice(userData.account_type === 'establishment' ? 1 : 5), activeImageActions)}
+                {user_type === 'establishment' && renderCoverPhoto(photos[0])}
+                {user_type === 'lady' && renderPhotosGrid(photos)}
+                {renderAdditionalPhotos(data.active.slice(user_type === 'establishment' ? 1 : 5), activeImageActions)}
             </View>
         )
     }

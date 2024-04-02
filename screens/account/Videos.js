@@ -25,6 +25,7 @@ const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLa
         inReview: [],
         rejected: []
     })
+    
     const [sectionWidth, setSectionWidth] = useState(0)
 
     const [uploading, setUploading] = useState(false)
@@ -127,8 +128,8 @@ const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLa
 
         delete videoData.video
         delete videoData.thumbnail
-        videoData.downloadUrl = urls[0]
-        videoData.thumbnailDownloadUrl = urls[1]
+        videoData.download_url = urls[0]
+        videoData.thumbnail_download_url = urls[1]
 
         const videos = userData.videos.concat([videoData])
         
@@ -264,7 +265,7 @@ const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLa
                     </Text>
                 </View>
 
-                {((data.active.length + data.inReview.length) < MAX_VIDEOS) && <Button
+                {((data.active.length + data.inReview.length) < MAX_VIDEOS) && userData.status !== IN_REVIEW && <Button
                     labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}
                     style={{ height: 'auto' }}
                     mode="outlined"
@@ -338,7 +339,7 @@ const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLa
 
     return (
         <View style={{ paddingBottom: SPACING.large }} onLayout={onLayout}>
-            {userData.status !== IN_REVIEW && renderActive()}
+            {renderActive()}
             {renderInReview()}
             {renderRejected()}
 

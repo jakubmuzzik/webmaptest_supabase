@@ -31,7 +31,7 @@ import { supabase } from '../../../supabase/config'
 
 const window = Dimensions.get('window')
 
-const ContactInformationEditor = ({ visible, setVisible, contactInformation, toastRef, userId, updateRedux, isEstablishment }) => {
+const ContactInformationEditor = ({ visible, setVisible, contactInformation, toastRef, userId, updateRedux, user_type }) => {
     const [isSaving, setIsSaving] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [changedContactInformation, setChangedContactInformation] = useState(contactInformation)
@@ -93,12 +93,12 @@ const ContactInformationEditor = ({ visible, setVisible, contactInformation, toa
         try {
             let changedData = {...changedContactInformation}
 
-            if (!isEstablishment) {
+            if (user_type === 'lady') {
                 delete changedData.website
             }
 
             const { error: updateError } = await supabase
-                .from('users')
+                .from(user_type === 'lady' ? 'ladies' : 'establishments')
                 .update({...changedData, last_modified_date: new Date()})
                 .eq('id', userId)
 
@@ -106,6 +106,7 @@ const ContactInformationEditor = ({ visible, setVisible, contactInformation, toa
                 throw updateError
             }
 
+            //TODO - add this to auth trigger
             if (changedData.name !== contactInformation.name) {
                 const { error: authUpdateError } = await supabase.auth.updateUser({
                     data: { name: changedData.name }
@@ -227,7 +228,7 @@ const ContactInformationEditor = ({ visible, setVisible, contactInformation, toa
                                     errorMessage={showErrorMessage && !changedContactInformation.phone ? 'Enter your phone' : undefined}
                                 />
                             </View>
-                            {isEstablishment && <View style={{ marginHorizontal: SPACING.small }}>
+                            {user_type === 'establishment' && <View style={{ marginHorizontal: SPACING.small }}>
                                 <HoverableInput
                                     placeholder="www.website.com"
                                     label="Website"

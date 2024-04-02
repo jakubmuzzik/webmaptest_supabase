@@ -16,14 +16,14 @@ import Footer from '../components/navigation/Footer'
 import Esc from '../screens/Esc'
 import Clu from '../screens/Clu'
 import Mas from '../screens/Mas'
-import Profile from '../screens/Profile'
 import Account from '../screens/Account'
 import EstablishmentSignup from '../screens/signup/EstablishmentSignup'
 import SignUpOrLogin from '../screens/SignUpOrLogin'
 import SearchResults from '../screens/SearchResults'
 import Home from '../screens/Home'
-import ChangePassword from '../screens/ChangePassword'
 import RequireAuth from './RequireAuth'
+import Lady from '../screens/Lady'
+import Establishment from '../screens/Establishment'
 
 import { COLORS, FONTS, FONT_SIZES, SMALL_SCREEN_THRESHOLD, SPACING, SUPPORTED_LANGUAGES } from '../constants'
 
@@ -109,7 +109,7 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
                 updateCurrentAuthUser(session.user)
                 //fetch only on page reloads and when already signed in
                 if (!hasLoadedRef.current) {
-                    fetchUser(session.user.id)
+                    fetchUser(session.user.id, session.user.user_metadata.user_type)
                 }
                 setIsLoggedIn(true)
             }
@@ -135,9 +135,15 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
                 <Route path='/clu' element={<Clu />} />
             </Route>
 
-            <Route path='/profile/:id' element={
+            <Route path='/lady/:id' element={
                 <LayoutWithHeader>
-                    <Profile />
+                    <Lady />
+                </LayoutWithHeader>
+            } />
+
+            <Route path='/establishment/:id' element={
+                <LayoutWithHeader>
+                    <Establishment />
                 </LayoutWithHeader>
             } />
 
@@ -190,14 +196,6 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
                 <LayoutWithHeader>
                     <SignUpOrLogin />
                 </LayoutWithHeader>
-            } />
-
-            <Route path='/change-password' element={
-                <RequireAuth>
-                    <LayoutWithHeader>
-                        <ChangePassword />
-                    </LayoutWithHeader>
-                </RequireAuth>
             } />
 
             <Route path='/search' element={

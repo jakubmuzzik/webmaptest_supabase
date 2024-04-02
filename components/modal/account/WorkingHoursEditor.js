@@ -29,7 +29,7 @@ import { Button, Switch, HelperText } from 'react-native-paper'
 
 const window = Dimensions.get('window')
 
-const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, userId, updateRedux }) => {
+const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, userId, updateRedux, user_type }) => {
     const [isSaving, setIsSaving] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [changedWorkingHours, setChangedWorkingHours] = useState(working_hours)
@@ -147,7 +147,7 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
 
         try {
             const { error: updateError } = await supabase
-                .from('users')
+                .from(user_type === 'lady' ? 'ladies' : 'establishments')
                 .update({working_hours: wh, last_modified_date: new Date()})
                 .eq('id', userId)
 

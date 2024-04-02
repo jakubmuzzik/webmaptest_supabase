@@ -28,7 +28,7 @@ const LOCATION_LONGITUDE_DELTA = 0.6 // == 50 Km
 const INITIAL_LATITUDE = 50.0646126
 const INITIAL_LONGITUDE = 14.3729754
 
-const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserInRedux, updateLadyInRedux }) => {
+const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserInRedux, updateLadyInRedux, user_type }) => {
     const { width } = useWindowDimensions()
     const isSmallScreen = width <= SMALL_SCREEN_THRESHOLD
 
@@ -188,7 +188,7 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
                     </View>}
                 </View>
             </View>
-            {userData.account_type === 'establishment' && <View style={styles.row}>
+            {user_type === 'establishment' && <View style={styles.row}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <MaterialCommunityIcons name="web" size={FONT_SIZES.medium} color="white" style={{ marginRight: SPACING.xxx_small }} />
                     <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#FFF', marginRight: SPACING.x_small }}>
@@ -554,23 +554,23 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
 
             {renderAbout()}
 
-            {userData.account_type === 'lady' && renderPersonalDetails()}
+            {user_type === 'lady' && renderPersonalDetails()}
 
-            {userData.account_type === 'lady' && renderPricing()}
+            {user_type === 'lady' && renderPricing()}
 
-            {userData.account_type === 'lady' && renderServices()}
+            {user_type === 'lady' && renderServices()}
 
             {renderWorkingHours()}
 
             {renderAddress()}
 
-            <AboutEditor visible={aboutEditorVisible} setVisible={setAboutEditorVisible} about={userData.description} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />
-            {userData.account_type === 'lady' && <PersonalDetailsEditor visible={personalDetailsEditorVisible} setVisible={setPersonalDetailsEditorVisible} personalDetails={personalDetails} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            {userData.account_type === 'lady' && <PricingEditor visible={pricingEditorVisible} setVisible={setPricingEditorVisible} pricing={pricing} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            {userData.account_type === 'lady' && <ServicesEditor visible={servicesEditorVisible} setVisible={setServicesEditorVisible} services={userData.services} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            <WorkingHoursEditor visible={workingHoursEditorVisible} setVisible={setWorkingHoursEditorVisible} working_hours={userData.working_hours} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />
-            <AddressEditor visible={addressEditorVisible} setVisible={setAddressEditorVisible} address={address} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} isEstablishment={userData.account_type === 'establishment'}/>
-            <ContactInformationEditor visible={contactInformationEditorVisible} setVisible={setContactInformationEditorVisible} contactInformation={contactInformation} toastRef={toastRef} userId={userData.id} isEstablishment={userData.account_type === 'establishment'} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />
+            <AboutEditor visible={aboutEditorVisible} setVisible={setAboutEditorVisible} about={userData.description} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} user_type={user_type} />
+            {user_type === 'lady' && <PersonalDetailsEditor visible={personalDetailsEditorVisible} setVisible={setPersonalDetailsEditorVisible} personalDetails={personalDetails} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
+            {user_type === 'lady' && <PricingEditor visible={pricingEditorVisible} setVisible={setPricingEditorVisible} pricing={pricing} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
+            {user_type === 'lady' && <ServicesEditor visible={servicesEditorVisible} setVisible={setServicesEditorVisible} services={userData.services} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
+            <WorkingHoursEditor visible={workingHoursEditorVisible} setVisible={setWorkingHoursEditorVisible} working_hours={userData.working_hours} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} user_type={user_type}/>
+            <AddressEditor visible={addressEditorVisible} setVisible={setAddressEditorVisible} address={address} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} user_type={user_type} />
+            <ContactInformationEditor visible={contactInformationEditorVisible} setVisible={setContactInformationEditorVisible} contactInformation={contactInformation} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} user_type={user_type} />
         </View>
     )
 }

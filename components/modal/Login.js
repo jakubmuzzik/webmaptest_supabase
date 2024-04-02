@@ -164,7 +164,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 throw signInError
             }
 
-            fetchUser(sessionData.user.id)
+            fetchUser(sessionData.user.id, sessionData.user.user_metadata.user_type)
 
             closeModal()
 

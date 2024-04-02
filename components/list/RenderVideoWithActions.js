@@ -29,7 +29,7 @@ const RenderVideoWithActions = ({ video, actions, offsetX = 0, showActions = tru
     const init = async () => {
         try {
             //setThumbnail(thumbnailUrl)
-            RNImage.getSize(video.thumbnailDownloadUrl, (width, height) => { 
+            RNImage.getSize(video.thumbnail_download_url, (width, height) => { 
                 setAspectRatio(width / height)
             })
         } catch(e) {
@@ -93,7 +93,7 @@ const RenderVideoWithActions = ({ video, actions, offsetX = 0, showActions = tru
         }}>
             <Image 
                 style={{...StyleSheet.absoluteFillObject, borderRadius: 10}}
-                source={video.thumbnailDownloadUrl}
+                source={video.thumbnail_download_url}
                 placeholder={video.blurhash}
                 transition={200}
                 resizeMode='cover'
@@ -120,7 +120,7 @@ const RenderVideoWithActions = ({ video, actions, offsetX = 0, showActions = tru
                     borderRadius: 10
                 }}
                 source={{
-                    uri: video.downloadUrl,
+                    uri: video.download_url,
                 }}
                 useNativeControls
                 resizeMode={ResizeMode.CONTAIN}

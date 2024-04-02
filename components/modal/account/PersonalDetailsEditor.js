@@ -12,7 +12,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import HoverableView from '../../HoverableView'
 import HoverableInput from '../../HoverableInput'
 import DropdownSelect from '../../DropdownSelect'
-import { normalize, areValuesEqual } from '../../../utils'
+import { normalize, areValuesEqual, convertDateToString, convertStringToDate } from '../../../utils'
 import {
     COLORS,
     FONTS,
@@ -45,7 +45,10 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
     const [isSaving, setIsSaving] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [contentWidth, setContentWidth] = useState(false)
-    const [changedPersonalDetails, setChangedPersonalDetails] = useState(personalDetails)
+    const [changedPersonalDetails, setChangedPersonalDetails] = useState({
+        ...personalDetails,
+        date_of_birth: convertDateToString(personalDetails.date_of_birth)
+    })
     const [isChanged, setIsChanged] = useState(false)
 
     const containerRef = useRef()
@@ -56,7 +59,10 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
             translateY.value = withTiming(0, {
                 useNativeDriver: true
             })
-            setChangedPersonalDetails(personalDetails)
+            setChangedPersonalDetails({
+                ...personalDetails,
+                date_of_birth: convertDateToString(personalDetails.date_of_birth)
+            })
         } else {
             translateY.value = withTiming(window.height, {
                 useNativeDriver: true
@@ -115,8 +121,8 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
 
         try {
             const { error: updateError } = await supabase
-                .from('users')
-                .update({...changedPersonalDetails, last_modified_date: new Date()})
+                .from('ladies')
+                .update({...changedPersonalDetails, date_of_birth: convertStringToDate(changedPersonalDetails.date_of_birth), last_modified_date: new Date()})
                 .eq('id', userId)
 
             if (updateError) {
@@ -131,7 +137,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                 text: 'Personal Details were changed successfully.'
             })
 
-            updateRedux({...changedPersonalDetails, id: userId, last_modified_date: new Date()})
+            updateRedux({...changedPersonalDetails, date_of_birth: convertStringToDate(changedPersonalDetails.date_of_birth).toISOString(), id: userId, last_modified_date: new Date()})
         } catch(e) {
             console.error(e)
             modalToastRef.current.show({

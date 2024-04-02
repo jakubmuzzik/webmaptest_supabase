@@ -11,7 +11,7 @@ import { COLORS, SPACING, FONTS, FONT_SIZES } from '../../../constants'
 import HoverableInput from '../../../components/HoverableInput'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import DropdownSelect from '../../../components/DropdownSelect'
-import { normalize } from '../../../utils'
+import { convertStringToDate, normalize } from '../../../utils'
 import { FontAwesome5, EvilIcons } from '@expo/vector-icons'
 
 import {
@@ -81,7 +81,10 @@ const PersonalDetails = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => ({
         validate,
-        data
+        data: {
+            ...data,
+            date_of_birth: convertStringToDate(data.date_of_birth)
+        }
     }))
 
     const scrollY = useSharedValue(0)

@@ -28,7 +28,7 @@ import { ACTIVE, MASSAGE_SERVICES } from "../labels"
 
 import { supabase } from "../supabase/config"
 
-const Profile = ({ toastRef }) => {
+const Lady = ({ toastRef }) => {
     const location = useLocation()
     const navigate = useNavigate()
 
@@ -62,17 +62,14 @@ const Profile = ({ toastRef }) => {
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState(location.state?.lady)
     const [establishmentName, setEstablishmentName] = useState()
-    const [ladiesUnderEstablishment, setLadiesUnderEstablishment] = useState()
 
     const establishmentNameRotateX = useSharedValue('90deg')
     const leftPhotoOpacity = useSharedValue(0)
-    const coverPhotoOpacity = useSharedValue(0)
     const rightPhotosOpacity1 = useSharedValue(0)
     const rightPhotosOpacity2 = useSharedValue(0)
     const leftPhotoTranslateY = useSharedValue(20)
     const rightPhotosTranslateY1 = useSharedValue(20)
     const rightPhotosTranslateY2 = useSharedValue(20)
-    const coverPhotoTranslateY = useSharedValue(20)
 
     const establishmentNameAnimatedStyle = useAnimatedStyle(() => {
         return {
@@ -80,14 +77,6 @@ const Profile = ({ toastRef }) => {
             fontSize: FONT_SIZES.large, 
             fontFamily: FONTS.medium,
             transform: [{ rotateX: establishmentNameRotateX.value }],
-        }
-    })
-
-    const coverPhotoAnimatedStyle = useAnimatedStyle(() => {
-        return {
-            width: '100%',
-            opacity: coverPhotoOpacity.value,
-            transform: [{ translateY:coverPhotoTranslateY.value  }],
         }
     })
 
@@ -145,33 +134,24 @@ const Profile = ({ toastRef }) => {
             return
         }
 
-        if (data.account_type === 'lady') {
-            leftPhotoOpacity.value = withTiming(1, {
-                useNativeDriver: true
-            })
-            leftPhotoTranslateY.value = withTiming(0, {
-                useNativeDriver: true
-            })
-            rightPhotosOpacity1.value = withDelay(20, withTiming(1, {
-                useNativeDriver: true
-            }))
-            rightPhotosTranslateY1.value = withDelay(20, withTiming(0, {
-                useNativeDriver: true
-            }))
-            rightPhotosOpacity2.value = withDelay(40, withTiming(1, {
-                useNativeDriver: true
-            }))
-            rightPhotosTranslateY2.value = withDelay(40, withTiming(0, {
-                useNativeDriver: true
-            }))
-        } else {
-            coverPhotoOpacity.value = withTiming(1, {
-                useNativeDriver: true
-            })
-            coverPhotoTranslateY.value = withTiming(0, {
-                useNativeDriver: true
-            })
-        }
+        leftPhotoOpacity.value = withTiming(1, {
+            useNativeDriver: true
+        })
+        leftPhotoTranslateY.value = withTiming(0, {
+            useNativeDriver: true
+        })
+        rightPhotosOpacity1.value = withDelay(20, withTiming(1, {
+            useNativeDriver: true
+        }))
+        rightPhotosTranslateY1.value = withDelay(20, withTiming(0, {
+            useNativeDriver: true
+        }))
+        rightPhotosOpacity2.value = withDelay(40, withTiming(1, {
+            useNativeDriver: true
+        }))
+        rightPhotosTranslateY2.value = withDelay(40, withTiming(0, {
+            useNativeDriver: true
+        }))
     }, [loading, data])
 
     useEffect(() => {
@@ -203,8 +183,8 @@ const Profile = ({ toastRef }) => {
     const fetchUser = async () => {
         try {
             const { data, error } = await supabase
-                .from('users')
-                .select()
+                .from('ladies')
+                .select('*, images(*), videos(*)')
                 .eq('id', id)
 
             if (error) {
@@ -212,15 +192,13 @@ const Profile = ({ toastRef }) => {
             }
 
             if (!data[0]) {
-                throw new Error('Profile was not found.')
+                throw new Error('Lady was not found.')
             }
 
             setData(data[0])
 
             if (data[0].establishment_id) {
                 fetchEstablishmentName(data[0].establishment_id)
-            } else if (data[0].account_type === 'establishment') {
-                fetchLadiesUnderEstablishment(data[0].id)
             }
         } catch (error) {
             console.error(error)
@@ -236,8 +214,8 @@ const Profile = ({ toastRef }) => {
     const fetchEstablishmentName = async (establishment_id) => {
         try {
             const { data, error } = await supabase
-                .from('users')
-                .select()
+                .from('establishments')
+                .select('name')
                 .eq('id', establishment_id)
 
             if (error) {
@@ -254,17 +232,6 @@ const Profile = ({ toastRef }) => {
         }
     }
 
-    const fetchLadiesUnderEstablishment = async (establishment_id) => {
-        setTimeout(() => {
-            setLadiesUnderEstablishment(new Array(30).fill({
-                name: 'lady xxx',
-                date_of_birth: '25071996',
-                address: {city: 'Praha'},
-                images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
-            }, 0))
-        }, 1500)
-    }
-
     const closeModal = () => {
         setPhotosModalVisible(false)
     }
@@ -279,11 +246,11 @@ const Profile = ({ toastRef }) => {
     }, [])
 
     const onEstablishmentLinkPress = () => {
-        setLoading(true)
+        //setLoading(true)
         //setEstablishmentName(null)
         //setData(null)
         navigate({
-            pathname: '/profile/' + data.establishment_id,
+            pathname: '/establishment/' + data.establishment_id,
             search: new URLSearchParams({ 
                 ...stripEmptyParams(params)
             }).toString(),
@@ -437,9 +404,9 @@ const Profile = ({ toastRef }) => {
             <Text style={{ color: '#FFF', marginBottom: SPACING.x_small, marginHorizontal: SPACING.xx_small, fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, }}>
                 {data.name}
             </Text>
-            {data.account_type === 'lady' && <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText, marginBottom: SPACING.xx_small }}>
+            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText, marginBottom: SPACING.xx_small }}>
                 {calculateAgeFromDate(data.date_of_birth)} years <Text style={{ color: COLORS.red }}>•</Text> {data.height} cm <Text style={{ color: COLORS.red }}>•</Text> {data.weight} kg
-            </Text>}
+            </Text>
             <View style={{ flexDirection: 'row', marginBottom: SPACING.xx_small, alignItems: 'center' }}>
                 <MaterialCommunityIcons name="phone" size={20} color={COLORS.greyText} style={{ marginRight: 3 }} />
                 <Text onPress={() => console.log('')} style={{ marginRight: SPACING.xx_small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText }}>
@@ -488,7 +455,7 @@ const Profile = ({ toastRef }) => {
                                     width: 'auto',
                                     borderRadius: 10
                                 }}
-                                source={images[0]?.downloadUrl}
+                                source={images[0]?.download_url}
                                 placeholder={images[0]?.blurhash}
                                 resizeMode="cover"
                                 transition={200}
@@ -508,7 +475,7 @@ const Profile = ({ toastRef }) => {
                                         flex: 1,
                                         borderRadius: 10
                                     }}
-                                    source={images[1]?.downloadUrl}
+                                    source={images[1]?.download_url}
                                     placeholder={images[1]?.blurhash}
                                     resizeMode="cover"
                                     transition={200}
@@ -523,7 +490,7 @@ const Profile = ({ toastRef }) => {
                                         flex: 1,
                                         borderRadius: 10
                                     }}
-                                    source={images[2]?.downloadUrl}
+                                    source={images[2]?.download_url}
                                     placeholder={images[2]?.blurhash}
                                     contentFit="cover"
                                     transition={200}
@@ -542,7 +509,7 @@ const Profile = ({ toastRef }) => {
                                         flex: 1,
                                         borderRadius: 10
                                     }}
-                                    source={images[3]?.downloadUrl}
+                                    source={images[3]?.download_url}
                                     placeholder={images[3]?.blurhash}
                                     resizeMode="cover"
                                     transition={200}
@@ -557,7 +524,7 @@ const Profile = ({ toastRef }) => {
                                         flex: 1,
                                         borderRadius: 10
                                     }}
-                                    source={images[4]?.downloadUrl}
+                                    source={images[4]?.download_url}
                                     placeholder={images[4]?.blurhash}
                                     resizeMode="cover"
                                     transition={200}
@@ -589,60 +556,14 @@ const Profile = ({ toastRef }) => {
         </>
     )
 
-    const renderCoverPhoto = () => (
-        <>
-            <Animated.View
-                style={coverPhotoAnimatedStyle}
-            >
-                <HoverableView hoveredOpacity={0.8}>
-                    <TouchableOpacity onPress={() => onImagePress(0)}>
-                        <Image
-                            style={{
-                                aspectRatio: 16 / 9,
-                                width: 'auto',
-                                borderRadius: 10
-                            }}
-                            source={images[0].downloadUrl}
-                            placeholder={images[0].blurhash}
-                            resizeMode="cover"
-                            transition={200}
-                        />
-                    </TouchableOpacity>
-                </HoverableView>
-            </Animated.View>
-
-            <View style={{ alignSelf: 'center', flexDirection: 'row', marginTop: SPACING.small }}>
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText }}>
-                    {Object.keys(images).length} {Object.keys(images).length > 1 ? 'photos' : 'photo'}
-                </Text>
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText, marginHorizontal: SPACING.xx_small }}>
-                    |
-                </Text>
-                {videos.length > 0 && <><Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText }}>
-                    {videos.length} {videos.length > 1 ? 'videos' : 'video'}
-                </Text>
-                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText, marginHorizontal: SPACING.xx_small }}>
-                        |
-                    </Text></>}
-                <TouchableOpacity onPress={() => setPhotosModalVisible(true)} style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
-                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: '#FFF', marginRight: 4 }}>View all</Text>
-                    <MaterialCommunityIcons name="dots-grid" size={20} color="white" />
-                </TouchableOpacity>
-            </View>
-        </>
-    )
-
     const renderAbout = () => (
         <View style={[styles.section, { marginTop: SPACING.xxx_large }]}>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
                 <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
                     About
                 </Text>
-                {!data.establishment_id && data.account_type === 'lady' && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
+                {!data.establishment_id && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
                     • Independent lady
-                </Text>}
-                {data.establishment_type && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
-                    • {data.establishment_type}
                 </Text>}
                 {data.establishment_id && establishmentName && (
                     <Animated.Text
@@ -968,130 +889,6 @@ const Profile = ({ toastRef }) => {
         </View>
     )
 
-    const renderLadiesUnderEstablishment = () => {
-        if (!ladiesUnderEstablishment) {
-            return (
-                <View style={{ marginTop: SPACING.large, marginBottom: SPACING.medium }}>
-                    <ContentLoader
-                        speed={2}
-                        height={35}
-                        width='45%'
-                        style={{ borderRadius: 5, marginTop: SPACING.large, alignSelf: 'center' }}
-                        backgroundColor={COLORS.grey}
-                        foregroundColor={COLORS.lightGrey}
-                    >
-                        <Rect x="0" y="0" rx="0" ry="0" width="100%" height={35} />
-                    </ContentLoader>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: SPACING.medium }}>
-                        <View style={{ width: 150, aspectRatio: 3/4, borderRadius: 10 }}>
-                            <ContentLoader
-                                speed={2}
-                                height={'100%'}
-                                width='100%'
-                                style={{ borderRadius: 10, alignSelf: 'center',}}
-                                backgroundColor={COLORS.grey}
-                                foregroundColor={COLORS.lightGrey}
-                            >
-                                <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
-                            </ContentLoader>
-                        </View>
-                        <View style={{ width: 150, aspectRatio: 3/4, marginLeft: SPACING.large }}>
-                            <ContentLoader
-                                speed={2}
-                                height={'100%'}
-                                width='100%'
-                                style={{ borderRadius: 10, alignSelf: 'center' }}
-                                backgroundColor={COLORS.grey}
-                                foregroundColor={COLORS.lightGrey}
-                            >
-                                <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
-                            </ContentLoader>
-                        </View>
-                        <View style={{ width: 150, marginLeft: SPACING.large, aspectRatio: 3/4 }}>
-                            <ContentLoader
-                                speed={2}
-                                height={'100%'}
-                                width='100%'
-                                style={{ borderRadius: 10, alignSelf: 'center' }}
-                                backgroundColor={COLORS.grey}
-                                foregroundColor={COLORS.lightGrey}
-                            >
-                                <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
-                            </ContentLoader>
-                        </View>
-                        <View style={{ width: 150, marginLeft: SPACING.large, aspectRatio: 3/4 }}>
-                            <ContentLoader
-                                speed={2}
-                                height={'100%'}
-                                width='100%'
-                                style={{ borderRadius: 10, alignSelf: 'center' }}
-                                backgroundColor={COLORS.grey}
-                                foregroundColor={COLORS.lightGrey}
-                            >
-                                <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
-                            </ContentLoader>
-                        </View>
-                        <View style={{ width: 150, marginLeft: SPACING.large, aspectRatio: 3/4 }}>
-                            <ContentLoader
-                                speed={2}
-                                height={'100%'}
-                                width='100%'
-                                style={{ borderRadius: 10, alignSelf: 'center' }}
-                                backgroundColor={COLORS.grey}
-                                foregroundColor={COLORS.lightGrey}
-                            >
-                                <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
-                            </ContentLoader>
-                        </View>
-                        <View style={{ width: 150, marginLeft: SPACING.large, aspectRatio: 3/4 }}>
-                            <ContentLoader
-                                speed={2}
-                                height={'100%'}
-                                width='100%'
-                                style={{ borderRadius: 10, alignSelf: 'center' }}
-                                backgroundColor={COLORS.grey}
-                                foregroundColor={COLORS.lightGrey}
-                            >
-                                <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
-                            </ContentLoader>
-                        </View>
-                    </ScrollView>
-                </View>
-            )
-        }
-
-        if (ladiesUnderEstablishment.length === 0) {
-            return null
-        }
-
-        return (
-            <View style={{ marginTop: SPACING.large, marginBottom: SPACING.medium }}>
-                <MotiText 
-                    style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h2, color: '#FFF', marginBottom: SPACING.medium, textAlign: 'center' }}
-                    from={{
-                        opacity: 0,
-                        transform: [{ translateY: -20 }],
-                    }}
-                    animate={{
-                        opacity: 1,
-                        transform: [{ translateY: 0 }],
-                    }}
-                    transition={{
-                        type: 'timing'
-                    }}
-                >
-                    Ladies in {data.name}
-                </MotiText> 
-
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {ladiesUnderEstablishment.map((data, index) => <View key={data.id} style={{ marginLeft: index === 0 ? 0 : SPACING.large, width: 150 }}>
-                        <RenderLady lady={data} width={150} delay={index * 20} />
-                    </View>)}
-                </ScrollView>
-            </View>
-        )
-    }
-
     if (loading) {
         return renderSkeleton()
     }
@@ -1108,23 +905,19 @@ const Profile = ({ toastRef }) => {
             <View style={{ alignSelf: 'center', maxWidth: '100%', width: 800 + SPACING.xxx_small, padding: SPACING.large }}>
                 {renderHeaderInfo()}
 
-                {data.account_type === 'lady' && renderPhotosGrid()}
-
-                {data.account_type === 'establishment' && renderCoverPhoto()}
+                {renderPhotosGrid()}
 
                 {renderAbout()}
 
-                {data.account_type === 'lady' && renderPersonalDetails()}
+                {renderPersonalDetails()}
 
-                {data.account_type === 'lady' && renderPricing()}
+                {renderPricing()}
 
-                {data.account_type === 'lady' && renderServices()}
+                {renderServices()}
 
                 {renderWorkingHours()}
 
                 {renderAddress()}
-
-                {data.account_type === 'establishment' && renderLadiesUnderEstablishment()}
             </View>
 
             <AssetsTabView visible={photosModalVisible} pressedAssetIndex={pressedImageIndexRef.current} images={Object.values(images)} videos={videos} closeModal={closeModal} />
@@ -1136,7 +929,7 @@ const mapStateToProps = (store) => ({
     toastRef: store.appState.toastRef
 })
 
-export default connect(mapStateToProps)(Profile)
+export default connect(mapStateToProps)(Lady)
 
 const styles = StyleSheet.create({
     section: {

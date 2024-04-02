@@ -15,7 +15,7 @@ import DeleteAccount from '../../components/modal/account/DeleteAccount'
 
 import { useLocation } from 'react-router-dom'
 
-const Settings = ({ setTabHeight, toastRef, logOut, currentUser, currentAuthUser, updateCurrentUserInRedux }) => {
+const Settings = ({ setTabHeight, toastRef, user_type, logOut, currentUser, currentAuthUser, updateCurrentUserInRedux }) => {
     const location = useLocation()
 
     useEffect(() => {
@@ -43,7 +43,7 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, currentAuthUser
     }
 
     const onStatusChangePress = () => {
-        if (currentUser.account_type === 'establishment') {
+        if (user_type === 'establishment') {
             return
         }
 
@@ -61,7 +61,7 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, currentAuthUser
     const deactivateProfile = async () => {
         try {
             const { error: updateError } = await supabase
-                .from('users')
+                .from(user_type === 'lady' ? 'ladies' : 'establishments')
                 .update({status: INACTIVE})
                 .eq('id', currentUser.id)
 
@@ -89,7 +89,7 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, currentAuthUser
     const activateProfile = async () => {
         try {
             const { error: updateError } = await supabase
-                .from('users')
+                .from(user_type === 'lady' ? 'ladies' : 'establishments')
                 .update({status: ACTIVE})
                 .eq('id', currentUser.id)
 
@@ -182,7 +182,7 @@ const Settings = ({ setTabHeight, toastRef, logOut, currentUser, currentAuthUser
 
             <PasswordEditor visible={passwordEditorVisible} setVisible={setPasswordEditorVisible} toastRef={toastRef} />
             <EmailEditor visible={emailEditorVisible} setVisible={setEmailEditorVisible} toastRef={toastRef} currentEmail={currentAuthUser.email}/>
-            <DeleteAccount visible={deleteAccountVisible} setVisible={setDeleteAccountVisible} toastRef={toastRef} isEstablishment={currentUser.account_type === 'establishment'} logOut={logOut} />
+            <DeleteAccount visible={deleteAccountVisible} setVisible={setDeleteAccountVisible} toastRef={toastRef} isEstablishment={user_type === 'establishment'} logOut={logOut} />
 
             <ConfirmationModal
                 visible={activateConfirmationVisible}

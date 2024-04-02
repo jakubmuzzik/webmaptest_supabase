@@ -76,10 +76,10 @@ export const updateCurrentAuthUser = (currentAuthUser) => ({
  * 
  * @description Redux thunk functions
  */
-export const fetchUser = (userId) => async (dispatch, getState) => {
+export const fetchUser = (userId, userType) => async (dispatch, getState) => {
     const { data, error } = await supabase
-        .from('users')
-        .select()
+        .from(userType === 'lady' ? 'ladies' : 'establishments')
+        .select('*, images(*), videos(*)')
         .eq('id', userId)
         .limit(1)
 
@@ -91,8 +91,19 @@ export const fetchUser = (userId) => async (dispatch, getState) => {
     dispatch({ type: USER_STATE_CHANGE, data: data[0] })
 }
 
-export const fetchLadies = () => (dispatch, getState) => {
-    return getDocs(query(collection(db, "users"), where('establishment_id', '==', getAuth().currentUser.uid), where('status', '!=', DELETED)))
+export const fetchLadies = () => async (dispatch, getState) => {
+    const { data, error } = await supabase
+        .from('ladies')
+        .select('*, images(*), videos(*)')
+        .eq('establishment_id', getState().userState.currentAuthUser.id)
+
+    if (error || !data || data.length === 0) {
+        dispatch({ type: LADIES_STATE_CHANGE, ladies: [] })
+    } else {
+        dispatch({ type: LADIES_STATE_CHANGE, ladies: data.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)) })
+    }
+
+    /*return getDocs(query(collection(db, "users"), where('establishment_id', '==', getAuth().currentUser.uid), where('status', '!=', DELETED)))
         .then(snapshot => {
             if (snapshot.empty) {
                 console.log('empty')
@@ -108,7 +119,7 @@ export const fetchLadies = () => (dispatch, getState) => {
 
                 dispatch({ type: LADIES_STATE_CHANGE, ladies })
             }
-        })
+        })*/
 }
 
 //lady under establishment

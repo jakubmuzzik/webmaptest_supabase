@@ -47,7 +47,7 @@ const ESTABLISHMENT_LADIES_MESSAGES = {
 
 const { height: initialHeight } = Dimensions.get('window')
 
-const Account = ({ navigation, route, currentUser={}, toastRef, updateCurrentUserInRedux}) => {
+const Account = ({ navigation, route, currentUser={}, user_type, toastRef, updateCurrentUserInRedux}) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -78,7 +78,7 @@ const Account = ({ navigation, route, currentUser={}, toastRef, updateCurrentUse
                 location.pathname.includes('add-lady') 
                 || location.pathname.includes('edit-lady')
             )
-            && currentUser.account_type !== 'establishment'
+            && user_type !== 'establishment'
         ) {
             navigate({
                 pathname: '/account',
@@ -115,7 +115,7 @@ const Account = ({ navigation, route, currentUser={}, toastRef, updateCurrentUse
     }
 
     const hasAllCoverPhotos = () => {
-        if (currentUser.account_type === 'establishment') {
+        if (user_type === 'establishment') {
             const coverImage = currentUser.images.find(image => image.index === 0 && image.status === ACTIVE || image.status === IN_REVIEW)
             return coverImage
         } else {
@@ -142,7 +142,7 @@ const Account = ({ navigation, route, currentUser={}, toastRef, updateCurrentUse
         setResubmitting(true)
         try {
             const { error: updateError } = await supabase
-                .from('users')
+                .from(user_type === 'lady' ? 'ladies' : 'establishments')
                 .update({status: IN_REVIEW, last_submitted_date: new Date()})
                 .eq('id', currentUser.id)
 
@@ -179,13 +179,13 @@ const Account = ({ navigation, route, currentUser={}, toastRef, updateCurrentUse
             case 'account':
                 return (
                     <View style={{ marginTop: SPACING.large }}>
-                        <AccountSettings currentUser={currentUser} />
+                        <AccountSettings currentUser={currentUser} user_type={user_type} />
                     </View>
                 )
             case 'edit_lady':
                 return (
                     <View style={{ marginTop: SPACING.large }}>
-                        <EditLady offsetX={windowWidth * route.index} />
+                        <EditLady offsetX={windowWidth * route.index} user_type={user_type} />
                     </View>
                 )
             case 'add_lady':
@@ -402,6 +402,7 @@ const Account = ({ navigation, route, currentUser={}, toastRef, updateCurrentUse
 
 const mapStateToProps = (store) => ({
     currentUser: store.userState.currentUser,
+    user_type: store.userState.currentAuthUser.user_metadata.user_type,
     toastRef: store.appState.toastRef
 })
 

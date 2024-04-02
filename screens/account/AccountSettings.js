@@ -13,7 +13,7 @@ import Settings from './Settings'
 import Ladies from './Ladies'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 
-const AccountSettings = ({ currentUser }) => {
+const AccountSettings = ({ currentUser, user_type }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -28,7 +28,7 @@ const AccountSettings = ({ currentUser }) => {
         { key: 'videos', title: 'Videos', height: '100%', path: '/account/videos' },
         { key: 'settings', title: 'Settings', height: '100%', path: '/account/settings' },
     ]
-    .filter(route => route.key === 'ladies' ? currentUser.account_type === 'establishment' : true)
+    .filter(route => route.key === 'ladies' ? user_type === 'establishment' : true)
     .map((route, index) => ({ ...route, index })))
 
     const navigate = useNavigate()
@@ -69,7 +69,7 @@ const AccountSettings = ({ currentUser }) => {
             case 'profile-information':
                 return (
                     <View style={{ width: normalize(800), maxWidth: '100%', height: routes[index].height, alignSelf: 'center' }}>
-                        <PersonalDetails userData={currentUser} setTabHeight={(height) => setTabHeight(height, route.index)} />
+                        <PersonalDetails userData={currentUser} user_type={user_type} setTabHeight={(height) => setTabHeight(height, route.index)} />
                     </View>
                 )
             case 'ladies':
@@ -81,7 +81,7 @@ const AccountSettings = ({ currentUser }) => {
             case 'photos':
                 return (
                     <View style={{ width: normalize(800), maxWidth: '100%', height: routes[index].height, alignSelf: 'center' }}>
-                        <Photos userData={currentUser} setTabHeight={(height) => setTabHeight(height, route.index)} index={route.index} />
+                        <Photos userData={currentUser} user_type={user_type} setTabHeight={(height) => setTabHeight(height, route.index)} index={route.index} />
                     </View>
                 )
             case 'videos':
@@ -93,7 +93,7 @@ const AccountSettings = ({ currentUser }) => {
             case 'settings':
                 return (
                     <View style={{ width: normalize(800), maxWidth: '100%', height: routes[index].height, alignSelf: 'center' }}>
-                        <Settings currentUser={currentUser} setTabHeight={(height) => setTabHeight(height, route.index)} />
+                        <Settings currentUser={currentUser} user_type={user_type} setTabHeight={(height) => setTabHeight(height, route.index)} />
                     </View>
                 )
             default:

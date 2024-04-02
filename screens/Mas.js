@@ -85,7 +85,7 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
                 name: 'llll',
                 date_of_birth: '25071996',
                 address: {city: 'Praha'},
-                images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
+                images: [{ download_url: require('../assets/dummy_photo.png') }]
             }, 0)
         }))
         setIsLoading(false)
@@ -94,9 +94,9 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
     const loadDataForCurrentPage = async () => {
         try {
             let query = supabase
-                .from('users')
-                .select()
-                .match({ account_type: 'lady', status: ACTIVE })  
+                .from('ladies')
+                .select('*, images(*), videos(*)')
+                .match({ status: ACTIVE })  
                 .overlaps('services', MASSAGE_SERVICES)  
 
             query = buildFiltersForQuery(query, filters)
@@ -126,9 +126,9 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
     const getMasseusesCount = async () => {
         try {
             let query = supabase
-                .from('users')
+                .from('ladies')
                 .select('*', { count: 'exact', head: true })
-                .match({ account_type: 'lady', status: ACTIVE })    
+                .match({ status: ACTIVE })    
                 .overlaps('services', MASSAGE_SERVICES)  
 
             query = buildFiltersForQuery(query, filters)

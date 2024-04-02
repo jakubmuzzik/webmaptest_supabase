@@ -49,7 +49,7 @@ const RenderLady = ({ lady, width, delay = 0 }) => {
 
     return (
         <Animated.View style={containerAnimatedStyle}>
-            <Link to={{ pathname: '/profile/' + lady.id, search: new URLSearchParams(stripEmptyParams(params)).toString() }} state={{ lady }}>
+            <Link to={{ pathname: '/lady/' + lady.id, search: new URLSearchParams(stripEmptyParams(params)).toString() }} state={{ lady }}>
                 <View style={{ flex: 1 }}
                     onMouseEnter={isBrowser ? () => setIsHovered(true) : undefined}
                     onMouseLeave={isBrowser ? () => setIsHovered(false) : undefined}
@@ -61,8 +61,8 @@ const RenderLady = ({ lady, width, delay = 0 }) => {
                             aspectRatio: 3 / 4,
                             width
                         }}
-                        source={lady.images[0].downloadUrl}
-                        placeholder={lady.images[0].blurhash}
+                        source={lady.images[0]?.download_url}
+                        placeholder={lady.images[0]?.blurhash}
                         resizeMode="cover"
                         transition={200}
                         alt={lady.name}

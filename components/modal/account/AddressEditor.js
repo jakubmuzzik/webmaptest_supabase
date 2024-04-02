@@ -33,7 +33,7 @@ const window = Dimensions.get('window')
 
 import { supabase } from '../../../supabase/config'
 
-const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateRedux, isEstablishment }) => {
+const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateRedux, user_type }) => {
     const [routes] = useState([
         { key: '1' },
         { key: '2' }
@@ -120,7 +120,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
 
         try {
             const { error: updateError } = await supabase
-                .from('users')
+                .from(user_type === 'lady' ? 'ladies' : 'establishments')
                 .update({address: addr, hidden_address: hidden, last_modified_date: new Date()})
                 .eq('id', userId)
 

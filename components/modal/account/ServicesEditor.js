@@ -94,7 +94,7 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
 
         try {
             const { error: updateError } = await supabase
-                .from('users')
+                .from('ladies')
                 .update({services: changedServices, last_modified_date: new Date()})
                 .eq('id', userId)
 

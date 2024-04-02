@@ -167,11 +167,22 @@ export const generateThumbnailFromLocalURI = (uri, time) => {
   });
 }
 
-export const calculateAgeFromDate = (dateStr) => {
-  const parsedPastDate = new Date(dateStr.slice(4, 8), dateStr.slice(2, 4) - 1, dateStr.slice(0, 2))
+export const convertStringToDate = (dateStr) => {
+  return dateStr.length === 8 ? new Date(dateStr.slice(4, 8), dateStr.slice(2, 4) - 1, dateStr.slice(0, 2)) : ''
+}
+
+export const convertDateToString = (dateVal) => {
+  const dateParts = dateVal instanceof Date ? dateVal.toISOString() : dateVal.split('-')
+
+  //e.g. 25071996
+  return dateParts[2].split('T')[0] + dateParts[1] + dateParts[0]
+}
+
+export const calculateAgeFromDate = (dateObj) => {
+  //const parsedPastDate = new Date(dateStr.slice(4, 8), dateStr.slice(2, 4) - 1, dateStr.slice(0, 2))
   const today = new Date()
 
-  const timeDiff = today - parsedPastDate;
+  const timeDiff = today - dateObj;
 
   const millisecondsInYear = 1000 * 60 * 60 * 24 * 365.25;
 
@@ -190,6 +201,15 @@ export const chunkArray = (arr, chunkSize) => {
   
   return chunks
 }
+
+export const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    [array[i], array[j]] = [array[j], array[i]]
+  }
+  
+  return array
+} 
 
 export const stripEmptyParams = (params) => {
   return Object.keys(params).reduce((out, param) => params[param] ? {...out, [param]: params[param]} : out, {})

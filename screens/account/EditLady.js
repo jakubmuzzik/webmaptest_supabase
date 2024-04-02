@@ -19,7 +19,7 @@ import Videos from './Videos'
 
 import { REJECTED, IN_REVIEW, ACTIVE } from '../../labels'
 
-const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedux }) => {
+const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedux, user_type }) => {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
@@ -97,7 +97,7 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
         setResubmitting(true)
         try {
             const { error: updateError } = await supabase
-                .from('users')
+                .from(user_type === 'lady' ? 'ladies' : 'establishments')
                 .update({status: IN_REVIEW, last_submitted_date: new Date()})
                 .eq('id', ladyData.id)
 

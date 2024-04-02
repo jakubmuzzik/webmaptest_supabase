@@ -48,7 +48,7 @@ const RenderEstablishment = ({ establishment, width, delay = 0 }) => {
 
     return (
         <Animated.View style={containerAnimatedStyle}>
-            <Link to={{ pathname: '/profile/' + establishment.id, search: new URLSearchParams(stripEmptyParams(params)).toString() }} state={{ establishment }}>
+            <Link to={{ pathname: '/establishment/' + establishment.id, search: new URLSearchParams(stripEmptyParams(params)).toString() }} state={{ establishment }}>
                 <View style={{ flex: 1 }}
                     onMouseEnter={isBrowser ? () => setIsHovered(true) : undefined}
                     onMouseLeave={isBrowser ? () => setIsHovered(false) : undefined}
@@ -60,7 +60,7 @@ const RenderEstablishment = ({ establishment, width, delay = 0 }) => {
                             aspectRatio: 3 / 4,
                             width
                         }}
-                        source={establishment.images[0].downloadUrl}
+                        source={establishment.images[0].download_url}
                         placeholder={establishment.images[0].blurhash}
                         resizeMode="cover"
                         transition={200}

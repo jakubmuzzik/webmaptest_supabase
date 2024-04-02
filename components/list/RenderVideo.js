@@ -28,7 +28,7 @@ const RenderVideo = ({ video }) => {
 
     const init = async () => {
         try {
-            RNImage.getSize(video.thumbnailDownloadUrl, (width, height) => { 
+            RNImage.getSize(video.thumbnail_download_url, (width, height) => { 
                 setAspectRatio(width / height)
             })
         } catch(e) {
@@ -53,7 +53,7 @@ const RenderVideo = ({ video }) => {
         }}>
             <Image 
                 style={{...StyleSheet.absoluteFillObject, borderRadius: 10}}
-                source={video.thumbnailDownloadUrl}
+                source={video.thumbnail_download_url}
                 placeholder={video.blurhash}
                 transition={200}
                 resizeMode='cover'
@@ -79,7 +79,7 @@ const RenderVideo = ({ video }) => {
                     aspectRatio: aspectRatio
                 }}
                 source={{
-                    uri: video.downloadUrl
+                    uri: video.download_url
                 }}
                 useNativeControls
                 resizeMode={ResizeMode.CONTAIN}

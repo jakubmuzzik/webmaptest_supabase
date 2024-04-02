@@ -52,7 +52,7 @@ const RenderImageWithActions = ({ image, transition = 200, resizeMode = 'contain
 
     return (
         <ImageBackground
-            source={{ uri: image.downloadUrl }}
+            source={{ uri: image.download_url }}
             style={StyleSheet.absoluteFillObject}
             imageStyle={{ opacity: 0.7 }}
             resizeMode='cover'
@@ -63,7 +63,7 @@ const RenderImageWithActions = ({ image, transition = 200, resizeMode = 'contain
                         flex: 1,
                         aspectRatio: 1 / 1,
                     }}
-                    source={{ uri: image.downloadUrl }}
+                    source={{ uri: image.download_url }}
                     placeholder={image.blurhash}
                     resizeMode={resizeMode}
                     transition={transition}

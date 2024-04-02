@@ -84,7 +84,7 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
                 name: 'llll',
                 date_of_birth: '25071996',
                 address: {city: 'Praha'},
-                images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
+                images: [{ download_url: require('../assets/dummy_photo.png') }]
             }, 0)
         }))
         setIsLoading(false)
@@ -93,9 +93,9 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
     const loadDataForCurrentPage = async () => {
         try {
             let query = supabase
-                .from('users')
-                .select()
-                .match({ account_type: 'establishment', status: ACTIVE })  
+                .from('establishments')
+                .select('*, images(*), videos(*)')
+                .match({ status: ACTIVE })  
 
             query = buildFiltersForQuery(query, filters)
 
@@ -124,9 +124,9 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
     const getEstablishmentsCount = async () => {
         try {
             let query = supabase
-                .from('users')
+                .from('establishments')
                 .select('*', { count: 'exact', head: true })
-                .match({ account_type: 'establishment', status: ACTIVE })      
+                .match({ status: ACTIVE })      
 
             query = buildFiltersForQuery(query, filters)
                 

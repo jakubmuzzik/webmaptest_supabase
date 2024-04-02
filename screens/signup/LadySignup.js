@@ -139,10 +139,11 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
                 {
                     email: data.email,
                     password: data.password,
-                },
-                {
-                    data: {
-                        name: data.name
+                    options: {
+                        data: {
+                            name: data.name,
+                        user_type: 'lady'
+                        }
                     }
                 }
             )
@@ -155,27 +156,27 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
 
             data.id = user.id
         } else {
-            const { data } = await supabase.auth.getSession()
+            const { data: sessionData } = await supabase.auth.getSession()
             data.id = uuid.v4(),
-            data.establishment_id = data.session.user.id
+            data.establishment_id = sessionData.session.user.id
         }
 
         data = {
             ...data,
             name_lowercase: data.name.toLowerCase(),
             created_date: new Date(),
-            account_type: 'lady',
             independent
         }
 
-        //extract assets before uploading
+        //extract assets
         const images = data.images
         const videos = data.videos
-        data.images = []
-        data.videos = []
+
+        delete data.images
+        delete data.videos
 
         const { error: insertUserError } = await supabase
-            .from('users')
+            .from('ladies')
             .insert(data)
 
         if (insertUserError) {
@@ -202,24 +203,38 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
 
         data.images.forEach((image, index) => {
             delete image.image
-            image.downloadUrl = imageURLs[index]
+            image.download_url = imageURLs[index]
+            image.lady_id = data.id
         })
 
         data.videos.forEach((video, index) => {
             delete video.video
             delete video.thumbnail
 
-            video.downloadUrl = videoURLs[index]
-            video.thumbnailDownloadUrl = thumbanilURLs[index]
+            video.download_url = videoURLs[index]
+            video.thumbnail_download_url = thumbanilURLs[index]
+            video.lady_id = data.id
         })
 
-        const { error: updateError } = await supabase
-            .from('users')
-            .update(data)
-            .eq('id', data.id)
-        
-        if (updateError) {
-            throw updateError
+        if (data.images.length > 0) {
+            console.log(data.images)
+            const { error: insertImagesError } = await supabase
+                .from('images')
+                .insert(data.images)
+
+            if (insertImagesError) {
+                throw insertImagesError
+            }
+        }
+
+        if (data.videos.length > 0) {
+            const { error: insertVideosError } = await supabase
+                .from('videos')
+                .insert(data.videos)
+
+            if (insertVideosError) {
+                throw insertVideosError
+            }
         }
     }
 

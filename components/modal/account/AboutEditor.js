@@ -29,7 +29,7 @@ import { supabase } from '../../../supabase/config'
 
 const window = Dimensions.get('window')
 
-const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId }) => {
+const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId, user_type }) => {
     const [isSaving, setIsSaving] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [changedAbout, setChangedAbout] = useState(about)
@@ -89,7 +89,7 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
 
         try {
             const { error: updateError } = await supabase
-                .from('users')
+                .from(user_type === 'lady' ? 'ladies' : 'establishments')
                 .update({description: changedAbout, last_modified_date: new Date()})
                 .eq('id', userId)
 

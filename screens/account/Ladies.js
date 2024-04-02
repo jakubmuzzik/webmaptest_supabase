@@ -142,7 +142,7 @@ const Ladies = ({ route, index, setTabHeight, ladies, fetchLadies, removeLadyFro
 
     const onOpenProfilePress = (ladyId) => {
         navigate({
-            pathname: '/profile/' + ladyId, 
+            pathname: '/lady/' + ladyId, 
             search: new URLSearchParams(stripEmptyParams(params)).toString()
         })
     }
@@ -353,7 +353,7 @@ const Ladies = ({ route, index, setTabHeight, ladies, fetchLadies, removeLadyFro
                     Inactive
                 </Text>
                 <Text style={[styles.sectionHeaderText, { color: COLORS.greyText, fontFamily: FONTS.medium }]}>
-                    • {data.length}
+                    • {data.inactive.length}
                 </Text>
             </View>
     

@@ -48,13 +48,13 @@ const LoginInformation = forwardRef((props, ref) => {
         }
 
         try {
-            const { data: authData, error } = await supabase
-                .from('users')
+            const { data: ladiesData, ladiesError } = await supabase
+                .from('ladies')
                 .select('email')
                 .eq('email', data.email)
 
-            if (error) {
-                console.error(error)
+            if (ladiesError) {
+                console.error(ladiesError)
                 toastRef.current.show({
                     type: 'error',
                     text: 'Could not validate the email.'
@@ -63,7 +63,22 @@ const LoginInformation = forwardRef((props, ref) => {
                 return false
             }
 
-            if (authData && authData.length > 0) {
+            const { data: establishmentsData, establishmentsError } = await supabase
+                .from('establishments')
+                .select('email')
+                .eq('email', data.email)
+
+            if (establishmentsError) {
+                console.error(establishmentsError)
+                toastRef.current.show({
+                    type: 'error',
+                    text: 'Could not validate the email.'
+                })
+
+                return false
+            }
+
+            if ((ladiesData && ladiesData.length > 0) || (establishmentsData && establishmentsData.length > 0)) {
                 toastRef.current.show({
                     type: 'error',
                     text: 'Email address is already in use.'

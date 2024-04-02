@@ -18,7 +18,7 @@ const renderItem = ({
 }) => {
     return (
         <Image
-            source={item.downloadUrl}
+            source={item.download_url}
             style={StyleSheet.absoluteFillObject}
             resizeMode="contain"
             placeholder={item.blurhash}
@@ -104,7 +104,7 @@ const AssetsGallery = ({ assets, pressedAssetIndex=0 }) => {
                                     opacity: assetIndex === index ? 1 : 0.6,
                                     borderRadius: 5
                                 }}
-                                source={asset.downloadUrl}
+                                source={asset.download_url}
                                 resizeMode='cover'
                                 placeholder={asset.blurhash}
                                 transition={200}

@@ -10,21 +10,10 @@ import RenderEstablishment from '../components/list/RenderEstablishment'
 import { AnimatePresence, MotiView } from 'moti'
 import { ACTIVE } from '../labels'
 import { connect } from 'react-redux'
-import { 
-    getCountFromServer, 
-    db, 
-    collection, 
-    query, 
-    where, 
-    startAt, 
-    limit, 
-    orderBy, 
-    getDocs,
-    endAt
-} from '../firebase/config'
 import { useNavigate } from 'react-router-dom'
 import SwappableText from '../components/animated/SwappableText'
 import LottieView from 'lottie-react-native'
+import { supabase } from '../supabase/config'
 
 const SearchResults = ({ toastRef }) => {
     const [searchParams] = useSearchParams()
@@ -38,10 +27,8 @@ const SearchResults = ({ toastRef }) => {
 
     const [isLoading, setIsLoading] = useState(true)
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
-    const [results, setResults] = useState([])
-
-    const ladies = results.filter(result => result.account_type === 'lady')
-    const establishments = results.filter(result => result.account_type === 'establishment')
+    const [ladiesResults, setLadiesResults] = useState([])
+    const [establisthmentsResults, setEstablisthmentsResults] = useState([])
 
     useEffect(() => {
         if (!params.query) {
@@ -57,22 +44,38 @@ const SearchResults = ({ toastRef }) => {
 
     const search = async () => {
         console.log('searching')
+        console.log(params.query)
         setIsLoading(true)
         try {
-            const q = query(
-                collection(db, "users"), 
-                where('status', '==', ACTIVE),
-                orderBy('name_lowercase'),
-                startAt(params.query.toLowerCase()),
-                endAt(params.query.toLowerCase() + '\uf8ff'),
-                limit(MAX_ITEMS_PER_PAGE)
-            )
-    
-            const snapshot = await getDocs(q)
-            setResults(snapshot.docs.map(doc => ({
-                ...doc.data(),
-                id: doc.id
-            })))
+            const results = await Promise.all([
+                supabase
+                    .from('ladies')
+                    .select('*, images(*), videos(*)')
+                    .match({ status: ACTIVE })
+                    .like('name_lowercase', '%' + params.query.toLowerCase() + '%')
+                    .limit(MAX_ITEMS_PER_PAGE),
+                supabase
+                    .from('establishments')
+                    .select('*, images(*), videos(*)')
+                    .match({ status: ACTIVE })
+                    .like('name_lowercase', '%' + params.query.toLowerCase() + '%')
+                    .limit(MAX_ITEMS_PER_PAGE),
+            ])
+
+            const { data: ladiesData, error: ladiesError } = results[0]
+            const { data: estsData, error: estsError } = results[1]
+
+            if (ladiesData?.length > 0) {
+                setLadiesResults(ladiesData)
+            } else {
+                setLadiesResults([])
+            }
+
+            if (estsData?.length > 0) {
+                setEstablisthmentsResults(estsData)
+            } else {
+                setEstablisthmentsResults([])
+            }
         } catch(error) {
             toastRef.current.show({
                 type: 'error',
@@ -158,41 +161,29 @@ const SearchResults = ({ toastRef }) => {
         </>
     )
 
-    const renderLadies = () => {
-        if (ladies.length === 0) {
-            return null
-        }
+    const renderLadies = () => (
+        <View style={{ marginTop: SPACING.large }}>
+            <Text style={{ fontSize: FONT_SIZES.h2, color: '#FFF', fontFamily: FONTS.bold, marginHorizontal: SPACING.large, textAlign: 'center' }}>
+                Ladies
+            </Text>
 
-        return (
-            <View style={{ marginTop: SPACING.large }}>
-                <Text style={{ fontSize: FONT_SIZES.h2, color: '#FFF', fontFamily: FONTS.bold, marginHorizontal: SPACING.large, textAlign: 'center'}}>
-                    Ladies
-                </Text>
-
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginLeft: SPACING.large, marginTop: SPACING.small }}>
-                    {ladies.map((result, index) => renderLady(result, index))}
-                </View>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginLeft: SPACING.large, marginTop: SPACING.small }}>
+                {ladiesResults.map((result, index) => renderLady(result, index))}
             </View>
-        )
-    }
+        </View>
+    )
 
-    const renderEstablishments = () => {
-        if (establishments.length === 0) {
-            return null
-        }
+    const renderEstablishments = () => (
+        <View style={{ marginTop: SPACING.large }}>
+            <Text style={{ fontSize: FONT_SIZES.h2, color: '#FFF', fontFamily: FONTS.bold, marginHorizontal: SPACING.large, textAlign: 'center' }}>
+                Establishments
+            </Text>
 
-        return (
-            <View style={{ marginTop: SPACING.large }}>
-                <Text style={{ fontSize: FONT_SIZES.h2, color: '#FFF', fontFamily: FONTS.bold, marginHorizontal: SPACING.large, textAlign: 'center' }}>
-                    Establishments
-                </Text>
-
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginLeft: SPACING.large, marginTop: SPACING.small }}>
-                    {establishments.map((result, index) => renderEstablishment(result, index))}
-                </View>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginLeft: SPACING.large, marginTop: SPACING.small }}>
+                {establisthmentsResults.map((result, index) => renderEstablishment(result, index))}
             </View>
-        )
-    }
+        </View>
+    )
 
     const renderNoResults = () => (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: -normalize(50)}}>
@@ -218,11 +209,11 @@ const SearchResults = ({ toastRef }) => {
 
             {isLoading && renderSkeletonLoader()}
 
-            {!isLoading && ladies.length > 0 && renderLadies()}
+            {!isLoading && ladiesResults.length > 0 && renderLadies()}
 
-            {!isLoading && establishments.length > 0 && renderEstablishments()}
+            {!isLoading && establisthmentsResults.length > 0 && renderEstablishments()}
 
-            {!isLoading && ladies.length === 0 && establishments.length === 0 && renderNoResults()}
+            {!isLoading && ladiesResults.length === 0 && establisthmentsResults.length === 0 && renderNoResults()}
         </View>
     )
 }

@@ -92,7 +92,7 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
 
         try {
             const { error: updateError } = await supabase
-                .from('users')
+                .from('ladies')
                 .update({...changedPricing, last_modified_date: new Date()})
                 .eq('id', userId)
 

@@ -86,7 +86,7 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
                 name: 'llll',
                 date_of_birth: '25071996',
                 address: {city: 'Praha'},
-                images: [{ downloadUrl: require('../assets/dummy_photo.png') }]
+                images: [{ download_url: require('../assets/dummy_photo.png') }]
             }, 0)
         }))
         setIsLoading(false)
@@ -95,9 +95,9 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
     const loadDataForCurrentPage = async () => {
         try {
             let query = supabase
-                .from('users')
-                .select()
-                .match({ account_type: 'lady', status: ACTIVE })  
+                .from('ladies')
+                .select('*, images(*), videos(*)')
+                .match({ status: ACTIVE })  
 
             query = buildFiltersForQuery(query, filters)
 
@@ -126,9 +126,9 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
     const getLadiesCount = async () => {
         try {
             let query = supabase
-                .from('users')
+                .from('ladies')
                 .select('*', { count: 'exact', head: true })
-                .match({ account_type: 'lady', status: ACTIVE })      
+                .match({ status: ACTIVE })      
 
             query = buildFiltersForQuery(query, filters)
                 
