@@ -19,27 +19,11 @@ import {
     SPACING
 } from '../../../constants'
 
-import { 
-    getAuth, 
-    EmailAuthProvider, 
-    reauthenticateWithCredential, 
-    writeBatch,
-    db,
-    getDocs,
-    query,
-    collection,
-    where,
-    deleteUser,
-    doc,
-    updateDoc
-} from '../../../firebase/config'
-
 import { Button } from 'react-native-paper'
 
 import Toast from '../../Toast'
 
 import BouncyCheckbox from "react-native-bouncy-checkbox"
-import { DELETED } from '../../../labels'
 
 import OverlaySpinner from '../OverlaySpinner'
 
@@ -96,11 +80,7 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment, logOut 
         })
         setVisible(false)
     }
-    
-    const reauthenticate = async () => {
-        const cred = EmailAuthProvider.credential(getAuth().currentUser.email, data.password)
-        return reauthenticateWithCredential(getAuth().currentUser, cred)
-    }
+
 
     const onDeletePress = async () => {
         if (isSaving) {
@@ -109,27 +89,13 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment, logOut 
 
         setIsSaving(true)
 
-        try {
-            await reauthenticate()
-        } catch(e) {
-            console.error(e)
-            modalToastRef.current.show({
-                type: 'error',
-                text: 'Invalid password.'
-            })
-            setIsSaving(false)
-            return
-        }
+        return
 
         try {
 
-            if (isEstablishment) {
-                await deleteEstablishmentData()
-            } else {
-                await updateDoc(doc(db, 'users', getAuth().currentUser.uid), { status: DELETED })
-            }
+            //TODO - call edge function
 
-            await deleteUser(getAuth().currentUser)
+            
             logOut()
             toastRef.current.show({
                 type: 'success',
@@ -146,31 +112,6 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment, logOut 
             setIsSaving(false)
         }
 
-    }
-
-    const deleteEstablishmentData = async () => {
-        const snapshot = await getDocs(query(collection(db, "users"), where('establishment_id', '==', getAuth().currentUser.uid), where('status', '!=', DELETED)))
-
-        if (snapshot.empty) {
-            return
-        }
-
-        const batches = []
-        let ids = snapshot.docs.map(doc => doc.id)
-
-        while (ids.length) {
-            let batch = writeBatch(db)
-            ids.splice(0, 500).forEach(id => {
-                batch.update(doc(db, 'users', id), { status: DELETED })
-            })
-
-            batches.push(batch)
-        }
-
-        await Promise.all([
-            ...batches.map((batch) => batch.commit()),
-            updateDoc(doc(db, 'users', getAuth().currentUser.uid), { status: DELETED })
-        ])
     }
 
     const modalContainerStyles = useAnimatedStyle(() => {

@@ -154,6 +154,7 @@ const Establishment = ({ toastRef }) => {
             .select('*, images(*), videos(*)')
             .match({ status: ACTIVE, establishment_id })  
             .order('last_modified_date', { descending: true })
+        //TODO - load e.g. first 20 and then place show more button...
 
         if (ladiesData && ladiesData.length > 0) {
             setLadiesUnderEstablishment(shuffleArray(ladiesData))

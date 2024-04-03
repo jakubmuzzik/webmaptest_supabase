@@ -176,6 +176,10 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
         setIsChanged(!areValuesEqual(values.outcall, pricing['outcall']) || !areValuesEqual(values.incall, pricing['incall']))
     }
 
+    const doesNotHaveAllPricesFilled = () => {
+        return changedPricing.prices.some(pricing => (changedPricing.incall && !pricing.incall) || (changedPricing.outcall && !pricing.outcall))
+    }
+
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
             backgroundColor: '#FFF',
@@ -406,7 +410,7 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                                 mode="contained"
                                 onPress={onSavePress}
                                 loading={isSaving}
-                                disabled={isSaving || !isChanged}
+                                disabled={isSaving || !isChanged || doesNotHaveAllPricesFilled()}
                             >
                                 Save
                             </Button>

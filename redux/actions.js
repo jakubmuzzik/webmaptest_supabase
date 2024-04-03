@@ -13,8 +13,6 @@ import {
     ESTABLISHMENT_CITIES_STATE_CHANGE,
     CURRENT_DATA_COUNT_RESET
 } from './actionTypes'
-import { getAuth, getDoc, doc, db, signOut, getDocs, query, collection, where, getCountFromServer } from '../firebase/config'
-import { ACTIVE, DELETED } from '../labels'
 import { supabase } from '../supabase/config'
 
 export const updateRoute = (route) => ({

@@ -168,7 +168,7 @@ export const generateThumbnailFromLocalURI = (uri, time) => {
 }
 
 export const convertStringToDate = (dateStr) => {
-  return dateStr.length === 8 ? new Date(dateStr.slice(4, 8), dateStr.slice(2, 4) - 1, dateStr.slice(0, 2)) : ''
+  return dateStr.length === 8 ? new Date(Date.UTC(dateStr.slice(4, 8), dateStr.slice(2, 4) - 1, dateStr.slice(0, 2))) : ''
 }
 
 export const convertDateToString = (dateVal) => {
@@ -178,11 +178,11 @@ export const convertDateToString = (dateVal) => {
   return dateParts[2].split('T')[0] + dateParts[1] + dateParts[0]
 }
 
-export const calculateAgeFromDate = (dateObj) => {
+export const calculateAgeFromDate = (dateStr) => {
   //const parsedPastDate = new Date(dateStr.slice(4, 8), dateStr.slice(2, 4) - 1, dateStr.slice(0, 2))
   const today = new Date()
 
-  const timeDiff = today - dateObj;
+  const timeDiff = today - new Date(dateStr);
 
   const millisecondsInYear = 1000 * 60 * 60 * 24 * 365.25;
 

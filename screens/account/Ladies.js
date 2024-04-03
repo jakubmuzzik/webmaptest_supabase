@@ -14,7 +14,7 @@ import { MOCK_DATA } from '../../constants'
 import ContentLoader, { Rect } from "react-content-loader/native"
 import ConfirmationModal from '../../components/modal/ConfirmationModal'
 
-import { updateDoc, doc, db, ref, uploadBytes, storage, getDownloadURL, deleteObject } from '../../firebase/config'
+import { supabase } from '../../supabase/config'
 
 const Ladies = ({ route, index, setTabHeight, ladies, fetchLadies, removeLadyFromRedux, updateLadyInRedux, toastRef }) => {
     const [searchParams] = useSearchParams()
@@ -79,7 +79,14 @@ const Ladies = ({ route, index, setTabHeight, ladies, fetchLadies, removeLadyFro
 
     const deleteLady = async (ladyId) => {
         try {
-            await updateDoc(doc(db, 'users', ladyId), { status: DELETED })
+            const { error } = await supabase
+                .from('ladies')
+                .delete()
+                .eq('id', ladyId)
+
+            if (error) {
+                throw error
+            }
 
             removeLadyFromRedux(ladyId)
 
@@ -100,7 +107,14 @@ const Ladies = ({ route, index, setTabHeight, ladies, fetchLadies, removeLadyFro
 
     const deactivateLady = async (ladyId) => {
         try {
-            await updateDoc(doc(db, 'users', ladyId), { status: INACTIVE })
+            const { error } = await supabase
+                .from('ladies')
+                .update({ status: INACTIVE })
+                .eq('id', ladyId)
+
+            if (error) {
+                throw error
+            }
 
             updateLadyInRedux({ status: INACTIVE, id: ladyId })
 
@@ -121,7 +135,14 @@ const Ladies = ({ route, index, setTabHeight, ladies, fetchLadies, removeLadyFro
 
     const activateLady = async (ladyId) => {
         try {
-            await updateDoc(doc(db, 'users', ladyId), { status: ACTIVE })
+            const { error } = await supabase
+                .from('ladies')
+                .update({ status: ACTIVE })
+                .eq('id', ladyId)
+
+            if (error) {
+                throw error
+            }
 
             updateLadyInRedux({ status: ACTIVE, id: ladyId })
 

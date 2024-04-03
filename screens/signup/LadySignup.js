@@ -156,9 +156,9 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
 
             data.id = user.id
         } else {
-            const { data: sessionData } = await supabase.auth.getSession()
+            const { data: { user } } = await supabase.auth.getUser()//await supabase.auth.getSession()
             data.id = uuid.v4(),
-            data.establishment_id = sessionData.session.user.id
+            data.establishment_id = user.id
         }
 
         data = {

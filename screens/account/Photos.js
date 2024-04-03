@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, useWindowDimensions, Modal } from 'react-native
 import { Image } from 'expo-image'
 import { COLORS, FONTS, FONT_SIZES, SPACING, MAX_PHOTO_SIZE_MB, MAX_PHOTOS } from '../../constants'
 import { ACTIVE, REJECTED, IN_REVIEW, INACTIVE } from '../../labels'
-import { normalize, getFileSizeInMb, getDataType, encodeImageToBlurhash } from '../../utils'
+import { normalize, getFileSizeInMb, getDataType, encodeImageToBlurhash, getMimeType } from '../../utils'
 import { IconButton, Button, TouchableRipple } from 'react-native-paper'
 import { Octicons, Ionicons, AntDesign } from '@expo/vector-icons'
 import DropdownSelect from '../../components/DropdownSelect'
@@ -18,7 +18,7 @@ import ConfirmationModal from '../../components/modal/ConfirmationModal'
 
 import LottieView from 'lottie-react-native'
 
-import { updateDoc, doc, db, ref, uploadBytes, storage, getDownloadURL, deleteObject } from '../../firebase/config'
+import { supabase } from '../../supabase/config'
 
 const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRef, updateCurrentUserInRedux, updateLadyInRedux }) => {
     const [data, setData] = useState({
@@ -34,7 +34,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
 
     useEffect(() => {
         const active = userData.images.filter(image => image.status === ACTIVE).sort((a,b) => a.index - b.index)
-        const inReview = userData.images.filter(image => image.status === IN_REVIEW).sort((a,b) => a.index - b.index)
+        const inReview = userData.images.filter(image => image.status === IN_REVIEW).sort((a,b) => a.index - b.index)//.map(image => ({...image, download_url: image.download_url + '?bust=' + Date.now()})) //bust the cache when replacing in review images
         const rejected = userData.images.filter(image => image.status === REJECTED).sort((a,b) => a.index - b.index)
 
         setData({
@@ -126,42 +126,71 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
 
         if (!isNaN(index)) {
             imageData.index = index
+            imageData.image_id_to_replace = data.active.find(image => image.index === index)?.id
         }
 
         let currentImages = [...userData.images]
 
         //if there's an existing file in storage, it will be replaced 
-        const url = await uploadAssetToFirestore(imageData.image, 'photos/' + userData.id + '/' + imageData.id)
+        const url = await uploadAssetToSupabase(imageData.image, userData.id + '/' + imageData.id)
 
         delete imageData.image
         imageData.download_url = url
 
+        if (user_type === 'establishment') {
+            imageData.establishment_id = userData.id
+        } else {
+            //user_tyoe === lady or editing lady under establishemnt (user_type === undefined)
+            imageData.lady_id = userData.id
+        }
+        
+        //overwriting another in review image
         if (replaceImageId) {
             currentImages = currentImages.filter(img => img.id !== replaceImageId)
         }
-
+        
         currentImages.push(imageData)
         
-        await updateDoc(doc(db, 'users', userData.id), { images: currentImages, last_modified_date: new Date() })
+        const { error } = await supabase
+            .from('images')
+            .upsert({ ...imageData })
+            .select()
+
+        if (error) {
+            throw error
+        }
+
+        //bust the cache 
+        if (replaceImageId) {
+            imageData.download_url += '?bust=' + Date.now()
+        }
 
         if (userData.establishment_id) {
-            updateLadyInRedux({ images: currentImages, id: userData.id, last_modified_date: new Date() })
+            updateLadyInRedux({ images: currentImages, id: userData.id })
         } else {
-            updateCurrentUserInRedux({ images: currentImages, id: userData.id, last_modified_date: new Date() })
+            updateCurrentUserInRedux({ images: currentImages, id: userData.id })
         }
     }
 
-    const uploadAssetToFirestore = async (assetUri, assetPath) => {
-        const imageRef = ref(storage, assetPath)
-    
-        const response = await fetch(assetUri)
-        const blob = await response.blob()
+    const uploadAssetToSupabase = async (assetUri, assetPath) => {
+        const arraybuffer = await fetch(assetUri).then((res) => res.arrayBuffer())
 
-        const result = await uploadBytes(imageRef, blob)
+        const { error: uploadError } = await supabase
+            .storage
+            .from('photos')
+            .upload(assetPath, arraybuffer, {
+                cacheControl: '3600',
+                upsert: true,
+                contentType: getMimeType(assetUri)
+            })
 
-        const downloadURL = await getDownloadURL(result.ref)
+        if (uploadError) {
+            throw uploadError
+        }
 
-        return downloadURL
+        const { data: publicUrlData } = supabase.storage.from('photos').getPublicUrl(assetPath)
+
+        return publicUrlData.publicUrl
     }
 
     //only cover photos can be edited
@@ -192,17 +221,23 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
         setImageToDelete(imageId)
     }
 
+    //storage object will be deleted from images trigger
     const deleteImage = async (imageId) => {
-        const imageRef = ref(storage, 'photos/' + userData.id + '/' + imageId)
-        await deleteObject(imageRef)
-
         const newImages = userData.images.filter(image => image.id !== imageId)
-        await updateDoc(doc(db, 'users', userData.id), { images: newImages, last_modified_date: new Date() })
+
+        const { error } = await supabase
+            .from('images')
+            .delete()
+            .eq('id', imageId)
+
+        if (error) {
+            throw error
+        }
 
         if (userData.establishment_id) {
-            updateLadyInRedux({ images: newImages, id: userData.id, last_modified_date: new Date() })
+            updateLadyInRedux({ images: newImages, id: userData.id })
         } else {
-            updateCurrentUserInRedux({ images: newImages, id: userData.id, last_modified_date: new Date() })
+            updateCurrentUserInRedux({ images: newImages, id: userData.id })
         }
 
         toastRef.current.show({
@@ -495,7 +530,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
         return (
             <View style={{ flexDirection: 'row', marginLeft: SPACING.small, marginRight: SPACING.small - SPACING.small, marginBottom: SPACING.small, flexWrap: 'wrap' }}>
                 {images.map((image) =>
-                    <View key={image.id} style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,.08)', borderRadius: 10, overflow: 'hidden', width: ((sectionWidth - (SPACING.small * 2) - (SPACING.small * 2)) / 3), marginRight: SPACING.small, marginBottom: SPACING.small }}>
+                    <View key={image.download_url} style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,.08)', borderRadius: 10, overflow: 'hidden', width: ((sectionWidth - (SPACING.small * 2) - (SPACING.small * 2)) / 3), marginRight: SPACING.small, marginBottom: SPACING.small }}>
                         <RenderImageWithActions image={image} actions={actions} offsetX={(windowWidth * index) + offsetX} showActions={showActions} />
                     </View>)}
             </View>

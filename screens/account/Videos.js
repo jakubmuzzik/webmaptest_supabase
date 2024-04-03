@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, useWindowDimensions, Modal } from 'react-native
 import { Image } from 'expo-image'
 import { COLORS, FONTS, FONT_SIZES, SPACING, SMALL_SCREEN_THRESHOLD, MAX_VIDEO_SIZE_MB, MAX_VIDEOS } from '../../constants'
 import { ACTIVE, REJECTED, IN_REVIEW } from '../../labels'
-import { normalize, generateThumbnailFromLocalURI, encodeImageToBlurhash, getFileSizeInMb, getDataType } from '../../utils'
+import { getMimeType, generateThumbnailFromLocalURI, encodeImageToBlurhash, getFileSizeInMb, getDataType } from '../../utils'
 import { IconButton, Button } from 'react-native-paper'
 import { Octicons } from '@expo/vector-icons'
 import DropdownSelect from '../../components/DropdownSelect'
@@ -17,9 +17,9 @@ import LottieView from 'lottie-react-native'
 import { updateLadyInRedux, updateCurrentUserInRedux } from '../../redux/actions'
 import uuid from 'react-native-uuid'
 
-import { updateDoc, doc, db, ref, uploadBytes, storage, getDownloadURL, deleteObject } from '../../firebase/config'
+import { supabase } from '../../supabase/config'
 
-const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLadyInRedux, updateCurrentUserInRedux }) => {
+const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRef, updateLadyInRedux, updateCurrentUserInRedux }) => {
     const [data, setData] = useState({
         active: [],
         inReview: [],
@@ -122,8 +122,8 @@ const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLa
 
         //if there's an existing file in storage, it will be replaced 
         const urls = await Promise.all([
-            uploadAssetToFirestore(videoData.video, 'videos/' + userData.id + '/' + videoData.id + '/video'),
-            uploadAssetToFirestore(videoData.thumbnail, 'videos/' + userData.id + '/' + videoData.id + '/thumbnail')
+            uploadAssetToSupabase(videoData.video, userData.id + '/' + videoData.id + '/video'),
+            uploadAssetToSupabase(videoData.thumbnail, userData.id + '/' + videoData.id + '/thumbnail')
         ])
 
         delete videoData.video
@@ -131,28 +131,51 @@ const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLa
         videoData.download_url = urls[0]
         videoData.thumbnail_download_url = urls[1]
 
+        if (user_type === 'establishment') {
+            videoData.establishment_id = userData.id
+        } else {
+            //user_tyoe === lady or editing lady under establishemnt (user_type === undefined)
+            videoData.lady_id = userData.id
+        }
+
         const videos = userData.videos.concat([videoData])
-        
-        await updateDoc(doc(db, 'users', userData.id), { videos, last_modified_date: new Date() })
+
+        const { error } = await supabase
+            .from('videos')
+            .upsert({ ...videoData })
+            .select()
+
+        if (error) {
+            throw error
+        }
 
         if (userData.establishment_id) {
-            updateLadyInRedux({ videos, id: userData.id, last_modified_date: new Date() })
+            updateLadyInRedux({ videos, id: userData.id })
         } else {
-            updateCurrentUserInRedux({ videos, id: userData.id, last_modified_date: new Date() })
+            updateCurrentUserInRedux({ videos, id: userData.id })
         }
     }
 
-    const uploadAssetToFirestore = async (assetUri, assetPath) => {
-        const imageRef = ref(storage, assetPath)
-    
-        const response = await fetch(assetUri)
-        const blob = await response.blob()
+    //todo - assign lady_id or establsih_id
+    const uploadAssetToSupabase = async (assetUri, assetPath) => {
+        const arraybuffer = await fetch(assetUri).then((res) => res.arrayBuffer())
 
-        const result = await uploadBytes(imageRef, blob)
+        const { error: uploadError } = await supabase
+            .storage
+            .from('videos')
+            .upload(assetPath, arraybuffer, {
+                cacheControl: '3600',
+                upsert: true,
+                contentType: getMimeType(assetUri),
+            })
 
-        const downloadURL = await getDownloadURL(result.ref)
+        if (uploadError) {
+            throw uploadError
+        }
 
-        return downloadURL
+        const { data: publicUrlData } = supabase.storage.from('videos').getPublicUrl(assetPath)
+
+        return publicUrlData.publicUrl
     }
 
     const onDeleteVideoPress = async (videoId) => {
@@ -172,16 +195,16 @@ const Videos = ({ index, setTabHeight, offsetX = 0, userData, toastRef, updateLa
     }
 
     const deleteVideo = async (videoId) => {
-        const videoRef = ref(storage, 'videos/' + userData.id + '/' + videoId + '/video')
-        const thumbnailRef = ref(storage, 'videos/' + userData.id + '/' + videoId + '/thumbnail')
-
-        await Promise.all([
-            deleteObject(videoRef),
-            deleteObject(thumbnailRef),
-        ])
-
         const newVideos = userData.videos.filter(video => video.id !== videoId)
-        await updateDoc(doc(db, 'users', userData.id), { videos: newVideos })
+
+        const { error } = await supabase
+            .from('videos')
+            .delete()
+            .eq('id', videoId)
+
+        if (error) {
+            throw error
+        }
 
         if (userData.establishment_id) {
             updateLadyInRedux({ videos: newVideos, id: userData.id })
