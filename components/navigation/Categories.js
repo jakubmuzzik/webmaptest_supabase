@@ -18,7 +18,7 @@ import { resetAllCurrentDataCount } from '../../redux/actions'
 
 import { Link, useSearchParams, useLocation, useNavigate } from 'react-router-dom'
 
-const Categories = ({ ladyCities, establishmentCities, resetAllCurrentDataCount }) => {
+const Categories = ({ cities=[], resetAllCurrentDataCount }) => {
     const [searchParams] = useSearchParams()
 
     const [index, setIndex] = useState(0)
@@ -42,7 +42,6 @@ const Categories = ({ ladyCities, establishmentCities, resetAllCurrentDataCount 
             icon: (focused) => <MaterialIcons name="meeting-room" size={FONT_SIZES.medium + 5} color={focused ? '#FFF' : 'rgba(255,255,255,0.7)'} />
         }
     ].map((route, index) => ({ ...route, index })))
-    const [cities, setCities] = useState([])
 
     let location = useLocation()
     const navigate = useNavigate()
@@ -68,22 +67,6 @@ const Categories = ({ ladyCities, establishmentCities, resetAllCurrentDataCount 
         const newIndex = routes.find(route => route.path === location.pathname)?.index
         setIndex(newIndex ?? 0)
     }, [location])
-
-    useEffect(() => {
-        if (location.pathname === '/clu') {
-            if (!establishmentCities) {
-                return
-            }
-
-            setCities(establishmentCities)
-        } else {
-            if (!establishmentCities) {
-                return
-            }
-
-            setCities(ladyCities)
-        }
-    }, [ladyCities, establishmentCities, location.pathname])
 
     //close modals when changing language, city etc...
     useEffect(() => {
@@ -253,8 +236,7 @@ const Categories = ({ ladyCities, establishmentCities, resetAllCurrentDataCount 
 }
 
 const mapStateToProps = (store) => ({
-    ladyCities: store.appState.ladyCities,
-    establishmentCities: store.appState.establishmentCities
+    cities: store.appState.cities
 })
 
 export default connect(mapStateToProps,{ resetAllCurrentDataCount })(Categories)

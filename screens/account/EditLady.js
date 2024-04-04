@@ -152,13 +152,13 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
             case 'photos':
                 return (
                     <View style={{ width: normalize(800), maxWidth: '100%', height: routes[index].height, alignSelf: 'center' }}>
-                        <Photos userData={ladyData} setTabHeight={(height) => setTabHeight(height, route.index)} index={route.index} offsetX={offsetX} />
+                        <Photos userData={ladyData} user_type='lady' setTabHeight={(height) => setTabHeight(height, route.index)} index={route.index} offsetX={offsetX} />
                     </View>
                 )
             case 'videos':
                 return (
                     <View style={{ width: normalize(800), maxWidth: '100%', height: routes[index].height, alignSelf: 'center' }}>
-                        <Videos userData={ladyData} setTabHeight={(height) => setTabHeight(height, route.index)} index={route.index} offsetX={offsetX}/>
+                        <Videos userData={ladyData} user_type='lady' setTabHeight={(height) => setTabHeight(height, route.index)} index={route.index} offsetX={offsetX}/>
                     </View>
                 )
             default:

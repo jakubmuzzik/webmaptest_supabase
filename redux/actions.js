@@ -9,8 +9,7 @@ import {
     CURRENT_LADIES_COUNT_CHANGE,
     CURRENT_MASSEUSES_COUNT_CHANGE,
     CURRENT_ESTABLISHMENTS_COUNT_CHANGE,
-    LADY_CITIES_STATE_CHANGE,
-    ESTABLISHMENT_CITIES_STATE_CHANGE,
+    CITIES_STATE_CHANGE,
     CURRENT_DATA_COUNT_RESET
 } from './actionTypes'
 import { supabase } from '../supabase/config'
@@ -55,14 +54,9 @@ export const resetAllCurrentDataCount = () => ({
     type: CURRENT_DATA_COUNT_RESET
 })
 
-export const updateLadyCities = (ladyCities) => ({
-    type: LADY_CITIES_STATE_CHANGE,
-    ladyCities
-})
-
-export const updateEstablishmentCities = (establishmentCities) => ({
-    type: ESTABLISHMENT_CITIES_STATE_CHANGE,
-    establishmentCities
+export const updateCities = (cities) => ({
+    type: CITIES_STATE_CHANGE,
+    cities
 })
 
 export const updateCurrentAuthUser = (currentAuthUser) => ({

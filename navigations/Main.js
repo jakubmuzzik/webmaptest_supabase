@@ -3,7 +3,7 @@ import { StyleSheet, View, useWindowDimensions, Dimensions } from 'react-native'
 import { normalize, stripEmptyParams, getParam } from '../utils'
 
 import { connect } from 'react-redux'
-import { updateScrollDisabled, fetchUser, storeToastRef, updateLadyCities, updateEstablishmentCities, updateCurrentAuthUser } from '../redux/actions'
+import { updateScrollDisabled, fetchUser, storeToastRef, updateCities, updateCurrentAuthUser } from '../redux/actions'
 
 import Toast from '../components/Toast'
 
@@ -62,7 +62,7 @@ const Redirect = ({ replace, to }) => {
     return <Navigate to={to} replace={replace} />
 }
 
-const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities, updateLadyCities, fetchUser, storeToastRef, updateCurrentAuthUser }) => {
+const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, storeToastRef, updateCurrentAuthUser }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(null)
 
     const toastRef = useRef()
@@ -84,10 +84,7 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
                     return;
                 }
 
-                //TODO - unite lady and est cities
-                //TODO - delete city from lady and est trigger
-                updateLadyCities(data.map(city => city.city))
-                updateEstablishmentCities(data.map(city => city.city))
+                updateCities(data.map(city => city.city))
             })
             .catch(error => {
                 console.error('Error executing query:', error.message);
@@ -255,4 +252,4 @@ const mapStateToProps = (store) => ({
     toastData: store.appState.toastData
 })
 
-export default connect(mapStateToProps, { updateScrollDisabled, fetchUser, storeToastRef, updateEstablishmentCities, updateLadyCities, updateCurrentAuthUser })(Main)
+export default connect(mapStateToProps, { updateScrollDisabled, fetchUser, storeToastRef, updateCities, updateCurrentAuthUser })(Main)

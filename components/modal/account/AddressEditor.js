@@ -128,24 +128,6 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                 throw updateError
             }
 
-            /*const infoRef = doc(db, 'info', 'webwide')
-
-            await runTransaction(db, async (transaction) => {
-                const infoDoc = await transaction.get(infoRef)
-
-                const cities = isEstablishment ? infoDoc.data().establishmentCities : infoDoc.data().ladyCities
-
-                if (cities.includes(addr.city)) {
-                    return
-                }
-
-                if (isEstablishment) {
-                    transaction.update(infoRef, { establishmentCities: cities.concat([addr.city]) })
-                } else {
-                    transaction.update(infoRef, { ladyCities: cities.concat([addr.city]) })
-                }
-            })*/
-
             closeModal()
 
             toastRef.current.show({

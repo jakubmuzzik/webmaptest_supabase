@@ -5,8 +5,7 @@ import {
     CURRENT_LADIES_COUNT_CHANGE,
     CURRENT_MASSEUSES_COUNT_CHANGE,
     CURRENT_ESTABLISHMENTS_COUNT_CHANGE,
-    LADY_CITIES_STATE_CHANGE,
-    ESTABLISHMENT_CITIES_STATE_CHANGE,
+    CITIES_STATE_CHANGE,
     CURRENT_DATA_COUNT_RESET
 } from '../actionTypes'
 
@@ -17,8 +16,7 @@ const INITIAL_STATE = {
     currentLadiesCount: undefined,
     currentMasseusesCount: undefined,
     currentEstablishmentsCount: undefined,
-    ladyCities: undefined,
-    establishmentCities: undefined
+    cities: undefined
 }
 
 export const app = (state = INITIAL_STATE, action) => {
@@ -60,15 +58,10 @@ export const app = (state = INITIAL_STATE, action) => {
                 currentMasseusesCount: undefined,
                 currentEstablishmentsCount: undefined
             }
-        case LADY_CITIES_STATE_CHANGE:
+        case CITIES_STATE_CHANGE:
             return {
                 ...state,
-                ladyCities: action.ladyCities
-            }
-        case ESTABLISHMENT_CITIES_STATE_CHANGE:
-            return {
-                ...state,
-                establishmentCities: action.establishmentCities
+                cities: action.cities
             }
         default:
             return state
