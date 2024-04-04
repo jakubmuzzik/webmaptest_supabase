@@ -146,7 +146,7 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
             case 'profileInformation':
                 return (
                     <View style={{ width: normalize(800), maxWidth: '100%', height: routes[index].height, alignSelf: 'center' }}>
-                        <PersonalDetails userData={ladyData} setTabHeight={(height) => setTabHeight(height, route.index)} />
+                        <PersonalDetails userData={ladyData} user_type='lady' setTabHeight={(height) => setTabHeight(height, route.index)} />
                     </View>
                 )
             case 'photos':

@@ -5,8 +5,6 @@ import { normalize, stripEmptyParams, getParam } from '../utils'
 import { connect } from 'react-redux'
 import { updateScrollDisabled, fetchUser, storeToastRef, updateLadyCities, updateEstablishmentCities, updateCurrentAuthUser } from '../redux/actions'
 
-import { getAuth, onAuthStateChanged, getDoc, doc, db } from '../firebase/config'
-
 import Toast from '../components/Toast'
 
 import LadySignup from '../screens/signup/LadySignup'
@@ -77,13 +75,23 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateEstablishmentCities,
     }, [toastRef])
 
     useEffect(() => {
-        getDoc(doc(db, 'info', 'webwide'))
-            .then((snapshot) => {
-                if (snapshot.exists()) {                    
-                    updateLadyCities(snapshot.data().ladyCities)
-                    updateEstablishmentCities(snapshot.data().establishmentCities)
+        supabase
+            .from('cities')
+            .select('city')
+            .then(({ data, error }) => {
+                if (error) {
+                    console.error('Error fetching data:', error.message);
+                    return;
                 }
+
+                //TODO - unite lady and est cities
+                //TODO - delete city from lady and est trigger
+                updateLadyCities(data.map(city => city.city))
+                updateEstablishmentCities(data.map(city => city.city))
             })
+            .catch(error => {
+                console.error('Error executing query:', error.message);
+            });
 
         const subscription = supabase.auth.onAuthStateChange((_event, session) => {
             console.log(_event)

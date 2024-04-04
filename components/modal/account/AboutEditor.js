@@ -90,7 +90,7 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
         try {
             const { error: updateError } = await supabase
                 .from(user_type === 'lady' ? 'ladies' : 'establishments')
-                .update({description: changedAbout, last_modified_date: new Date(Date.UTC())})
+                .update({description: changedAbout, last_modified_date: new Date()})
                 .eq('id', userId)
 
             if (updateError) {
