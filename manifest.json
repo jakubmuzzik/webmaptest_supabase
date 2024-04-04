@@ -2,8 +2,8 @@
   "background_color": "#ffffff",
   "display": "standalone",
   "lang": "en",
-  "name": "webmaptest",
-  "short_name": "webmaptest",
+  "name": "webmaptest_supabase",
+  "short_name": "webmaptest_supabase",
   "start_url": "/?utm_source=web_app_manifest",
   "orientation": "portrait"
 }
