@@ -172,7 +172,7 @@ export const convertStringToDate = (dateStr) => {
 }
 
 export const convertDateToString = (dateVal) => {
-  const dateParts = dateVal instanceof Date ? dateVal.toISOString() : dateVal.split('-')
+  const dateParts = dateVal instanceof Date ? dateVal.toISOString().split('-') : dateVal.split('-')
 
   //e.g. 25071996
   return dateParts[2].split('T')[0] + dateParts[1] + dateParts[0]
@@ -203,12 +203,11 @@ export const chunkArray = (arr, chunkSize) => {
 }
 
 export const shuffleArray = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    [array[i], array[j]] = [array[j], array[i]]
-  }
-  
-  return array
+  for (let i = array.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [array[i], array[j]] = [array[j], array[i]]; 
+  } 
+  return array; 
 } 
 
 export const stripEmptyParams = (params) => {

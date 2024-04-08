@@ -200,14 +200,17 @@ const Lady = ({ toastRef }) => {
             if (data[0].establishment_id) {
                 fetchEstablishmentName(data[0].establishment_id)
             }
+
+            setLoading(false)
         } catch (error) {
             console.error(error)
+            
+            setData(undefined)
+
             toastRef.current.show({
                 type: 'error',
                 text: 'We could not find the lady.'
             })
-        } finally {
-            setLoading(false)
         }
     }
 
@@ -245,7 +248,20 @@ const Lady = ({ toastRef }) => {
         }
     }, [])
 
-    const onEstablishmentLinkPress = () => {
+    const onEstablishmentLinkPress = async () => {
+        const { error: updateError } = await supabase
+                .from('ladies')
+                .update({status: ACTIVE})
+                .eq('id', 'b49f5111-b8f2-4a0d-8941-23b1e04b6e4a')
+
+            if (updateError) {
+                throw updateError
+            }
+
+          console.error(updateError)
+
+          return
+
         //setLoading(true)
         //setEstablishmentName(null)
         //setData(null)
