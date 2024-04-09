@@ -27,6 +27,8 @@ import BouncyCheckbox from "react-native-bouncy-checkbox"
 
 import OverlaySpinner from '../OverlaySpinner'
 
+import { supabase } from '../../../supabase/config'
+
 const window = Dimensions.get('window')
 
 const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment, logOut }) => {
@@ -89,12 +91,10 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment, logOut 
 
         setIsSaving(true)
 
-        return
-
         try {
+            await supabase.functions.invoke('delete-user')
 
-            //TODO - call edge function
-
+            await supabase.auth.refreshSession()
             
             logOut()
             toastRef.current.show({
