@@ -19,7 +19,25 @@ Deno.serve(async (req: Request) => {
       { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
     )
     // Now we can get the session or user object
-    const { data: { user } } = await supabaseClient.auth.getUser()
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser()
+
+    if (userError) {
+      throw userError
+    }
+
+    const { password } = await req.json();
+  
+    const { data: isValidOldPassword, error: passwordError } = await supabaseClient.rpc("verify_user_password", { password });
+    
+    if (passwordError || !isValidOldPassword) {
+      return new Response(
+        JSON.stringify({ error: "Invalid password" }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        },
+      );
+    }
 
     if (user.user_metadata.user_type === 'lady') {
       const { error } = await supabaseClient

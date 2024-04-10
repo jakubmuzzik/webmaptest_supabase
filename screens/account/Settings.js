@@ -31,7 +31,15 @@ const Settings = ({ setTabHeight, toastRef, user_type, logOut, currentUser, curr
     const [activateConfirmationVisible, setActivateConfirmationVisiblet] = useState(false)
 
     const onLogoutPress = () => {
-        logOut()
+        try {
+            logOut()
+            toastRef.current?.show({
+                type: 'success',
+                text: "You've been logged out."
+            })
+        } catch(e) {
+            console.error(e)
+        }
     }
 
     const onEmailEditPress = () => {
@@ -182,7 +190,7 @@ const Settings = ({ setTabHeight, toastRef, user_type, logOut, currentUser, curr
 
             <PasswordEditor visible={passwordEditorVisible} setVisible={setPasswordEditorVisible} toastRef={toastRef} />
             <EmailEditor visible={emailEditorVisible} setVisible={setEmailEditorVisible} toastRef={toastRef} currentEmail={currentAuthUser.email}/>
-            <DeleteAccount visible={deleteAccountVisible} setVisible={setDeleteAccountVisible} toastRef={toastRef} isEstablishment={user_type === 'establishment'} logOut={logOut} />
+            <DeleteAccount visible={deleteAccountVisible} setVisible={setDeleteAccountVisible} toastRef={toastRef} isEstablishment={user_type === 'establishment'} />
 
             <ConfirmationModal
                 visible={activateConfirmationVisible}

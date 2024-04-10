@@ -31,7 +31,7 @@ import { supabase } from '../../../supabase/config'
 
 const window = Dimensions.get('window')
 
-const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment, logOut }) => {
+const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment }) => {
 
     const [isSaving, setIsSaving] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
@@ -92,14 +92,26 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment, logOut 
         setIsSaving(true)
 
         try {
-            await supabase.functions.invoke('delete-user')
+            const { data: deleteAccountResponse } = await supabase.functions.invoke('delete-user', {
+                body: {
+                    password: data.password
+                }
+            })
+
+            if (deleteAccountResponse?.error === 'Invalid password') {
+                modalToastRef.current.show({
+                    type: 'error',
+                    text: 'Invalid password'
+                })
+                return
+            }
 
             await supabase.auth.refreshSession()
             
-            logOut()
             toastRef.current.show({
                 type: 'success',
-                text: 'Your account was successfully deleted.'
+                headerText: 'Account deleted',
+                text: 'Your account has been successfully deleted.'
             })
         } catch(e) {
             modalToastRef.current.show({

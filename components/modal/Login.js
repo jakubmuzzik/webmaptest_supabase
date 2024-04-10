@@ -228,6 +228,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
 
             toastRef.current.show({
                 type: 'success',
+                headerText: 'Password reset link sent',
                 text: 'Instructions to reset your password have been sent to your Email address.'
             })
             closeModal()

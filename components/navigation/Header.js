@@ -170,8 +170,16 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
         })
     }
 
-    const onLogoutPress = () => {
-        logOut()
+    const onLogoutPress = async () => {
+        try {
+            await logOut()
+            toastRef.current?.show({
+                type: 'success',
+                text: "You've been logged out."
+            })
+        } catch(e) {
+            console.error(e)
+        }
     }
 
     const renderUserDropdown = () => {
