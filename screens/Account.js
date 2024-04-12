@@ -23,6 +23,8 @@ import { ACTIVE, IN_REVIEW, REJECTED } from '../labels'
 
 import { updateCurrentUserInRedux } from '../redux/actions'
 
+import { supabase } from '../supabase/config'
+
 //todo - create texts for each account statuses 
 //could be a status - Profile was not approved.. fix the following data: list of wrong data
 //and then a button to re-submit a profile for a review after fixing the data
@@ -114,7 +116,7 @@ const Account = ({ currentUser={}, user_type, toastRef, updateCurrentUserInRedux
             const coverImage = currentUser.images.find(image => image.index === 0 && image.status === ACTIVE || image.status === IN_REVIEW)
             return coverImage
         } else {
-            const coverImages = currentUser.images.filter(image => Number(image.index) < 5 && (image.status === ACTIVE || image.status === IN_REVIEW))
+            const coverImages = currentUser.images.filter(image => image.index != null && Number(image.index) < 5 && (image.status === ACTIVE || image.status === IN_REVIEW))
             return Number(coverImages.length) === 5
         }
     }

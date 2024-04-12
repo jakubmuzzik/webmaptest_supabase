@@ -8,15 +8,16 @@ import { stripEmptyParams, getParam, normalize } from '../../utils'
 import RenderAccountLady from '../../components/list/RenderAccountLady'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchNewLadies } from '../../redux/actions'
+import { fetchNewLadies, setNewLadies } from '../../redux/actions'
 import { ACTIVE, DELETED, INACTIVE, IN_REVIEW, REJECTED} from '../../labels'
 import { MOCK_DATA } from '../../constants'
 import ContentLoader, { Rect } from "react-content-loader/native"
 import ConfirmationModal from '../../components/modal/ConfirmationModal'
+import OverlaySpinner from '../../components/modal/OverlaySpinner'
 
 import { supabase } from '../../supabase/config'
 
-const NewLadies = ({ newLadies, toastRef, fetchNewLadies }) => {
+const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -27,7 +28,9 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies }) => {
      
     const [sectionWidth, setSectionWidth] = useState(0)
 
-    const [ladyToDeactivate, setLadyToDeactivate] = useState()
+    const [saving, setSaving] = useState(false)
+
+    const [ladyToReject, setLadyToReject] = useState()
     const [ladyToActivate, setLadyToActivate] = useState()
 
     useEffect(() => {
@@ -60,17 +63,41 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies }) => {
     }, [sectionWidth])
 
     const activateLady = async (ladyId) => {
+        setSaving(true)
         try {
-            const { error } = await supabase
+            const lady = newLadies.find(newLady => newLady.id === ladyId)
+
+            if (lady.establishment_id) {
+                const { error: selectError, data: estData } = await supabase
+                    .from('establishments')
+                    .select('status')
+                    .eq('id', lady.establishment_id)
+
+                if (selectError) {
+                    throw selectError
+                }
+
+                if (estData[0].status !== ACTIVE) {
+                    toastRef.current.show({
+                        type: 'error',
+                        headerText: 'Activation error',
+                        text: 'Lady could not be activated, because associated establishment is not Active.'
+                    })
+
+                    return
+                }
+            }
+
+            const { error: updateError } = await supabase
                 .from('ladies')
                 .update({ status: ACTIVE })
                 .eq('id', ladyId)
 
-            if (error) {
-                throw error
+            if (updateError) {
+                throw updateError
             }
 
-            //updateLadyInRedux({ status: ACTIVE, id: ladyId })
+            setNewLadies(newLadies.filter(newLady => newLady.id !== ladyId))
 
             toastRef.current.show({
                 type: 'success',
@@ -84,6 +111,39 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies }) => {
                 headerText: 'Activate error',
                 text: 'Lady could not be activated.'
             })
+        } finally {
+            setSaving(false)
+        }
+    }
+
+    const rejectLady = async (ladyId) => {
+        setSaving(true)
+        try {
+            const { error: updateError } = await supabase
+                .from('ladies')
+                .update({ status: REJECTED })
+                .eq('id', ladyId)
+
+            if (updateError) {
+                throw updateError
+            }
+
+            setNewLadies(newLadies.filter(newLady => newLady.id !== ladyId))
+
+            toastRef.current.show({
+                type: 'success',
+                headerText: 'Lady rejected',
+                text: 'Lady was successfuly rejected.'
+            })
+        } catch(error) {
+            console.error(error)
+            toastRef.current.show({
+                type: 'error',
+                headerText: 'Rejection error',
+                text: 'Lady could not be rejected.'
+            })
+        } finally {
+            setSaving(false)
         }
     }
 
@@ -95,13 +155,11 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies }) => {
     }
 
     const onActivatePress = (ladyId) => {
-        //validate if parent establishment is approved
-        //if approved, also approve all in review images
         setLadyToActivate(ladyId)
     }
 
     const onRejectPress = (ladyId) => {
-        //if rejected, also reject all in review images
+        setLadyToReject(ladyId)
     }
 
     const actions = [
@@ -167,10 +225,12 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies }) => {
                 </View>
             </View>
 
+            {saving && <OverlaySpinner />}
+
             <ConfirmationModal
                 visible={!!ladyToActivate}
                 headerText='Confirm Activation'
-                text='Are you sure you want to approve selected Lady? All in review images will be approved as well.'
+                text='Are you sure you want to approve selected Lady? All in review images and videos will be approved as well.'
                 onCancel={() => setLadyToActivate(undefined)}
                 onConfirm={() => activateLady(ladyToActivate)}
                 headerErrorText='Activation error'
@@ -180,14 +240,14 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies }) => {
             />
 
             <ConfirmationModal
-                visible={!!ladyToDeactivate}
-                headerText='Confirm Deactivation'
-                text='Are you sure you want to deactivate selected Lady? Profile will be hidden from the profile listings and search results. You can reactivate the profile at any time.'
-                onCancel={() => setLadyToDeactivate(undefined)}
-                onConfirm={() => deactivateLady(ladyToDeactivate)}
-                headerErrorText='Deactivation error'
-                errorText='Lady could not be deactivated.'
-                confirmLabel='Deactivate'
+                visible={!!ladyToReject}
+                headerText='Confirm Rejection'
+                text='Are you sure you want to reject selected Lady? All in review images and videos will be rejected as well.'
+                onCancel={() => setLadyToReject(undefined)}
+                onConfirm={() => rejectLady(ladyToReject)}
+                headerErrorText='Rejection error'
+                errorText='Lady could not be rejected.'
+                confirmLabel='Reject'
                 confirmButtonColor={COLORS.lightBlack}
             />
         </View>
@@ -199,7 +259,7 @@ const mapStateToProps = (store) => ({
     toastRef: store.appState.toastRef
 })
 
-export default connect(mapStateToProps, { fetchNewLadies })(memo(NewLadies))
+export default connect(mapStateToProps, { fetchNewLadies, setNewLadies })(memo(NewLadies))
 
 const styles = StyleSheet.create({
     section: {

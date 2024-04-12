@@ -19,6 +19,8 @@ import Videos from './Videos'
 
 import { REJECTED, IN_REVIEW, ACTIVE } from '../../labels'
 
+import { supabase } from '../../supabase/config'
+
 const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedux, user_type }) => {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
@@ -133,7 +135,7 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
     }
 
     const hasAllCoverPhotos = () => {
-        const coverImages = ladyData.images.filter(image => Number(image.index) < 5 && (image.status === ACTIVE || image.status === IN_REVIEW))
+        const coverImages = ladyData.images.filter(image => image.index != null && Number(image.index) < 5 && (image.status === ACTIVE || image.status === IN_REVIEW))
         return Number(coverImages.length) === 5
     }
 

@@ -348,7 +348,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
             const coverImage = userData.images.find(image => image.index === 0 && image.status === ACTIVE || image.status === IN_REVIEW)
             return !!coverImage
         } else {
-            const coverImages = userData.images.filter(image => Number(image.index) < 5 && (image.status === ACTIVE || image.status === IN_REVIEW))
+            const coverImages = userData.images.filter(image => image.index != null && Number(image.index) < 5 && (image.status === ACTIVE || image.status === IN_REVIEW))
             return Number(coverImages.length) === 5
         }
     }
