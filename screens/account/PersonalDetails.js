@@ -21,14 +21,14 @@ import WorkingHoursEditor from '../../components/modal/account/WorkingHoursEdito
 import AddressEditor from '../../components/modal/account/AddressEditor'
 import ContactInformationEditor from '../../components/modal/account/ContactInformationEditor'
 
-import { updateCurrentUserInRedux, updateLadyInRedux } from '../../redux/actions'
+import { updateCurrentUserInRedux, updateLadyInRedux, updateNewLadyInRedux } from '../../redux/actions'
 
 const LOCATION_LATITUDE_DELTA = 0.9735111002971948 // default value just for map init -> later is used minLatitudeDelta.current
 const LOCATION_LONGITUDE_DELTA = 0.6 // == 50 Km 
 const INITIAL_LATITUDE = 50.0646126
 const INITIAL_LONGITUDE = 14.3729754
 
-const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserInRedux, updateLadyInRedux, user_type }) => {
+const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserInRedux, updateLadyInRedux, updateNewLadyInRedux, user_type, currentAuthUser }) => {
     const { width } = useWindowDimensions()
     const isSmallScreen = width <= SMALL_SCREEN_THRESHOLD
 
@@ -128,6 +128,10 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
 
     const onAddressEditPress = () => {
         setAddressEditorVisible(true)
+    }
+
+    const getUpdateReduxFunction = () => {
+        return (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id) ? updateNewLadyInRedux : userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux
     }
 
     const loadingMapFallback = useMemo(() => {
@@ -564,22 +568,23 @@ const PersonalDetails = ({ setTabHeight, toastRef, userData, updateCurrentUserIn
 
             {renderAddress()}
 
-            <AboutEditor visible={aboutEditorVisible} setVisible={setAboutEditorVisible} about={userData.description} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} user_type={user_type} />
-            {user_type === 'lady' && <PersonalDetailsEditor visible={personalDetailsEditorVisible} setVisible={setPersonalDetailsEditorVisible} personalDetails={personalDetails} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            {user_type === 'lady' && <PricingEditor visible={pricingEditorVisible} setVisible={setPricingEditorVisible} pricing={pricing} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            {user_type === 'lady' && <ServicesEditor visible={servicesEditorVisible} setVisible={setServicesEditorVisible} services={userData.services} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} />}
-            <WorkingHoursEditor visible={workingHoursEditorVisible} setVisible={setWorkingHoursEditorVisible} working_hours={userData.working_hours} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} user_type={user_type}/>
-            <AddressEditor visible={addressEditorVisible} setVisible={setAddressEditorVisible} address={address} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} user_type={user_type} />
-            <ContactInformationEditor visible={contactInformationEditorVisible} setVisible={setContactInformationEditorVisible} contactInformation={contactInformation} toastRef={toastRef} userId={userData.id} updateRedux={userData.establishment_id ? updateLadyInRedux : updateCurrentUserInRedux} user_type={user_type} />
+            <AboutEditor visible={aboutEditorVisible} setVisible={setAboutEditorVisible} about={userData.description} toastRef={toastRef} userId={userData.id} updateRedux={getUpdateReduxFunction()} user_type={user_type} />
+            {user_type === 'lady' && <PersonalDetailsEditor visible={personalDetailsEditorVisible} setVisible={setPersonalDetailsEditorVisible} personalDetails={personalDetails} toastRef={toastRef} userId={userData.id} updateRedux={getUpdateReduxFunction()} />}
+            {user_type === 'lady' && <PricingEditor visible={pricingEditorVisible} setVisible={setPricingEditorVisible} pricing={pricing} toastRef={toastRef} userId={userData.id} updateRedux={getUpdateReduxFunction()} />}
+            {user_type === 'lady' && <ServicesEditor visible={servicesEditorVisible} setVisible={setServicesEditorVisible} services={userData.services} toastRef={toastRef} userId={userData.id} updateRedux={getUpdateReduxFunction()} />}
+            <WorkingHoursEditor visible={workingHoursEditorVisible} setVisible={setWorkingHoursEditorVisible} working_hours={userData.working_hours} toastRef={toastRef} userId={userData.id} updateRedux={getUpdateReduxFunction()} user_type={user_type}/>
+            <AddressEditor visible={addressEditorVisible} setVisible={setAddressEditorVisible} address={address} toastRef={toastRef} userId={userData.id} updateRedux={getUpdateReduxFunction()} user_type={user_type} />
+            <ContactInformationEditor visible={contactInformationEditorVisible} setVisible={setContactInformationEditorVisible} contactInformation={contactInformation} toastRef={toastRef} userId={userData.id} currentUserId={currentAuthUser.id} updateRedux={getUpdateReduxFunction()} user_type={user_type} />
         </View>
     )
 }
 
 const mapStateToProps = (store) => ({
-    toastRef: store.appState.toastRef
+    toastRef: store.appState.toastRef,
+    currentAuthUser: store.userState.currentAuthUser
 })
 
-export default connect(mapStateToProps, { updateCurrentUserInRedux, updateLadyInRedux })(memo(PersonalDetails))
+export default connect(mapStateToProps, { updateCurrentUserInRedux, updateLadyInRedux, updateNewLadyInRedux })(memo(PersonalDetails))
 
 const styles = StyleSheet.create({
     containerLarge: {

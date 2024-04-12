@@ -2,7 +2,7 @@ import React, { memo, useState, useRef, useMemo, useCallback } from "react"
 import { StyleSheet, Text, View, FlatList } from "react-native"
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { COLORS, FONTS, FONT_SIZES, SPACING, SUPPORTED_LANGUAGES } from "../../constants"
-import { normalize, stripEmptyParams, getParam } from "../../utils"
+import { normalize, convertDateToString, getParam } from "../../utils"
 import { Image } from 'expo-image'
 import { isBrowser } from 'react-device-detect'
 import { IconButton } from "react-native-paper"
@@ -77,7 +77,7 @@ const RenderAccountLady = ({ lady, width, showPrice = true, actions=[], offsetX 
                 {lady.name}
             </Text>
             <Text numberOfLines={1} style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.greyText }}>
-                Added: 21.05.2023
+                Added: {convertDateToString(lady.created_date)}
             </Text>
         </>
     )

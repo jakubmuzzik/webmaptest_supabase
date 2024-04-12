@@ -10,9 +10,18 @@ import {
     CURRENT_MASSEUSES_COUNT_CHANGE,
     CURRENT_ESTABLISHMENTS_COUNT_CHANGE,
     CITIES_STATE_CHANGE,
-    CURRENT_DATA_COUNT_RESET
+    CURRENT_DATA_COUNT_RESET,
+    NEW_LADIES_COUNT_CHANGE,
+    NEW_ESTABLISHMENTS_COUNT_CHANGE,
+    NEW_PHOTOS_COUNT_CHANGE,
+    NEW_VIDEOS_COUNT_CHANGE,
+    NEW_LADIES_CHANGE,
+    NEW_ESTABLISHMENTS_CHANGE,
+    NEW_PHOTOS_CHANGE,
+    NEW_VIDEOS_CHANGE
 } from './actionTypes'
 import { supabase } from '../supabase/config'
+import { IN_REVIEW } from '../labels'
 
 export const updateRoute = (route) => ({
     type: ROUTE_STATE_CHANGE,
@@ -64,6 +73,46 @@ export const updateCurrentAuthUser = (currentAuthUser) => ({
     currentAuthUser
 })
 
+export const setNewLadiesCount = (newLadiesCount) => ({
+    type: NEW_LADIES_COUNT_CHANGE,
+    newLadiesCount
+})
+
+export const setNewEstablishmentsCount = (newEstablishmentsCount) => ({
+    type: NEW_ESTABLISHMENTS_COUNT_CHANGE,
+    newEstablishmentsCount
+})
+
+export const setNewPhotosCount = (newPhotosCount) => ({
+    type: NEW_PHOTOS_COUNT_CHANGE,
+    newPhotosCount
+})
+
+export const setNewVideosCount = (newVideosCount) => ({
+    type: NEW_VIDEOS_COUNT_CHANGE,
+    newVideosCount
+})
+
+export const setNewLadies = (newLadies) => ({
+    type: NEW_LADIES_CHANGE,
+    newLadies
+})
+
+export const setNewEstablishments = (newEstablishments) => ({
+    type: NEW_ESTABLISHMENTS_CHANGE,
+    newEstablishments
+})
+
+export const setNewPhotos = (newPhotos) => ({
+    type: NEW_PHOTOS_CHANGE,
+    newPhotos
+})
+
+export const setNewVideos = (newVideos) => ({
+    type: NEW_VIDEOS_CHANGE,
+    newVideos
+})
+
 /**
  * 
  * @description Redux thunk functions
@@ -88,30 +137,34 @@ export const fetchLadies = () => async (dispatch, getState) => {
         .from('ladies')
         .select('*, images(*), videos(*)')
         .eq('establishment_id', getState().userState.currentAuthUser.id)
+        .order('created_date', { descending: true })
 
     if (error || !data || data.length === 0) {
         dispatch({ type: LADIES_STATE_CHANGE, ladies: [] })
     } else {
-        dispatch({ type: LADIES_STATE_CHANGE, ladies: data.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)) })
+        dispatch({ type: LADIES_STATE_CHANGE, ladies: data })
+    }
+}
+
+//updated in review lady 
+export const updateNewLadyInRedux = (data) => (dispatch, getState) => {
+    let newLadies = getState().adminState.newLadies ? JSON.parse(JSON.stringify(getState().adminState.newLadies)) : []
+
+    let existingLady = newLadies.find(lady => lady.id === data.id)
+
+    if (existingLady) {
+        newLadies = newLadies.filter(lady => lady.id !== data.id)
+        existingLady = {
+            ...existingLady,
+            ...data
+        } 
+    } else {
+        existingLady = data
     }
 
-    /*return getDocs(query(collection(db, "users"), where('establishment_id', '==', getAuth().currentUser.uid), where('status', '!=', DELETED)))
-        .then(snapshot => {
-            if (snapshot.empty) {
-                console.log('empty')
-                dispatch({ type: LADIES_STATE_CHANGE, ladies: [] })
-            } else {
-                const ladies = snapshot.docs
-                    .map(doc => {
-                        const data = doc.data()
-                        const id = doc.id
-                        return { id, ...data }
-                    })
-                    .sort((a, b) => b.created_date.toDate() - a.created_date.toDate())
+    newLadies.push(existingLady)
 
-                dispatch({ type: LADIES_STATE_CHANGE, ladies })
-            }
-        })*/
+    dispatch({ type: NEW_LADIES_CHANGE, newLadies })
 }
 
 //lady under establishment
@@ -149,4 +202,18 @@ export const logOut = () => async (dispatch, getState) => {
         return
     }
     dispatch({ type: CLEAR_DATA })
+}
+
+export const fetchNewLadies = () => async (dispatch) => {
+    const { data, error } = await supabase
+        .from('ladies')
+        .select('*, images(*), videos(*)')
+        .eq('status', IN_REVIEW)
+        .order('last_submitted_date', { descending: false })
+
+    if (error || !data || data.length === 0) {
+        dispatch(setNewLadies([]))
+    } else {
+        dispatch(setNewLadies(data))
+    }
 }

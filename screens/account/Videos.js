@@ -2,7 +2,7 @@ import React, { useState, memo, useCallback, useEffect } from 'react'
 import { View, Text, StyleSheet, useWindowDimensions, Modal } from 'react-native'
 import { Image } from 'expo-image'
 import { COLORS, FONTS, FONT_SIZES, SPACING, SMALL_SCREEN_THRESHOLD, MAX_VIDEO_SIZE_MB, MAX_VIDEOS } from '../../constants'
-import { ACTIVE, REJECTED, IN_REVIEW } from '../../labels'
+import { ACTIVE, REJECTED, IN_REVIEW, INACTIVE } from '../../labels'
 import { getMimeType, generateThumbnailFromLocalURI, encodeImageToBlurhash, getFileSizeInMb, getDataType } from '../../utils'
 import { IconButton, Button } from 'react-native-paper'
 import { Octicons } from '@expo/vector-icons'
@@ -19,7 +19,7 @@ import uuid from 'react-native-uuid'
 
 import { supabase } from '../../supabase/config'
 
-const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRef, updateLadyInRedux, updateCurrentUserInRedux }) => {
+const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRef, updateLadyInRedux, updateCurrentUserInRedux, currentAuthUser }) => {
     const [data, setData] = useState({
         active: [],
         inReview: [],
@@ -311,7 +311,7 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
     )
 
     const renderInReview = () => {
-        if (data.inReview.length === 0) {
+        if (data.inReview.length === 0 && userData.status !== IN_REVIEW) {
             return null
         }
         
@@ -362,8 +362,8 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
 
     return (
         <View style={{ paddingBottom: SPACING.large }} onLayout={onLayout}>
-            {renderActive()}
-            {renderInReview()}
+            {(userData.status === ACTIVE || userData.status === REJECTED || userData.status === INACTIVE) && renderActive()}
+            {userData.status !== REJECTED && renderInReview()}
             {renderRejected()}
 
             {uploading && (
@@ -406,7 +406,8 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
 }
 
 const mapStateToProps = (store) => ({
-    toastRef: store.appState.toastRef
+    toastRef: store.appState.toastRef,
+    currentAuthUser: store.userState.currentAuthUser
 })
 
 export default connect(mapStateToProps, { updateLadyInRedux, updateCurrentUserInRedux })(memo(Videos))

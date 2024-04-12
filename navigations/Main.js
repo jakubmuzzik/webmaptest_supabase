@@ -20,8 +20,10 @@ import SignUpOrLogin from '../screens/SignUpOrLogin'
 import SearchResults from '../screens/SearchResults'
 import Home from '../screens/Home'
 import RequireAuth from './RequireAuth'
+import RequireAdminUser from './RequireAdminUser'
 import Lady from '../screens/Lady'
 import Establishment from '../screens/Establishment'
+import AdminNavigation from '../screens/admin/AdminNavigation'
 
 import { COLORS, FONTS, FONT_SIZES, SMALL_SCREEN_THRESHOLD, SPACING, SUPPORTED_LANGUAGES } from '../constants'
 
@@ -168,6 +170,31 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
                 <Route path='videos' element={<Account />} />
                 <Route path='settings' element={<Account />} />
             </Route>
+
+            <Route path='/admin' element={
+                <RequireAdminUser>
+                    <LayoutWithHeader>
+                        <Outlet />
+                    </LayoutWithHeader>
+                </RequireAdminUser>
+            } >
+                {/* <Route index element={<Redirect to="/admin" replace />} /> */}
+                <Route index element={<AdminNavigation />} />
+                <Route path='new-establishments' element={<AdminNavigation />} />
+                <Route path='new-ladies' element={<AdminNavigation />} />
+                <Route path='new-photos' element={<AdminNavigation />} />
+                <Route path='new-videos' element={<AdminNavigation />} />
+                <Route path='new-ladies/edit-lady/:id' element={<AdminNavigation />} />
+                
+            </Route>
+
+            {/* <Route path='/admin' element={
+                <RequireAdminUser>
+                    <LayoutWithHeader>
+                        <AdminNavigation />
+                    </LayoutWithHeader>
+                </RequireAdminUser>
+            } /> */}
 
             <Route path='/lady-signup' element={
                 <>

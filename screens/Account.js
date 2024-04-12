@@ -47,7 +47,7 @@ const ESTABLISHMENT_LADIES_MESSAGES = {
 
 const { height: initialHeight } = Dimensions.get('window')
 
-const Account = ({ navigation, route, currentUser={}, user_type, toastRef, updateCurrentUserInRedux}) => {
+const Account = ({ currentUser={}, user_type, toastRef, updateCurrentUserInRedux}) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -96,15 +96,10 @@ const Account = ({ navigation, route, currentUser={}, user_type, toastRef, updat
     }, [location, currentUser])
 
     const onGoBackPress = () => {
-        //can't go back
-        if (location.key === 'default') {
-            navigate({
-                pathname: '/account/ladies',
-                search: new URLSearchParams(stripEmptyParams(params)).toString()
-            })
-        } else {
-            navigate(-1)
-        }
+        navigate({
+            pathname: '/account/ladies',
+            search: new URLSearchParams(stripEmptyParams(params)).toString()
+        })
     }
 
     const hasAllProfileInformation = () => {

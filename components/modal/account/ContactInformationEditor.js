@@ -31,7 +31,7 @@ import { supabase } from '../../../supabase/config'
 
 const window = Dimensions.get('window')
 
-const ContactInformationEditor = ({ visible, setVisible, contactInformation, toastRef, userId, updateRedux, user_type }) => {
+const ContactInformationEditor = ({ visible, setVisible, contactInformation, toastRef, userId, updateRedux, user_type, currentUserId }) => {
     const [isSaving, setIsSaving] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [changedContactInformation, setChangedContactInformation] = useState(contactInformation)
@@ -106,8 +106,9 @@ const ContactInformationEditor = ({ visible, setVisible, contactInformation, toa
                 throw updateError
             }
 
-            //TODO - add this to auth trigger
-            if (changedData.name !== contactInformation.name) {
+            console.log(userId)
+            console.log(currentUserId)
+            if (userId === currentUserId && changedData.name !== contactInformation.name) {
                 const { error: authUpdateError } = await supabase.auth.updateUser({
                     data: { name: changedData.name }
                 })

@@ -12,7 +12,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import HoverableView from '../../HoverableView'
 import HoverableInput from '../../HoverableInput'
 import DropdownSelect from '../../DropdownSelect'
-import { normalize, areValuesEqual, convertDateToString, convertStringToDate } from '../../../utils'
+import { normalize, areValuesEqual, convertDateToBirthdayString, convertStringToDate } from '../../../utils'
 import {
     COLORS,
     FONTS,
@@ -47,7 +47,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
     const [contentWidth, setContentWidth] = useState(false)
     const [changedPersonalDetails, setChangedPersonalDetails] = useState({
         ...personalDetails,
-        date_of_birth: convertDateToString(personalDetails.date_of_birth)
+        date_of_birth: convertDateToBirthdayString(personalDetails.date_of_birth)
     })
     const [isChanged, setIsChanged] = useState(false)
 
@@ -61,7 +61,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
             })
             setChangedPersonalDetails({
                 ...personalDetails,
-                date_of_birth: convertDateToString(personalDetails.date_of_birth)
+                date_of_birth: convertDateToBirthdayString(personalDetails.date_of_birth)
             })
         } else {
             translateY.value = withTiming(window.height, {

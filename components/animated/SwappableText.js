@@ -13,7 +13,7 @@ const SwappableText = ({value, style={}, duration=300}) => {
     const [currentValue, setCurrentValue] = useState() 
 
     useEffect(() => {
-        if (!currentValue) {
+        if (currentValue != null) {
             //init
             setCurrentValue(value)
             return
@@ -24,7 +24,7 @@ const SwappableText = ({value, style={}, duration=300}) => {
     }, [value])
 
     useEffect(() => {
-        if (!currentValue) {
+        if (currentValue != null) {
             return
         }
 

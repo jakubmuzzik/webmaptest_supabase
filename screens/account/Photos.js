@@ -11,16 +11,17 @@ import RenderImageWithActions from '../../components/list/RenderImageWithActions
 import * as ImagePicker from 'expo-image-picker'
 import uuid from 'react-native-uuid'
 import { connect } from 'react-redux'
-import { updateCurrentUserInRedux, updateLadyInRedux } from '../../redux/actions'
+import { updateCurrentUserInRedux, updateLadyInRedux, updateNewLadyInRedux } from '../../redux/actions'
 import { BlurView } from 'expo-blur'
 import { MotiView } from 'moti'
 import ConfirmationModal from '../../components/modal/ConfirmationModal'
+import OverlaySpinner from '../../components/modal/OverlaySpinner'
 
 import LottieView from 'lottie-react-native'
 
 import { supabase } from '../../supabase/config'
 
-const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRef, updateCurrentUserInRedux, updateLadyInRedux }) => {
+const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRef, updateCurrentUserInRedux, updateLadyInRedux, currentAuthUser, updateNewLadyInRedux }) => {
     const [data, setData] = useState({
         active: [],
         inReview: [],
@@ -28,6 +29,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
     })
 
     const [uploading, setUploading] = useState(false)
+    const [saving, setSaving] = useState(false)
 
     const [imageToDelete, setImageToDelete] = useState()
     const [coverImageToEdit, setCoverImageToEdit] = useState()
@@ -41,6 +43,8 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
             active, inReview, rejected
         })
     }, [userData.images])
+
+    console.log(data)
 
     const [sectionWidth, setSectionWidth] = useState(0)
 
@@ -165,7 +169,9 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
             imageData.download_url += '?bust=' + Date.now()
         }
 
-        if (userData.establishment_id) {
+        if (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id) {
+            updateNewLadyInRedux({ images: currentImages, id: userData.id })
+        } else if (userData.establishment_id) {
             updateLadyInRedux({ images: currentImages, id: userData.id })
         } else {
             updateCurrentUserInRedux({ images: currentImages, id: userData.id })
@@ -234,7 +240,9 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
             throw error
         }
 
-        if (userData.establishment_id) {
+        if (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id) {
+            updateNewLadyInRedux({ images: newImages, id: userData.id })
+        } else if (userData.establishment_id) {
             updateLadyInRedux({ images: newImages, id: userData.id })
         } else {
             updateCurrentUserInRedux({ images: newImages, id: userData.id })
@@ -249,6 +257,78 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
 
     const onAddNewImagePress = () => {
         openImagePicker()
+    }
+
+    const onApproveImagePress = async (imageId) => {
+        setSaving(true)
+        try {
+            let images = JSON.parse(JSON.stringify(userData.images))
+            let toUpdate = images.find(image => image.id === imageId)
+            
+            toUpdate.status = ACTIVE
+            toUpdate.approved_date = new Date()
+            
+            const { error } = await supabase
+                .from('images')
+                .update({ status: ACTIVE, approved_date: new Date() })
+                .eq('id', imageId)
+
+            if (error) {
+                throw error
+            }
+
+            if (toUpdate.image_id_to_replace) {
+                images = images.filter(image => image.id !== toUpdate.image_id_to_replace)
+            }
+
+            updateNewLadyInRedux({ images, id: userData.id })
+
+            toastRef.current.show({
+                type: 'success',
+                headerText: 'Image approved',
+                text: 'Image has been approved'
+            })
+        } catch(error) {
+            console.error(error)
+            toastRef.current.show({
+                type: 'error',
+                text: error.message
+            })
+        } finally {
+            setSaving(false)
+        }
+    }
+
+    const onRejectImagePress = async (imageId) => {
+        try {
+            let images = [...userData.images]
+            let toUpdate = images.find(image => image.id === imageId)
+            
+            toUpdate.status = REJECTED
+            toUpdate.approved_date = new Date()
+            
+            const { error } = await supabase
+                .from('images')
+                .update({ status: REJECTED, approved_date: new Date() })
+                .eq('id', imageId)
+
+            if (error) {
+                throw error
+            }
+
+            updateNewLadyInRedux({ images, id: userData.id })
+
+            toastRef.current.show({
+                type: 'success',
+                headerText: 'Image rejected',
+                text: 'Image has been rejected'
+            })
+        } catch(error) {
+            toastRef.current.show({
+                type: 'error',
+                text: error.message
+            })
+        }
     }
 
     //ALL ACTIVE PHOTOS
@@ -283,7 +363,18 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
         }
     ]
 
-    const pendingImageActions = [
+    const pendingImageActions = currentAuthUser.app_metadata.userrole === 'ADMIN' ? [
+        {
+            label: 'Approve',
+            onPress: onApproveImagePress,
+            iconName: 'delete-outline'
+        },
+        {
+            label: 'Reject',
+            onPress: onRejectImagePress,
+            iconName: 'delete-outline'
+        }
+    ] : [
         {
             label: 'Delete',
             onPress: onDeleteImagePress,
@@ -539,11 +630,12 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
 
     const renderActive = () => {
         const photos = (
-            (userData.status === ACTIVE || userData.status === INACTIVE)
+            (userData.status === ACTIVE || userData.status === INACTIVE || currentAuthUser.app_metadata.userrole === 'ADMIN')
                 ? data.active.slice(0, user_type === 'establishment' ? 1 : 5) 
                 //For REJECTED Concat active and in review -> user is uploading missing cover images one by one
                 : data.active.slice(0, user_type === 'establishment' ? 1 : 5).concat(data.inReview.slice(0, user_type === 'establishment' ? 1 : 5))
-        ).reduce((out, current) => {
+        )
+        .reduce((out, current) => {
             out[current.index] = current
 
             return out
@@ -553,7 +645,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
             <View style={styles.section}>
                 <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', flexShrink: 1 }}>
-                        <Octicons name="dot-fill" size={20} color={(userData.status === ACTIVE || userData.status === INACTIVE) ? "green" : "orange"} style={{ marginRight: SPACING.xx_small }} />
+                        <Octicons name="dot-fill" size={20} color={(userData.status === ACTIVE || userData.status === INACTIVE || currentAuthUser.app_metadata.userrole === 'ADMIN') ? "green" : "orange"} style={{ marginRight: SPACING.xx_small }} />
                         <Text numberOfLines={1} style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
                             {userData.status === REJECTED ? 'Photos' : 'Active'}
                         </Text>
@@ -591,7 +683,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
     }
 
     const renderInReview = () => {
-        if (data.inReview.length === 0) {
+        if (data.inReview.length === 0 && userData.status !== IN_REVIEW) {
             return null
         }
 
@@ -612,7 +704,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
                         <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.greyText, textAlign: 'center', margin: SPACING.small }}>
                             No photos in review
                         </Text>
-                        : renderAdditionalPhotos(data.inReview, pendingImageActions, userData.status !== IN_REVIEW)
+                        : renderAdditionalPhotos(data.inReview, pendingImageActions, userData.status !== IN_REVIEW || currentAuthUser.app_metadata.userrole === 'ADMIN')
                 }
             </View>
         )
@@ -642,8 +734,8 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
 
     return (
         <View style={{ paddingBottom: SPACING.large }} onLayout={onLayout}>
-            {(userData.status === ACTIVE || userData.status === REJECTED || userData.status === INACTIVE) && renderActive()}
-            {userData.status !== REJECTED && renderInReview()}
+            {(userData.status === ACTIVE || userData.status === REJECTED || userData.status === INACTIVE || currentAuthUser.app_metadata.userrole === 'ADMIN') && renderActive()}
+            {(userData.status !== REJECTED || currentAuthUser.app_metadata.userrole === 'ADMIN') && renderInReview()}
             {renderRejected()}
 
             {uploading && (
@@ -670,6 +762,8 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
                     </MotiView>
                 </Modal>
             )}
+
+            {saving && <OverlaySpinner />}
 
             <ConfirmationModal 
                 visible={!!imageToDelete}
@@ -698,10 +792,11 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
 }
 
 const mapStateToProps = (store) => ({
-    toastRef: store.appState.toastRef
+    toastRef: store.appState.toastRef,
+    currentAuthUser: store.userState.currentAuthUser
 })
 
-export default connect(mapStateToProps, { updateCurrentUserInRedux, updateLadyInRedux })(memo(Photos))
+export default connect(mapStateToProps, { updateCurrentUserInRedux, updateLadyInRedux, updateNewLadyInRedux })(memo(Photos))
 
 const styles = StyleSheet.create({
     section: {

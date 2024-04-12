@@ -175,6 +175,13 @@ export const convertDateToString = (dateVal) => {
   const dateParts = dateVal instanceof Date ? dateVal.toISOString().split('-') : dateVal.split('-')
 
   //e.g. 25071996
+  return dateParts[2].split('T')[0] + '.' + dateParts[1] + '.' + dateParts[0]
+}
+
+export const convertDateToBirthdayString = (dateVal) => {
+  const dateParts = dateVal instanceof Date ? dateVal.toISOString().split('-') : dateVal.split('-')
+
+  //e.g. 25071996
   return dateParts[2].split('T')[0] + dateParts[1] + dateParts[0]
 }
 

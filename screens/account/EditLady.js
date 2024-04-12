@@ -348,7 +348,7 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
                     paddingHorizontal: SPACING.medium,
                 }}
                 initialLayout={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height }}
-                lazy={({ route }) => route.key !== 'settings'}
+                lazy
                 renderLazyPlaceholder={renderLazyPlaceholder}
             />
         </>
