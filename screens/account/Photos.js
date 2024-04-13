@@ -44,8 +44,6 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
         })
     }, [userData.images])
 
-    console.log(data)
-
     const [sectionWidth, setSectionWidth] = useState(0)
 
     const { width: windowWidth } = useWindowDimensions()
@@ -227,32 +225,37 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
         setImageToDelete(imageId)
     }
 
-    //storage object will be deleted from images trigger
     const deleteImage = async (imageId) => {
-        const newImages = userData.images.filter(image => image.id !== imageId)
+        try {
+            const newImages = userData.images.filter(image => image.id !== imageId)
 
-        const { error } = await supabase
-            .from('images')
-            .delete()
-            .eq('id', imageId)
-
-        if (error) {
-            throw error
+            const { error, data: data2 } = await supabase
+                .from('images')
+                .delete()
+                .eq('id', imageId)
+            if (error) {
+                throw error
+            }
+    
+            if (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id) {
+                updateNewLadyInRedux({ images: newImages, id: userData.id })
+            } else if (userData.establishment_id) {
+                updateLadyInRedux({ images: newImages, id: userData.id })
+            } else {
+                updateCurrentUserInRedux({ images: newImages, id: userData.id })
+            }
+    
+            toastRef.current.show({
+                type: 'success',
+                text: 'Photo was deleted.'
+            })
+        } catch(error) {
+            console.error(error)
+            toastRef.current.show({
+                type: 'error',
+                text: 'Photo could not be deleted.'
+            })
         }
-
-        if (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id) {
-            updateNewLadyInRedux({ images: newImages, id: userData.id })
-        } else if (userData.establishment_id) {
-            updateLadyInRedux({ images: newImages, id: userData.id })
-        } else {
-            updateCurrentUserInRedux({ images: newImages, id: userData.id })
-        }
-
-        toastRef.current.show({
-            type: 'success',
-            headerText: 'Success!',
-            text: 'Photo was deleted.'
-        })
     }
 
     const onAddNewImagePress = () => {
@@ -333,13 +336,13 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
 
     //ALL ACTIVE PHOTOS
     const hasAllCoverActivePhotos = () => {
-        for (let i=0; i< (user_type === 'establishment' ? 1 : 5); i++) {
-            if (!data.active[i]) {
-                return false
-            }
+        const coverActiveImages = data.active.filter(image => image.index != null && image.index < (user_type === 'establishment' ? 1 : 5))
+        
+        if (user_type === 'establishment') {
+            return coverActiveImages.length === 1
+        } else {
+            return coverActiveImages.length === 5
         }
-
-        return true
     }
 
     //ALL ACTIVE + IN REVIEW PHOTOS
@@ -631,9 +634,9 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
     const renderActive = () => {
         const photos = (
             (userData.status === ACTIVE || userData.status === INACTIVE || currentAuthUser.app_metadata.userrole === 'ADMIN')
-                ? data.active.slice(0, user_type === 'establishment' ? 1 : 5) 
+                ? data.active.filter(image => image.index != null && image.index < (user_type === 'establishment' ? 1 : 5))//.slice(0, user_type === 'establishment' ? 1 : 5) 
                 //For REJECTED Concat active and in review -> user is uploading missing cover images one by one
-                : data.active.slice(0, user_type === 'establishment' ? 1 : 5).concat(data.inReview.slice(0, user_type === 'establishment' ? 1 : 5))
+                : data.active.filter(image => image.index != null && image.index < (user_type === 'establishment' ? 1 : 5)).concat(data.inReview.filter(image => image.index != null && image.index < user_type === 'establishment' ? 1 : 5))//.slice(0, user_type === 'establishment' ? 1 : 5).concat(data.inReview.slice(0, user_type === 'establishment' ? 1 : 5))
         )
         .reduce((out, current) => {
             out[current.index] = current
@@ -677,11 +680,11 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
                 </>}
                 {user_type === 'establishment' && renderCoverPhoto(photos[0])}
                 {user_type === 'lady' && renderPhotosGrid(photos)}
-                {renderAdditionalPhotos(data.active.slice(user_type === 'establishment' ? 1 : 5), activeImageActions)}
+                {renderAdditionalPhotos(data.active.filter(image => image.index == null || image.index >= (user_type === 'establishment' ? 1 : 5))/*slice(user_type === 'establishment' ? 1 : 5)*/, activeImageActions)}
             </View>
         )
     }
-
+console.log(data.active)
     const renderInReview = () => {
         if (data.inReview.length === 0 && userData.status !== IN_REVIEW) {
             return null

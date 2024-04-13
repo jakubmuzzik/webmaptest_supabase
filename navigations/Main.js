@@ -115,7 +115,7 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
 
                 updateCurrentAuthUser(session.user)
                 //fetch only on page reloads and when already signed in
-                if (!hasLoadedRef.current) {
+                if (!hasLoadedRef.current && session.user.app_metadata.userrole !== 'ADMIN') {
                     fetchUser(session.user.id, session.user.user_metadata.user_type)
                 }
                 setIsLoggedIn(true)

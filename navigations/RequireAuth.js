@@ -23,10 +23,17 @@ const RequireAuth = ({ children, currentAuthUser }) => {
 
     const isLoggedIn = currentAuthUser.id
 
-    if (!isLoggedIn) {
-        console.log('is not logged in')
+    if (!isLoggedIn) {        
         let to = '/auth'
         //need to hardcode => search param on Navigate component didn't work
+        if (params.language) {
+            to += '?language=' + params.language
+        }
+
+        return <Navigate to={to} state={{ from: location }} replace />
+    } else if (currentAuthUser.app_metadata.userrole === 'ADMIN') {
+        let to = '/admin'
+    
         if (params.language) {
             to += '?language=' + params.language
         }

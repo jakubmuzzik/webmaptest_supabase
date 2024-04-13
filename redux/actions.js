@@ -93,25 +93,37 @@ export const setNewVideosCount = (newVideosCount) => ({
     newVideosCount
 })
 
-export const setNewLadies = (newLadies) => ({
-    type: NEW_LADIES_CHANGE,
-    newLadies
-})
+export const setNewLadies = (newLadies) => (dispatch, getState) => {
+    dispatch({ type: NEW_LADIES_CHANGE, newLadies })
 
-export const setNewEstablishments = (newEstablishments) => ({
-    type: NEW_ESTABLISHMENTS_CHANGE,
-    newEstablishments
-})
+    if (getState().adminState.newLadiesCount !== newLadies.length) {
+        dispatch({ type: NEW_LADIES_COUNT_CHANGE, newLadiesCount: newLadies.length })
+    }
+}
 
-export const setNewPhotos = (newPhotos) => ({
-    type: NEW_PHOTOS_CHANGE,
-    newPhotos
-})
+export const setNewEstablishments = (newEstablishments) => (dispatch, getState) => {
+    dispatch({ type: NEW_ESTABLISHMENTS_CHANGE, newEstablishments })
 
-export const setNewVideos = (newVideos) => ({
-    type: NEW_VIDEOS_CHANGE,
-    newVideos
-})
+    if (getState().adminState.newEstablishmentsCount !== newEstablishments.length) {
+        dispatch({ type: NEW_ESTABLISHMENTS_COUNT_CHANGE, newEstablishmentsCount: newEstablishments.length })
+    }
+}
+
+export const setNewPhotos = (newPhotos) => (dispatch, getState) => {
+    dispatch({ type: NEW_PHOTOS_CHANGE, newPhotos })
+
+    if (getState().adminState.newPhotosCount !== newPhotos.length) {
+        dispatch({ type: NEW_PHOTOS_COUNT_CHANGE, newPhotosCount: newPhotos.length })
+    }
+}
+
+export const setNewVideos = (newVideos) => (dispatch, getState) => {
+    dispatch({ type: NEW_VIDEOS_CHANGE, newVideos })
+
+    if (getState().adminState.newVideosCount !== newVideos.length) {
+        dispatch({ type: NEW_VIDEOS_COUNT_CHANGE, newVideosCount: newVideos.length })
+    }
+}
 
 /**
  * 

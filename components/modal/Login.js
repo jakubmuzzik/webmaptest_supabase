@@ -164,7 +164,9 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 throw signInError
             }
 
-            fetchUser(sessionData.user.id, sessionData.user.user_metadata.user_type)
+            if (sessionData.user.app_metadata.userrole !== 'ADMIN') {
+                fetchUser(sessionData.user.id, sessionData.user.user_metadata.user_type)
+            }
 
             closeModal()
 
