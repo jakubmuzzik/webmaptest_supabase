@@ -8,7 +8,7 @@ import { stripEmptyParams, getParam, normalize } from '../../utils'
 import RenderAccountLady from '../../components/list/RenderAccountLady'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchNewLadies, setNewLadies } from '../../redux/actions'
+import { fetchNewEstablishments, setNewEstablishments } from '../../redux/actions'
 import { ACTIVE, DELETED, INACTIVE, IN_REVIEW, REJECTED} from '../../labels'
 import { MOCK_DATA } from '../../constants'
 import ContentLoader, { Rect } from "react-content-loader/native"
@@ -17,7 +17,7 @@ import OverlaySpinner from '../../components/modal/OverlaySpinner'
 
 import { supabase } from '../../supabase/config'
 
-const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
+const NewEstablishments = ({ newEstablishments, toastRef, fetchNewEstablishments, setNewEstablishments }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -30,14 +30,14 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
 
     const [saving, setSaving] = useState(false)
 
-    const [ladyToReject, setLadyToReject] = useState()
-    const [ladyToActivate, setLadyToActivate] = useState()
+    const [establishmentToReject, setEstablishmentToReject] = useState()
+    const [establishmentToActivate, setEstablishmentToActivate] = useState()
 
     useEffect(() => {
-        if (newLadies === null) {
-            fetchNewLadies()
+        if (newEstablishments === null) {
+            fetchNewEstablishments()
         }
-    }, [newLadies])
+    }, [newEstablishments])
 
     const navigate = useNavigate()
 
@@ -62,110 +62,87 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
                         : isLargeScreen ? ((sectionWidth - SPACING.small - SPACING.small) / 5) - (SPACING.small * 4) / 5 : ((sectionWidth - SPACING.small - SPACING.small) / 6) - (SPACING.small * 5) / 6
     }, [sectionWidth])
 
-    const activateLady = async (ladyId) => {
+    const activateEstablishment = async (establishmentId) => {
         setSaving(true)
         try {
-            const lady = newLadies.find(newLady => newLady.id === ladyId)
-
-            if (lady.establishment_id) {
-                const { error: selectError, data: estData } = await supabase
-                    .from('establishments')
-                    .select('status')
-                    .eq('id', lady.establishment_id)
-
-                if (selectError) {
-                    throw selectError
-                }
-
-                if (estData[0].status !== ACTIVE) {
-                    toastRef.current.show({
-                        type: 'error',
-                        headerText: 'Activation error',
-                        text: 'Lady could not be activated, because associated establishment is not Active.'
-                    })
-
-                    return
-                }
-            }
-
             const { error: updateError } = await supabase
-                .from('ladies')
+                .from('establishments')
                 .update({ status: ACTIVE })
-                .eq('id', ladyId)
+                .eq('id', establishmentId)
 
             if (updateError) {
                 throw updateError
             }
 
-            setNewLadies(newLadies.filter(newLady => newLady.id !== ladyId))
+            setNewEstablishments(newEstablishments.filter(newEstablishment => newEstablishment.id !== establishmentId))
 
             toastRef.current.show({
                 type: 'success',
-                headerText: 'Lady activated',
-                text: 'Lady was successfuly activated.'
+                headerText: 'Establishment activated',
+                text: 'Establishment was successfuly activated.'
             })
         } catch(error) {
             console.error(error)
             toastRef.current.show({
                 type: 'error',
                 headerText: 'Activate error',
-                text: 'Lady could not be activated.'
+                text: 'Establishment could not be activated.'
             })
         } finally {
             setSaving(false)
         }
     }
 
-    const rejectLady = async (ladyId) => {
+    const rejectEstablishment = async (establishmentId) => {
         setSaving(true)
         try {
             const { error: updateError } = await supabase
-                .from('ladies')
+                .from('establishments')
                 .update({ status: REJECTED })
-                .eq('id', ladyId)
+                .eq('id', establishmentId)
 
             if (updateError) {
                 throw updateError
             }
 
-            setNewLadies(newLadies.filter(newLady => newLady.id !== ladyId))
+            setNewEstablishments(newEstablishments.filter(newEstablishment => newEstablishment.id !== establishmentId))
 
             toastRef.current.show({
                 type: 'success',
-                headerText: 'Lady rejected',
-                text: 'Lady was successfuly rejected.'
+                headerText: 'Establishment rejected',
+                text: 'Establishment was successfuly rejected.'
             })
         } catch(error) {
             console.error(error)
             toastRef.current.show({
                 type: 'error',
                 headerText: 'Rejection error',
-                text: 'Lady could not be rejected.'
+                text: 'Establishment could not be rejected.'
             })
         } finally {
             setSaving(false)
         }
     }
 
-    const onEditLadyPress = (ladyId) => {
+    const onEditEstablishmentPress = (establishmentId) => {
         navigate({
-            pathname: '/admin/new-ladies/edit-lady/' + ladyId,
+            pathname: '/admin/new-establishments/edit-establishment/' + establishmentId,
             search: new URLSearchParams(stripEmptyParams(params)).toString()
         })
     }
 
-    const onActivatePress = (ladyId) => {
-        setLadyToActivate(ladyId)
+    const onActivatePress = (establishmentId) => {
+        setEstablishmentToActivate(establishmentId)
     }
 
-    const onRejectPress = (ladyId) => {
-        setLadyToReject(ladyId)
+    const onRejectPress = (establishmentId) => {
+        setEstablishmentToReject(establishmentId)
     }
 
     const actions = [
         {
-            label: 'View',
-            onPress: onEditLadyPress
+            label: 'Edit',
+            onPress: onEditEstablishmentPress
         },
         {
             label: 'Approve',
@@ -177,8 +154,7 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
         },
     ]
 
-
-    if (newLadies === null) {
+    if (newEstablishments === null) {
         return (
             <View onLayout={onLayout} style={{ width: normalize(800), maxWidth: '100%', alignSelf: 'center', paddingVertical: SPACING.x_large }}>
                 <ContentLoader
@@ -208,15 +184,15 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
         <View onLayout={onLayout} style={{ paddingBottom: SPACING.large, width: normalize(800), maxWidth: '100%', alignSelf: 'center', paddingHorizontal: SPACING.medium, }}>
             <View style={styles.section}>
                 <View style={styles.sectionHeader}>
-                    {newLadies.length === 0 && <Text style={{ color: COLORS.greyText, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textAlign: 'center' }}>
-                        No ladies for review
+                    {newEstablishments.length === 0 && <Text style={{ color: COLORS.greyText, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textAlign: 'center' }}>
+                        No establishments for review
                     </Text>}
                 </View>
 
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginLeft: SPACING.small }}>
-                    {newLadies.map(lady => (
-                        <View key={lady.id} style={{ width: cardWidth, marginBottom: SPACING.medium, marginRight: SPACING.small }}>
-                            <RenderAccountLady lady={lady} width={cardWidth} actions={actions} offsetX={windowWidth}/>
+                    {newEstablishments.map(establishment => (
+                        <View key={establishment.id} style={{ width: cardWidth, marginBottom: SPACING.medium, marginRight: SPACING.small }}>
+                            <RenderAccountLady lady={establishment} width={cardWidth} actions={actions} offsetX={windowWidth * 2}/>
                         </View>
                     ))}
                 </View>
@@ -225,25 +201,25 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
             {saving && <OverlaySpinner />}
 
             <ConfirmationModal
-                visible={!!ladyToActivate}
+                visible={!!establishmentToActivate}
                 headerText='Confirm Activation'
-                text='Are you sure you want to approve selected Lady? All in review images and videos will be approved as well.'
-                onCancel={() => setLadyToActivate(undefined)}
-                onConfirm={() => activateLady(ladyToActivate)}
+                text='Are you sure you want to approve selected Establishment? All in review images and videos will be approved as well.'
+                onCancel={() => setEstablishmentToActivate(undefined)}
+                onConfirm={() => activateEstablishment(establishmentToActivate)}
                 headerErrorText='Activation error'
-                errorText='Lady could not be activated.'
+                errorText='Establishment could not be activated.'
                 confirmLabel='Activate'
                 confirmButtonColor='green'
             />
 
             <ConfirmationModal
-                visible={!!ladyToReject}
+                visible={!!establishmentToReject}
                 headerText='Confirm Rejection'
-                text='Are you sure you want to reject selected Lady? All in review images and videos will be rejected as well.'
-                onCancel={() => setLadyToReject(undefined)}
-                onConfirm={() => rejectLady(ladyToReject)}
+                text='Are you sure you want to reject selected Establishment? All in review images and videos will be rejected as well.'
+                onCancel={() => setEstablishmentToReject(undefined)}
+                onConfirm={() => rejectEstablishment(establishmentToReject)}
                 headerErrorText='Rejection error'
-                errorText='Lady could not be rejected.'
+                errorText='Establishment could not be rejected.'
                 confirmLabel='Reject'
                 confirmButtonColor={COLORS.lightBlack}
             />
@@ -252,11 +228,11 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
 }
 
 const mapStateToProps = (store) => ({
-    newLadies: store.adminState.newLadies,
+    newEstablishments: store.adminState.newEstablishments,
     toastRef: store.appState.toastRef
 })
 
-export default connect(mapStateToProps, { fetchNewLadies, setNewLadies })(memo(NewLadies))
+export default connect(mapStateToProps, { fetchNewEstablishments, setNewEstablishments })(memo(NewEstablishments))
 
 const styles = StyleSheet.create({
     section: {

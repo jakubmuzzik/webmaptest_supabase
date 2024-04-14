@@ -21,7 +21,7 @@ import { REJECTED, IN_REVIEW, ACTIVE } from '../../labels'
 
 import { supabase } from '../../supabase/config'
 
-const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedux, user_type }) => {
+const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedux }) => {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
@@ -99,7 +99,7 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
         setResubmitting(true)
         try {
             const { error: updateError } = await supabase
-                .from(user_type === 'lady' ? 'ladies' : 'establishments')
+                .from('ladies')
                 .update({status: IN_REVIEW, last_submitted_date: new Date()})
                 .eq('id', ladyData.id)
 

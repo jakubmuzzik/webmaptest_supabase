@@ -158,7 +158,7 @@ const Settings = ({ setTabHeight, toastRef, user_type, logOut, currentUser, curr
                             Profile Status
                         </Text>
                     </View>
-                    <TouchableOpacity onPress={onStatusChangePress} style={{ flexDirection: 'row', alignItems: 'center' }} activeOpacity={1}>
+                    <TouchableOpacity onPress={onStatusChangePress} style={{ flexDirection: 'row', alignItems: 'center', cursor: user_type === 'establishment' ? 'defaul' : 'pointer' }} activeOpacity={1}>
                         <Octicons name="dot-fill" size={20} color={currentUser.status === IN_REVIEW ? 'yellow' : currentUser.status === INACTIVE ? 'grey' : currentUser.status === REJECTED ? 'red' : 'green'} style={{ marginRight: SPACING.xxx_small }} />
                         <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}>
                             {currentUser.status}

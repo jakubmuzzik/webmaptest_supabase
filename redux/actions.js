@@ -179,6 +179,27 @@ export const updateNewLadyInRedux = (data) => (dispatch, getState) => {
     dispatch({ type: NEW_LADIES_CHANGE, newLadies })
 }
 
+//updated in review lady 
+export const updateNewEstablishmentInRedux = (data) => (dispatch, getState) => {
+    let newEstablishments = getState().adminState.newEstablishments ? JSON.parse(JSON.stringify(getState().adminState.newEstablishments)) : []
+
+    let existingEstablishment = newEstablishments.find(lady => lady.id === data.id)
+
+    if (existingEstablishment) {
+        newEstablishments = newEstablishments.filter(est => est.id !== data.id)
+        existingEstablishment = {
+            ...existingEstablishment,
+            ...data
+        } 
+    } else {
+        existingEstablishment = data
+    }
+
+    newEstablishments.push(existingEstablishment)
+
+    dispatch({ type: NEW_ESTABLISHMENTS_CHANGE, newEstablishments })
+}
+
 //lady under establishment
 export const updateLadyInRedux = (data) => (dispatch, getState) => {
     let ladies = getState().userState.ladies ? JSON.parse(JSON.stringify(getState().userState.ladies)) : []
@@ -227,5 +248,19 @@ export const fetchNewLadies = () => async (dispatch) => {
         dispatch(setNewLadies([]))
     } else {
         dispatch(setNewLadies(data))
+    }
+}
+
+export const fetchNewEstablishments = () => async (dispatch) => {
+    const { data, error } = await supabase
+        .from('establishments')
+        .select('*, images(*), videos(*)')
+        .eq('status', IN_REVIEW)
+        .order('last_submitted_date', { descending: false })
+
+    if (error || !data || data.length === 0) {
+        dispatch(setNewEstablishments([]))
+    } else {
+        dispatch(setNewEstablishments(data))
     }
 }

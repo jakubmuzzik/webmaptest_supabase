@@ -185,6 +185,7 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
                 <Route path='new-photos' element={<AdminNavigation />} />
                 <Route path='new-videos' element={<AdminNavigation />} />
                 <Route path='new-ladies/edit-lady/:id' element={<AdminNavigation />} />
+                <Route path='new-establishments/edit-establishment/:id' element={<AdminNavigation />} />
                 
             </Route>
 

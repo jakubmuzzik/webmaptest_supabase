@@ -182,7 +182,7 @@ const Account = ({ currentUser={}, user_type, toastRef, updateCurrentUserInRedux
             case 'edit_lady':
                 return (
                     <View style={{ marginTop: SPACING.large }}>
-                        <EditLady offsetX={windowWidth * route.index} user_type={user_type} />
+                        <EditLady offsetX={windowWidth * route.index} />
                     </View>
                 )
             case 'add_lady':

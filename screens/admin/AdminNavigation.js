@@ -19,6 +19,8 @@ import { Ionicons, Entypo } from '@expo/vector-icons'
 import AdminDashboard from './AdminDashboard'
 import NewLadies from './NewLadies'
 import EditNewLady from './EditNewLady'
+import NewEstablishments from './NewEstablishments'
+import EditNewEstablishment from './EditNewEstablishment'
 
 import ContentLoader, { Rect } from "react-content-loader/native"
 import { ACTIVE, IN_REVIEW, REJECTED } from '../../labels'
@@ -43,7 +45,8 @@ const AdminNavigation = ({ user_type, toastRef }) => {
         { key: 'new-establishments', title: 'New Establishments', pathname: '/admin/new-establishments', navigationPaths: ['New Establishments'] },
         { key: 'new-photos', title: 'New Photos', pathname: '/admin/new-photos', navigationPaths: ['New Photos'] },
         { key: 'new-videos', title: 'New Videos', pathname: '/admin/new-videos', navigationPaths: ['New Videos'] },
-        { key: 'edit-lady', title: 'Edit Lady', pathname: '/admin/new-ladies/edit-lady/*', navigationPaths: ['New Ladies', 'Edit Lady'] }
+        { key: 'edit-lady', title: 'Edit Lady', pathname: '/admin/new-ladies/edit-lady/*', navigationPaths: ['New Ladies', 'Edit Lady'] },
+        { key: 'edit-establishment', title: 'Edit Establishment', pathname: '/admin/new-establishments/edit-establishment/*', navigationPaths: ['New Establishments', 'Edit Establishment'] }
     ]
     .map((route, index) => ({ ...route, index })))
 
@@ -95,7 +98,7 @@ const AdminNavigation = ({ user_type, toastRef }) => {
             case 'new-establishments':
                 return (
                     <View style={{ marginTop: SPACING.large }}>
-                        {/* <NewLadies /> */}
+                        <NewEstablishments />
                     </View>
                 )
             case 'new-photos':
@@ -114,6 +117,12 @@ const AdminNavigation = ({ user_type, toastRef }) => {
                 return (
                     <View style={{ marginTop: SPACING.large }}>
                         <EditNewLady offsetX={windowWidth * route.index} />
+                    </View>
+                )
+            case 'edit-establishment':
+                return (
+                    <View style={{ marginTop: SPACING.large }}>
+                        <EditNewEstablishment offsetX={windowWidth * route.index} />
                     </View>
                 )
             default:

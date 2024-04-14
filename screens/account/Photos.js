@@ -11,7 +11,7 @@ import RenderImageWithActions from '../../components/list/RenderImageWithActions
 import * as ImagePicker from 'expo-image-picker'
 import uuid from 'react-native-uuid'
 import { connect } from 'react-redux'
-import { updateCurrentUserInRedux, updateLadyInRedux, updateNewLadyInRedux } from '../../redux/actions'
+import { updateCurrentUserInRedux, updateLadyInRedux, updateNewLadyInRedux, updateNewEstablishmentInRedux } from '../../redux/actions'
 import { BlurView } from 'expo-blur'
 import { MotiView } from 'moti'
 import ConfirmationModal from '../../components/modal/ConfirmationModal'
@@ -21,7 +21,7 @@ import LottieView from 'lottie-react-native'
 
 import { supabase } from '../../supabase/config'
 
-const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRef, updateCurrentUserInRedux, updateLadyInRedux, currentAuthUser, updateNewLadyInRedux }) => {
+const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRef, updateCurrentUserInRedux, updateLadyInRedux, currentAuthUser, updateNewLadyInRedux, updateNewEstablishmentInRedux }) => {
     const [data, setData] = useState({
         active: [],
         inReview: [],
@@ -167,8 +167,10 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
             imageData.download_url += '?bust=' + Date.now()
         }
 
-        if (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id) {
+        if (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id && user_type === 'lady') {
             updateNewLadyInRedux({ images: currentImages, id: userData.id })
+        } else if(currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id && user_type === 'establishment') {
+            updateNewEstablishmentInRedux({ images: currentImages, id: userData.id })
         } else if (userData.establishment_id) {
             updateLadyInRedux({ images: currentImages, id: userData.id })
         } else {
@@ -236,9 +238,11 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
             if (error) {
                 throw error
             }
-    
-            if (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id) {
+
+            if (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id && user_type === 'lady') {
                 updateNewLadyInRedux({ images: newImages, id: userData.id })
+            } else if(currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id && user_type === 'establishment') {
+                updateNewEstablishmentInRedux({ images: newImages, id: userData.id })
             } else if (userData.establishment_id) {
                 updateLadyInRedux({ images: newImages, id: userData.id })
             } else {
@@ -284,7 +288,11 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
                 images = images.filter(image => image.id !== toUpdate.image_id_to_replace)
             }
 
-            updateNewLadyInRedux({ images, id: userData.id })
+            if (user_type === 'lady') {
+                updateNewLadyInRedux({ images, id: userData.id })
+            } else {
+                updateNewEstablishmentInRedux({ images, id: userData.id })
+            }
 
             toastRef.current.show({
                 type: 'success',
@@ -319,7 +327,11 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
                 throw error
             }
 
-            updateNewLadyInRedux({ images, id: userData.id })
+            if (user_type === 'lady') {
+                updateNewLadyInRedux({ images, id: userData.id })
+            } else {
+                updateNewEstablishmentInRedux({ images, id: userData.id })
+            }
 
             toastRef.current.show({
                 type: 'success',
@@ -799,7 +811,7 @@ const mapStateToProps = (store) => ({
     currentAuthUser: store.userState.currentAuthUser
 })
 
-export default connect(mapStateToProps, { updateCurrentUserInRedux, updateLadyInRedux, updateNewLadyInRedux })(memo(Photos))
+export default connect(mapStateToProps, { updateCurrentUserInRedux, updateLadyInRedux, updateNewLadyInRedux, updateNewEstablishmentInRedux })(memo(Photos))
 
 const styles = StyleSheet.create({
     section: {

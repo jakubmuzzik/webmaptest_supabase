@@ -9,10 +9,7 @@ import { IconButton } from "react-native-paper"
 import { useSearchParams } from 'react-router-dom'
 import DropdownSelect from "../DropdownSelect"
 
-const blurhash =
-    '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['
-
-const RenderAccountLady = ({ lady, width, showPrice = true, actions=[], offsetX = 0}) => {
+const RenderAccountLady = ({ lady, width, actions=[], offsetX = 0}) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
