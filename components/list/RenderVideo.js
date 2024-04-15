@@ -37,7 +37,7 @@ const RenderVideo = ({ video }) => {
             <Video
                 ref={videoRef}
                 style={{ height: '100%', width: '100%' }}
-                videoStyle={{ height: '100%', margin: 'auto' }}
+                videoStyle={{ maxHeight: '100%', maxWidth: '100%', margin: 'auto' }}
                 source={{
                     uri: video.download_url
                 }}
