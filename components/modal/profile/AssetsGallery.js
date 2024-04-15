@@ -34,7 +34,7 @@ const AssetsGallery = ({ assets, pressedAssetIndex=0 }) => {
     //     id: route.params.id
     // }), [route.params])
 
-    const { width, height } = useWindowDimensions()
+    const { width } = useWindowDimensions()
 
     const gallery = useRef()
     const bottomScrollViewRef = useRef()

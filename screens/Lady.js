@@ -249,9 +249,6 @@ const Lady = ({ toastRef }) => {
     }, [])
 
     const onEstablishmentLinkPress = async () => {
-        //setLoading(true)
-        //setEstablishmentName(null)
-        //setData(null)
         navigate({
             pathname: '/establishment/' + data.establishment_id,
             search: new URLSearchParams({ 
@@ -259,10 +256,6 @@ const Lady = ({ toastRef }) => {
             }).toString(),
             state: null
         })
-
-        
-        //fetchUser()
-        //navigate(0)
     }
 
     const loadingMapFallback = useMemo(() => {

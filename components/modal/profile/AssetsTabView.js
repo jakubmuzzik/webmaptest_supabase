@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Modal, ScrollView, Text, Dimensions } from 'react-native'
+import { View, Modal, ScrollView, Text, Dimensions, useWindowDimensions } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { connect } from 'react-redux'
@@ -10,8 +10,9 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
 import VideosList from './VideosList'
 import { ActivityIndicator } from 'react-native-paper'
 import AssetsGallery from './AssetsGallery'
+import ContentLoader, { Rect } from "react-content-loader/native"
 
-const { width, height } = Dimensions.get('window')
+const MAX_IMAGE_SIZE = 130
 
 const AssetsTabView = ({ images = [], videos = [], visible, updateScrollDisabled, closeModal, pressedAssetIndex=0 }) => {
     const [pagesIndex, setPagesIndex] = useState(0)
@@ -25,6 +26,11 @@ const AssetsTabView = ({ images = [], videos = [], visible, updateScrollDisabled
         { key: 'Photos', title: 'Photos', length: images.length },
         { key: 'Videos', title: 'Videos', length: videos.length },
     ].filter(r => r.length))
+
+    const { width } = useWindowDimensions()
+
+    const baseImageWidth = width < 800 ? width : 800
+    const dynamicImageSize = Math.floor(baseImageWidth / 4)
 
     const onClosePress = () => {
         updateScrollDisabled()
@@ -45,9 +51,103 @@ const AssetsTabView = ({ images = [], videos = [], visible, updateScrollDisabled
     }
 
     const renderLazyPlaceholder = () => (
-        <View style={{ alignSelf: 'center', marginTop: SPACING.xx_large }}>
-            <ActivityIndicator animating color={COLORS.red} size={30}/>
-        </View>
+        <>
+            <View style={{ flex: 1, marginTop: 10, marginHorizontal: SPACING.medium }}>
+                <ContentLoader
+                    speed={2}
+                    height={'100%'}
+                    width={500}
+                    style={{ borderRadius: 5, ...StyleSheet.absoluteFillObject, maxWidth: '100%', margin: 'auto' }}
+                    backgroundColor={COLORS.grey}
+                    foregroundColor={COLORS.lightGrey}
+                >
+                    <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
+                </ContentLoader>
+            </View>
+
+            <View style={{ width: 800, maxWidth: '100%', alignSelf: 'center' }}>
+                <ScrollView horizontal contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: SPACING.small, }}>
+                    <ContentLoader
+                        speed={2}
+                        height={dynamicImageSize}
+                        width={dynamicImageSize}
+                        style={{
+                            borderRadius: 5, marginRight: SPACING.small, maxHeight: MAX_IMAGE_SIZE,
+                            maxWidth: MAX_IMAGE_SIZE,
+                        }}
+                        backgroundColor={COLORS.grey}
+                        foregroundColor={COLORS.lightGrey}
+                    >
+                        <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
+                    </ContentLoader>
+                    <ContentLoader
+                        speed={2}
+                        height={dynamicImageSize}
+                        width={dynamicImageSize}
+                        style={{
+                            borderRadius: 5, marginRight: SPACING.small, maxHeight: MAX_IMAGE_SIZE,
+                            maxWidth: MAX_IMAGE_SIZE,
+                        }}
+                        backgroundColor={COLORS.grey}
+                        foregroundColor={COLORS.lightGrey}
+                    >
+                        <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
+                    </ContentLoader>
+                    <ContentLoader
+                        speed={2}
+                        height={dynamicImageSize}
+                        width={dynamicImageSize}
+                        style={{
+                            borderRadius: 5, marginRight: SPACING.small, maxHeight: MAX_IMAGE_SIZE,
+                            maxWidth: MAX_IMAGE_SIZE,
+                        }}
+                        backgroundColor={COLORS.grey}
+                        foregroundColor={COLORS.lightGrey}
+                    >
+                        <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
+                    </ContentLoader>
+                    <ContentLoader
+                        speed={2}
+                        height={dynamicImageSize}
+                        width={dynamicImageSize}
+                        style={{
+                            borderRadius: 5, marginRight: SPACING.small, maxHeight: MAX_IMAGE_SIZE,
+                            maxWidth: MAX_IMAGE_SIZE,
+                        }}
+                        backgroundColor={COLORS.grey}
+                        foregroundColor={COLORS.lightGrey}
+                    >
+                        <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
+                    </ContentLoader>
+                    <ContentLoader
+                        speed={2}
+                        height={dynamicImageSize}
+                        width={dynamicImageSize}
+                        style={{
+                            borderRadius: 5, marginRight: SPACING.small, maxHeight: MAX_IMAGE_SIZE,
+                            maxWidth: MAX_IMAGE_SIZE,
+                        }}
+                        backgroundColor={COLORS.grey}
+                        foregroundColor={COLORS.lightGrey}
+                    >
+                        <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
+                    </ContentLoader>
+                    <ContentLoader
+                        speed={2}
+                        height={dynamicImageSize}
+                        width={dynamicImageSize}
+                        style={{
+                            borderRadius: 5, maxHeight: MAX_IMAGE_SIZE,
+                            maxWidth: MAX_IMAGE_SIZE,
+                        }}
+                        backgroundColor={COLORS.grey}
+                        foregroundColor={COLORS.lightGrey}
+                    >
+                        <Rect x="0" y="0" rx="0" ry="0" width="100%" height={'100%'} />
+                    </ContentLoader>
+                </ScrollView>
+            </View>
+        </>
     )
 
     const renderTabBar = (props) => (
