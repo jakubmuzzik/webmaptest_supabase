@@ -1,47 +1,25 @@
 import React, { useEffect, useState, memo, useRef } from 'react'
-import { View, Image as RNImage, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native'
-import { Image } from 'expo-image'
+import { View, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native'
 import DropdownSelect from '../DropdownSelect'
-import { IconButton, ActivityIndicator } from 'react-native-paper'
+import { IconButton } from 'react-native-paper'
 import { COLORS, SPACING } from '../../constants'
-import { normalize, generateThumbnailFromLocalURI } from '../../utils'
+import { normalize } from '../../utils'
 import { Video, ResizeMode } from 'expo-av'
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
+import { BlurView } from 'expo-blur'
 
 const RenderVideoWithActions = ({ video, actions, offsetX = 0, showActions = true }) => {
     const actionsDropdownRef = useRef()
 
-    const [aspectRatio, setAspectRatio] = useState()
     const [showPoster, setShowPoster] = useState(true)
 
     const videoRef = useRef()
-
-    useEffect(() => {
-        init()
-    }, [])
 
     useEffect(() => {
         if (!showPoster && videoRef.current) {
             videoRef.current.playAsync()
         }
     }, [showPoster, videoRef.current])
-
-    const init = async () => {
-        try {
-            //setThumbnail(thumbnailUrl)
-            RNImage.getSize(video.thumbnail_download_url, (width, height) => { 
-                setAspectRatio(width / height)
-            })
-        } catch(e) {
-            console.error(e)
-        }
-    }
-
-    if (!aspectRatio) {
-        return (
-            <ActivityIndicator style={{ margin: SPACING.large, alignSelf: 'center' }} animating color={COLORS.red} />
-        )
-    }
 
     const renderActions = () => {
         if (!showActions) {
@@ -83,52 +61,56 @@ const RenderVideoWithActions = ({ video, actions, offsetX = 0, showActions = tru
         }
     }
 
-    const renderPoster = () => (
-        <View style={{ 
-            width: '100%',
-            height: undefined,
-            aspectRatio: aspectRatio,
-            alignItems: 'center',
-            justifyContent: 'center'
-        }}>
-            <Image 
-                style={{...StyleSheet.absoluteFillObject, borderRadius: 10}}
-                source={video.thumbnail_download_url}
-                placeholder={video.blurhash}
-                transition={200}
-                resizeMode='cover'
-            />
-            <TouchableOpacity activeOpacity={0.8} onPress={() => setShowPoster(false)}>
-                <Ionicons name="ios-play-circle-sharp" size={normalize(70)} color='rgba(0,0,0,.7)' />
-            </TouchableOpacity>
-        </View>
-    )
-
     return (
-        <>
-            {!showPoster && <Video
-                ref={videoRef}
-                style={{
-                    width: '100%',
-                    height: undefined,
-                    aspectRatio: aspectRatio
-                }}
-                videoStyle={{
-                    width: '100%',
-                    height: undefined,
-                    aspectRatio: aspectRatio,
-                    borderRadius: 10
-                }}
-                source={{
-                    uri: video.download_url,
-                }}
-                useNativeControls
-                resizeMode={ResizeMode.CONTAIN}
-            />}
-            {showPoster && renderPoster()}
+        <ImageBackground
+            source={{ uri: video.thumbnail_download_url }}
+            style={{
+                width: '100%',
+                height: undefined,
+                aspectRatio: 1 / 1,
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}
+            imageStyle={{ opacity: 0.7 }}
+            resizeMode='cover'
+        >
+            <>
+                {showPoster && <TouchableOpacity activeOpacity={0.8} onPress={() => setShowPoster(false)} >
+                    <Ionicons name="ios-play-circle-sharp" size={normalize(70)} color='rgba(0,0,0,.7)' />
+                </TouchableOpacity>}
+
+                {!showPoster && (
+                    <BlurView intensity={50} style={{
+                        width: '100%',
+                        height: undefined,
+                        aspectRatio: 1 / 1,
+                        borderRadius: 10
+                    }}>
+                        <Video
+                            ref={videoRef}
+                            style={{
+                                width: '100%',
+                                height: undefined,
+                                aspectRatio: 1 / 1
+                            }}
+                            videoStyle={{
+                                width: '100%',
+                                height: undefined,
+                                aspectRatio: 1 / 1,
+                                borderRadius: 10
+                            }}
+                            source={{
+                                uri: video.download_url,
+                            }}
+                            useNativeControls
+                            resizeMode={ResizeMode.CONTAIN}
+                        />
+                    </BlurView>
+                )}
+            </>
 
             {renderActions()}
-        </>
+        </ImageBackground>
     )
 }
 

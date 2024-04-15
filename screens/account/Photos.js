@@ -381,13 +381,11 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
     const pendingImageActions = currentAuthUser.app_metadata.userrole === 'ADMIN' ? [
         {
             label: 'Approve',
-            onPress: onApproveImagePress,
-            iconName: 'delete-outline'
+            onPress: onApproveImagePress
         },
         {
             label: 'Reject',
-            onPress: onRejectImagePress,
-            iconName: 'delete-outline'
+            onPress: onRejectImagePress
         }
     ] : [
         {
@@ -696,7 +694,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
             </View>
         )
     }
-console.log(data.active)
+
     const renderInReview = () => {
         if (data.inReview.length === 0 && userData.status !== IN_REVIEW) {
             return null

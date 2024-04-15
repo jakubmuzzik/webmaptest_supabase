@@ -249,19 +249,6 @@ const Lady = ({ toastRef }) => {
     }, [])
 
     const onEstablishmentLinkPress = async () => {
-        const { error: updateError } = await supabase
-                .from('ladies')
-                .update({status: ACTIVE})
-                .eq('id', 'b49f5111-b8f2-4a0d-8941-23b1e04b6e4a')
-
-            if (updateError) {
-                throw updateError
-            }
-
-          console.error(updateError)
-
-          return
-
         //setLoading(true)
         //setEstablishmentName(null)
         //setData(null)
@@ -586,7 +573,7 @@ const Lady = ({ toastRef }) => {
                         numberOfLines={2}
                         style={establishmentNameAnimatedStyle}
                     >
-                        • Lady from <Text onPress={onEstablishmentLinkPress} style={{ color: COLORS.linkColor, textDecorationLine: 'underline' }}>{establishmentName}</Text>
+                        • Lady from <Text onPress={onEstablishmentLinkPress} style={{ color: COLORS.red, textDecorationLine: 'underline' }}>{establishmentName}</Text>
                     </Animated.Text>
                 )}
             </View>

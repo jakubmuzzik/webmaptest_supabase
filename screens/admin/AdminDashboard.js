@@ -208,7 +208,7 @@ const AdminDashboard = ({
         })
     }
 
-    const renderNewDataCard = (dataCount, title, pathToNavigate, marginRight) => (
+    const renderNewDataCard = (dataCount, title, pathToNavigate, marginRight, icon) => (
         <TouchableRipple style={{
             flex: 1,
             marginRight: marginRight,
@@ -227,7 +227,7 @@ const AdminDashboard = ({
                     <Text style={{ color: COLORS.greyText, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }}>
                         {title}
                     </Text>
-                    <MaterialIcons name="meeting-room" size={25} color="white" />
+                    {icon}
                 </View>
 
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', flexShrink: 1 }}>
@@ -257,13 +257,13 @@ const AdminDashboard = ({
     return (
         <View style={{ width: normalize(800), maxWidth: '100%', alignSelf: 'center', paddingHorizontal: SPACING.medium }}>
             <View style={{ flexDirection: 'row', marginBottom: SPACING.xx_small }}>
-                {renderNewDataCard(newEstablishmentsCount, 'New Establishments', '/admin/new-establishments', SPACING.xx_small)}
-                {renderNewDataCard(newLadiesCount, 'New Ladies', '/admin/new-ladies', 0)}
+                {renderNewDataCard(newEstablishmentsCount, 'New Establishments', '/admin/new-establishments', SPACING.xx_small, <MaterialIcons name="meeting-room" size={25} color="white" />)}
+                {renderNewDataCard(newLadiesCount, 'New Ladies', '/admin/new-ladies', 0, <Entypo name="mask" size={25} color={COLORS.white} />)}
             </View>
 
             <View style={{ flexDirection: 'row' }}>
-                {renderNewDataCard(newPhotosCount, 'New Photos', '/admin/new-photos', SPACING.xx_small)}
-                {renderNewDataCard(newVideosCount, 'New Videos', '/admin/new-videos', 0)}
+                {renderNewDataCard(newPhotosCount, 'New Photos', '/admin/new-photos', SPACING.xx_small, <MaterialIcons name="photo" size={25} color="white" />)}
+                {renderNewDataCard(newVideosCount, 'New Videos', '/admin/new-videos', 0, <MaterialIcons name="video-library" size={25} color="white" />)}
             </View>
         </View>
     )

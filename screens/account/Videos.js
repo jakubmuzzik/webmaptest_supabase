@@ -14,12 +14,14 @@ import ConfirmationModal from '../../components/modal/ConfirmationModal'
 import { BlurView } from 'expo-blur'
 import { MotiView } from 'moti'
 import LottieView from 'lottie-react-native'
-import { updateLadyInRedux, updateCurrentUserInRedux } from '../../redux/actions'
+import { updateLadyInRedux, updateCurrentUserInRedux, updateNewLadyInRedux, updateNewEstablishmentInRedux } from '../../redux/actions'
 import uuid from 'react-native-uuid'
+
+import OverlaySpinner from '../../components/modal/OverlaySpinner'
 
 import { supabase } from '../../supabase/config'
 
-const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRef, updateLadyInRedux, updateCurrentUserInRedux, currentAuthUser }) => {
+const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRef, updateLadyInRedux, updateCurrentUserInRedux, currentAuthUser, updateNewLadyInRedux, updateNewEstablishmentInRedux }) => {
     const [data, setData] = useState({
         active: [],
         inReview: [],
@@ -29,6 +31,7 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
     const [sectionWidth, setSectionWidth] = useState(0)
 
     const [uploading, setUploading] = useState(false)
+    const [saving, setSaving] = useState(false)
 
     const [videoToDelete, setVideoToDelete] = useState()
 
@@ -149,7 +152,11 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
             throw error
         }
 
-        if (userData.establishment_id) {
+        if (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id && user_type === 'lady') {
+            updateNewLadyInRedux({ videos, id: userData.id })
+        } else if(currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id && user_type === 'establishment') {
+            updateNewEstablishmentInRedux({ videos, id: userData.id })
+        } else if (userData.establishment_id) {
             updateLadyInRedux({ videos, id: userData.id })
         } else {
             updateCurrentUserInRedux({ videos, id: userData.id })
@@ -206,7 +213,11 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
             throw error
         }
 
-        if (userData.establishment_id) {
+        if (currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id && user_type === 'lady') {
+            updateNewLadyInRedux({ videos: newVideos, id: userData.id })
+        } else if(currentAuthUser.app_metadata.userrole === 'ADMIN' && userData.id !== currentAuthUser.id && user_type === 'establishment') {
+            updateNewEstablishmentInRedux({ videos: newVideos, id: userData.id })
+        } else if (userData.establishment_id) {
             updateLadyInRedux({ videos: newVideos, id: userData.id })
         } else {
             updateCurrentUserInRedux({ videos: newVideos, id: userData.id })
@@ -217,6 +228,82 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
             headerText: 'Success!',
             text: 'Video was deleted.'
         })
+    }
+
+    const onApproveVideoPress = async (videoId) => {
+        setSaving(true)
+        try {
+            let videos = JSON.parse(JSON.stringify(userData.videos))
+            let toUpdate = videos.find(video => video.id === videoId)
+            
+            toUpdate.status = ACTIVE
+            toUpdate.approved_date = new Date()
+            
+            const { error } = await supabase
+                .from('videos')
+                .update({ status: ACTIVE, approved_date: new Date() })
+                .eq('id', videoId)
+
+            if (error) {
+                throw error
+            }
+
+            if (user_type === 'lady') {
+                updateNewLadyInRedux({ videos, id: userData.id })
+            } else {
+                updateNewEstablishmentInRedux({ videos, id: userData.id })
+            }
+
+            toastRef.current.show({
+                type: 'success',
+                headerText: 'Video approved',
+                text: 'Video has been approved'
+            })
+        } catch(error) {
+            console.error(error)
+            toastRef.current.show({
+                type: 'error',
+                text: error.message
+            })
+        } finally {
+            setSaving(false)
+        }
+    }
+
+    const onRejectVideoPress = async (videoId) => {
+        try {
+            let videos = [...userData.videos]
+            let toUpdate = videos.find(video => video.id === videoId)
+            
+            toUpdate.status = REJECTED
+            toUpdate.approved_date = new Date()
+            
+            const { error } = await supabase
+                .from('videos')
+                .update({ status: REJECTED, approved_date: new Date() })
+                .eq('id', videoId)
+
+            if (error) {
+                throw error
+            }
+
+            if (user_type === 'lady') {
+                updateNewLadyInRedux({ videos, id: userData.id })
+            } else {
+                updateNewEstablishmentInRedux({ videos, id: userData.id })
+            }
+
+            toastRef.current.show({
+                type: 'success',
+                headerText: 'Video rejected',
+                text: 'Video has been rejected'
+            })
+        } catch(error) {
+            toastRef.current.show({
+                type: 'error',
+                text: error.message
+            })
+        }
     }
 
     const onAddNewVideoPress = () => {
@@ -231,7 +318,16 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
         }
     ]
 
-    const inReviewActions = [
+    const inReviewActions = currentAuthUser.app_metadata.userrole === 'ADMIN' ? [
+        {
+            label: 'Approve',
+            onPress: onApproveVideoPress
+        },
+        {
+            label: 'Reject',
+            onPress: onRejectVideoPress
+        }
+    ] : [
         {
             label: 'Delete',
             onPress: onDeleteVideoPress,
@@ -248,24 +344,19 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
     ]
 
     const renderVideos = (videos, actions, showActions=true) => {
-        const largeContainerStyles = {
-            flexDirection: 'row', 
-            marginLeft: SPACING.small, 
-            marginRight: SPACING.small - SPACING.small, 
-            flexWrap: 'wrap'
-        }
-        const smallContainerStyles = {
-            flexDirection: 'row', marginHorizontal: SPACING.small,  marginBottom: SPACING.small, flexWrap: 'wrap'
-        }
         const largeImageContainerStyles = {
-            borderRadius: 10, overflow: 'hidden', width: ((sectionWidth - (SPACING.small * 2) - (SPACING.small )) / 2), marginRight: SPACING.small, marginBottom: SPACING.small
+            borderRadius: 10, overflow: 'hidden', width: ((sectionWidth - (SPACING.small * 2) - (SPACING.small * 2)) / 3)/*((sectionWidth - (SPACING.small * 2) - (SPACING.small )) / 2)*/, marginRight: SPACING.small, marginBottom: SPACING.small
         }
         const smallImageContainerStyles = {
-            borderRadius: 10, overflow: 'hidden', width: '100%', marginBottom: SPACING.small
+            borderRadius: 10, overflow: 'hidden', width: ((sectionWidth - (SPACING.small * 2) - (SPACING.small )) / 2),/*'100%',*/marginRight: SPACING.small, marginBottom: SPACING.small
         }
 
         return (
-            <View style={isSmallScreen ? smallContainerStyles : largeContainerStyles}>
+            <View style={{
+                flexDirection: 'row',
+                marginLeft: SPACING.small,
+                flexWrap: 'wrap'
+            }}>
                 {videos.map((video) =>
                     <View key={video.id} style={isSmallScreen ? smallImageContainerStyles : largeImageContainerStyles}>
                         <RenderVideoWithActions video={video} actions={actions} offsetX={(windowWidth * index) + offsetX} showActions={showActions} />
@@ -332,7 +423,7 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
                         <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.greyText, textAlign: 'center', margin: SPACING.small }}>
                             No videos in review
                         </Text>
-                        : renderVideos(data.inReview, inReviewActions, userData.status !== IN_REVIEW)
+                        : renderVideos(data.inReview, inReviewActions, userData.status !== IN_REVIEW || currentAuthUser.app_metadata.userrole === 'ADMIN')
                 }
             </View>
         )
@@ -362,8 +453,8 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
 
     return (
         <View style={{ paddingBottom: SPACING.large }} onLayout={onLayout}>
-            {(userData.status === ACTIVE || userData.status === REJECTED || userData.status === INACTIVE) && renderActive()}
-            {userData.status !== REJECTED && renderInReview()}
+            {(userData.status === ACTIVE || userData.status === REJECTED || userData.status === INACTIVE || currentAuthUser.app_metadata.userrole === 'ADMIN') && renderActive()}
+            {renderInReview()}
             {renderRejected()}
 
             {uploading && (
@@ -391,6 +482,8 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
                 </Modal>
             )}
 
+            {saving && <OverlaySpinner />}
+
             <ConfirmationModal 
                 visible={!!videoToDelete}
                 headerText='Confirm delete'
@@ -410,7 +503,7 @@ const mapStateToProps = (store) => ({
     currentAuthUser: store.userState.currentAuthUser
 })
 
-export default connect(mapStateToProps, { updateLadyInRedux, updateCurrentUserInRedux })(memo(Videos))
+export default connect(mapStateToProps, { updateLadyInRedux, updateCurrentUserInRedux, updateNewLadyInRedux, updateNewEstablishmentInRedux })(memo(Videos))
 
 const styles = StyleSheet.create({
     section: {
