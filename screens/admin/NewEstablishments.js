@@ -181,7 +181,7 @@ const NewEstablishments = ({ newEstablishments, toastRef, fetchNewEstablishments
     }
 
     return (
-        <View onLayout={onLayout} style={{ paddingBottom: SPACING.large, width: normalize(800), maxWidth: '100%', alignSelf: 'center', paddingHorizontal: SPACING.medium, }}>
+        <View onLayout={onLayout} style={{ paddingBottom: SPACING.large, width: normalize(800), maxWidth: '100%', alignSelf: 'center' }}>
             <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                     {newEstablishments.length === 0 && <Text style={{ color: COLORS.greyText, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textAlign: 'center' }}>

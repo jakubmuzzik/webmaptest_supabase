@@ -581,7 +581,7 @@ const Establishment = ({ toastRef }) => {
                     >
                         <Rect x="0" y="0" rx="0" ry="0" width="100%" height={35} />
                     </ContentLoader>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: SPACING.medium }}>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: SPACING.medium }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: SPACING.large }}>
                         <View style={{ width: 150, aspectRatio: 3/4, borderRadius: 10 }}>
                             <ContentLoader
                                 speed={2}
@@ -664,7 +664,7 @@ const Establishment = ({ toastRef }) => {
         }
 
         return (
-            <View style={{ marginTop: SPACING.large, marginBottom: SPACING.medium }}>
+            <View style={{ marginTop: SPACING.large, marginBottom: SPACING.large }}>
                 <MotiText 
                     style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h2, color: '#FFF', marginBottom: SPACING.medium, textAlign: 'center' }}
                     from={{
@@ -679,18 +679,15 @@ const Establishment = ({ toastRef }) => {
                         type: 'timing'
                     }}
                 >
-                    Ladies in {data.name}
+                    Ladies in {data.name}<Text style={{ color: COLORS.red }}> • </Text>
+                    {ladiesUnderEstablishment.length}
                 </MotiText> 
-
-                {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {ladiesUnderEstablishment.map((data, index) => <View key={data.id} style={{ marginLeft: index === 0 ? 0 : SPACING.large, width: 150 }}>
-                        <RenderLady lady={data} width={150} delay={index * 20} />
-                    </View>)}
-                </ScrollView> */}
                 <FlatList 
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={ladiesUnderEstablishment}
+                    contentContainerStyle={{ paddingHorizontal: SPACING.xxxxx_large, justifyContent: 'center', flexGrow: 1 }}
+                    initialNumToRender={30}
                     renderItem={({item, index}) => (
                         <View key={item.id} style={{ marginLeft: index === 0 ? 0 : SPACING.large, width: 150 }}>
                             <RenderLady lady={item} width={150} delay={index * 20} />
@@ -725,9 +722,10 @@ const Establishment = ({ toastRef }) => {
 
                 {renderAddress()}
 
-                {renderLadiesUnderEstablishment()}
             </View>
 
+            {renderLadiesUnderEstablishment()}
+            
             <AssetsTabView visible={photosModalVisible} pressedAssetIndex={pressedImageIndexRef.current} images={Object.values(images)} videos={videos} closeModal={closeModal} />
         </>
     )
