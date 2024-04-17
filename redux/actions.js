@@ -21,7 +21,7 @@ import {
     NEW_VIDEOS_CHANGE
 } from './actionTypes'
 import { supabase } from '../supabase/config'
-import { IN_REVIEW } from '../labels'
+import { IN_REVIEW, ACTIVE } from '../labels'
 
 export const updateRoute = (route) => ({
     type: ROUTE_STATE_CHANGE,
@@ -263,4 +263,64 @@ export const fetchNewEstablishments = () => async (dispatch) => {
     } else {
         dispatch(setNewEstablishments(data))
     }
+}
+
+export const fetchNewPhotos = () => async (dispatch) => {
+    const ladiesQuery = supabase
+        .from('images')
+        .select('*,ladies!inner(status,name,id)')
+        .eq('status', IN_REVIEW)
+        .eq('ladies.status', ACTIVE)
+
+    const estQuery = supabase
+        .from('images')
+        .select('*,establishments!inner(status,name,id)')
+        .eq('status', IN_REVIEW)
+        .eq('establishments.status', ACTIVE)
+
+    const results = await Promise.all([
+        ladiesQuery,
+        estQuery
+    ])
+
+    let newPhotos = []
+
+    if (results[0].data?.length > 0) {
+        newPhotos = results[0].data
+    }
+    if (results[1].data?.length > 0) {
+        newPhotos = newPhotos.concat(results[1].data)
+    }
+
+    dispatch(setNewPhotos(newPhotos))
+}
+
+export const fetchNewVideos = () => async (dispatch) => {
+    const ladiesQuery = supabase
+        .from('videos')
+        .select('*,ladies!inner(status,name,id)')
+        .eq('status', IN_REVIEW)
+        .eq('ladies.status', ACTIVE)
+
+    const estQuery = supabase
+        .from('videos')
+        .select('*,establishments!inner(status,name,id)')
+        .eq('status', IN_REVIEW)
+        .eq('establishments.status', ACTIVE)
+
+    const results = await Promise.all([
+        ladiesQuery,
+        estQuery
+    ])
+
+    let newVideos = []
+
+    if (results[0].data?.length > 0) {
+        newVideos = results[0].data
+    }
+    if (results[1].data?.length > 0) {
+        newVideos = newVideos.concat(results[1].data)
+    }
+
+    dispatch(setNewVideos(newVideos))
 }

@@ -682,11 +682,12 @@ const Establishment = ({ toastRef }) => {
                     Ladies in {data.name}<Text style={{ color: COLORS.red }}> • </Text>
                     {ladiesUnderEstablishment.length}
                 </MotiText> 
+
                 <FlatList 
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={ladiesUnderEstablishment}
-                    contentContainerStyle={{ paddingHorizontal: SPACING.xxxxx_large, justifyContent: 'center', flexGrow: 1 }}
+                    contentContainerStyle={{ paddingHorizontal: SPACING.large, justifyContent: 'center', flexGrow: 1 }}
                     initialNumToRender={30}
                     renderItem={({item, index}) => (
                         <View key={item.id} style={{ marginLeft: index === 0 ? 0 : SPACING.large, width: 150 }}>

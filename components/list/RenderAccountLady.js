@@ -16,16 +16,15 @@ const RenderAccountLady = ({ lady, width, actions=[], offsetX = 0}) => {
         language: getParam(SUPPORTED_LANGUAGES, searchParams.get('language'), '')
     }), [searchParams])
 
-    const [index, setIndex] = useState(0)
-    const [isHovered, setIsHovered] = useState(false)
+    //const [isHovered, setIsHovered] = useState(false)
 
     const actionsDropdownRef = useRef()
 
     return (
         <>
             <View style={{  }}
-                onMouseEnter={isBrowser ? () => setIsHovered(true) : undefined}
-                onMouseLeave={isBrowser ? () => setIsHovered(false) : undefined}
+                //onMouseEnter={isBrowser ? () => setIsHovered(true) : undefined}
+                //onMouseLeave={isBrowser ? () => setIsHovered(false) : undefined}
             >
                 <Image
                     style={{

@@ -45,7 +45,7 @@ const NewEstablishments = ({ newEstablishments, toastRef, fetchNewEstablishments
 
     const onLayout = (event) => {
         //-2 due to border radius
-        setSectionWidth(event.nativeEvent.layout.width - 2)
+        setSectionWidth(event.nativeEvent.layout.width - 2 - SPACING.small - SPACING.small)
     }
 
     const cardWidth = useMemo(() => {
@@ -181,7 +181,7 @@ const NewEstablishments = ({ newEstablishments, toastRef, fetchNewEstablishments
     }
 
     return (
-        <View onLayout={onLayout} style={{ paddingBottom: SPACING.large, width: normalize(800), maxWidth: '100%', alignSelf: 'center' }}>
+        <View onLayout={onLayout} style={{ paddingBottom: SPACING.large, width: normalize(800), maxWidth: '100%', alignSelf: 'center', paddingHorizontal: SPACING.small }}>
             <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                     {newEstablishments.length === 0 && <Text style={{ color: COLORS.greyText, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textAlign: 'center' }}>

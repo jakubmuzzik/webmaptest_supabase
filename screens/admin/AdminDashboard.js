@@ -32,7 +32,6 @@ const { height: initialHeight } = Dimensions.get('window')
 
 const AdminDashboard = ({ 
     toastRef,
-    setIndex, 
     setNewEstablishmentsCount, 
     setNewLadiesCount, 
     setNewPhotosCount, 
@@ -87,11 +86,7 @@ const AdminDashboard = ({
 
             const { count } = await query
 
-            if (!isNaN(count)) {
-                setNewLadiesCount(count)
-            } else {
-                setNewLadiesCount(0)
-            }
+            setNewLadiesCount(count ?? 0)
         } catch (error) {
             console.error(error)
             toastRef.current.show({
@@ -110,11 +105,7 @@ const AdminDashboard = ({
 
             const { count } = await query
 
-            if (!isNaN(count)) {
-                setNewEstablishmentsCount(count)
-            } else {
-                setNewEstablishmentsCount(0)
-            }
+            setNewEstablishmentsCount(count ?? 0)
         } catch (error) {
             console.error(error)
             toastRef.current.show({
@@ -146,12 +137,8 @@ const AdminDashboard = ({
 
             let total = 0
 
-            if (!isNaN(results[0].count)) {
-                total += results[0].count
-            }
-            if (!isNaN(results[1].count)) {
-                total += results[1].count
-            }
+            total += results[0].count ?? 0
+            total += results[1].count ?? 0
 
             setNewPhotosCount(total)
         } catch (error) {
@@ -184,12 +171,8 @@ const AdminDashboard = ({
 
             let total = 0
 
-            if (!isNaN(results[0].count)) {
-                total += results[0].count
-            }
-            if (!isNaN(results[1].count)) {
-                total += results[0].count
-            }
+            total += results[0].count ?? 0
+            total += results[1].count ?? 0
 
             setNewVideosCount(total)
         } catch (error) {

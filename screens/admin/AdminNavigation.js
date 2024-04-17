@@ -21,6 +21,7 @@ import NewLadies from './NewLadies'
 import EditNewLady from './EditNewLady'
 import NewEstablishments from './NewEstablishments'
 import EditNewEstablishment from './EditNewEstablishment'
+import NewPhotos from './NewPhotos'
 
 import ContentLoader, { Rect } from "react-content-loader/native"
 import { ACTIVE, IN_REVIEW, REJECTED } from '../../labels'
@@ -86,7 +87,7 @@ const AdminNavigation = ({ user_type, toastRef }) => {
             case 'admin':
                 return (
                     <View style={{ marginTop: SPACING.large }}>
-                        <AdminDashboard setIndex={(i) => setIndex(i)} />
+                        <AdminDashboard />
                     </View>
                 )
             case 'new-ladies':
@@ -104,7 +105,7 @@ const AdminNavigation = ({ user_type, toastRef }) => {
             case 'new-photos':
                 return (
                     <View style={{ marginTop: SPACING.large }}>
-                        {/* <NewLadies /> */}
+                        <NewPhotos index={route.index} />
                     </View>
                 )
             case 'new-videos':
