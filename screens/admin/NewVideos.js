@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useMemo, memo, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, useWindowDimensions, Image } from 'react-native'
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
 import { Entypo } from '@expo/vector-icons'
 import { SPACING, FONTS, FONT_SIZES, COLORS, SUPPORTED_LANGUAGES } from '../../constants'
 import { IconButton } from 'react-native-paper'
@@ -8,7 +8,7 @@ import { stripEmptyParams, getParam, normalize } from '../../utils'
 import RenderAccountLady from '../../components/list/RenderAccountLady'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchNewPhotos, setNewPhotos } from '../../redux/actions'
+import { fetchNewVideos, setNewVideos } from '../../redux/actions'
 import { ACTIVE, DELETED, INACTIVE, IN_REVIEW, REJECTED} from '../../labels'
 import { MOCK_DATA } from '../../constants'
 import ContentLoader, { Rect } from "react-content-loader/native"
@@ -16,11 +16,11 @@ import ConfirmationModal from '../../components/modal/ConfirmationModal'
 import OverlaySpinner from '../../components/modal/OverlaySpinner'
 
 import DropdownSelect from '../../components/DropdownSelect'
-import RenderImageWithActions from '../../components/list/RenderImageWithActions'
+import RenderVideoWithActions from '../../components/list/RenderVideoWithActions'
 
 import { supabase } from '../../supabase/config'
 
-const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index }) => {
+const NewVideos = ({ newVideos, toastRef, fetchNewVideos, setNewVideos, index }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -31,18 +31,18 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
 
     const [saving, setSaving] = useState(false)
 
-    const [photoToReject, setPhotoToReject] = useState()
-    const [photoToActivate, setPhotoToActivate] = useState()
-    const [rejectAllPhotosForProfile, setRejectAllPhotosForProfile] = useState()
-    const [activateAllPhotosForProfile, setActivateAllPhotosForProfile] = useState()
+    const [videoToReject, setVideoToReject] = useState()
+    const [videoToActivate, setVideoToActivate] = useState()
+    const [rejectAllVideosForProfile, setRejectAllVideosForProfile] = useState()
+    const [activateAllVideosForProfile, setActivateAllVideosForProfile] = useState()
 
-    const [photos, setPhotos] = useState(undefined)
+    const [videos, setVideos] = useState(undefined)
 
     useEffect(() => {
-        if (newPhotos === null) {
-            fetchNewPhotos()
+        if (newVideos === null) {
+            fetchNewVideos()
         } else {
-            const reducePhotos = (out, current, foreignKeyName) => {
+            const reduceVideos = (out, current, foreignKeyName) => {
                 if (out[current[foreignKeyName]]) {
                     out[current[foreignKeyName]] = {
                         data: [
@@ -60,16 +60,16 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
 
                 return out
             }
-            let groupedLadiesPhotos = newPhotos.filter(newPhoto => newPhoto.lady_id).reduce((out, current) => reducePhotos(out, current, 'lady_id'), {})
+            let groupedLadiesVideos = newVideos.filter(newVideo => newVideo.lady_id).reduce((out, current) => reduceVideos(out, current, 'lady_id'), {})
 
-            let groupedEstPhotos = newPhotos.filter(newPhoto => newPhoto.establishment_id).reduce((out, current) => reducePhotos(out, current, 'establishment_id'), {})
+            let groupedEstVideos = newVideos.filter(newVideo => newVideo.establishment_id).reduce((out, current) => reduceVideos(out, current, 'establishment_id'), {})
 
-            setPhotos({
-                ladies: groupedLadiesPhotos,
-                establishments: groupedEstPhotos
+            setVideos({
+                ladies: groupedLadiesVideos,
+                establishments: groupedEstVideos
             })
         }
-    }, [newPhotos])
+    }, [newVideos])
 
     const navigate = useNavigate()
 
@@ -94,132 +94,132 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
                         : isLargeScreen ? ((sectionWidth - SPACING.small - SPACING.small) / 5) - (SPACING.small * 4) / 5 : ((sectionWidth - SPACING.small - SPACING.small) / 6) - (SPACING.small * 5) / 6
     }, [sectionWidth])
 
-    const rejectAllPhotos = async (profileId) => {
+    const rejectAllVideos = async (profileId) => {
         setSaving(true)
         try {
-            const isLady = Object.keys(photos.ladies).includes(profileId)
+            const isLady = Object.keys(videos.ladies).includes(profileId)
 
-            const profilePhotos = isLady ? photos.ladies[profileId].data : photos.establishments[profileId].data
+            const profileVideos = isLady ? videos.ladies[profileId].data : videos.establishments[profileId].data
             
             const { error: updateError } = await supabase
-                .from('images')
-                .upsert(profilePhotos.map(photo => ({ id: photo.id, status: REJECTED })))
+                .from('videos')
+                .upsert(profileVideos.map(video => ({ id: video.id, status: REJECTED })))
 
             if (updateError) {
                 throw updateError
             }
 
-            setNewPhotos(newPhotos.filter(newPhoto => isLady ? newPhoto.lady_id !== profileId : newPhoto.establishment_id !== profileId))
+            setNewVideos(newVideos.filter(newVideo => isLady ? newVideo.lady_id !== profileId : newVideo.establishment_id !== profileId))
 
             toastRef.current.show({
                 type: 'success',
-                headerText: 'Photos rejected',
-                text: 'Photos were successfuly rejected.'
+                headerText: 'Videos rejected',
+                text: 'Videos were successfuly rejected.'
             })
         } catch(error) {
             console.error(error)
             toastRef.current.show({
                 type: 'error',
                 headerText: 'Rejection error',
-                text: 'Photos could not be rejected.'
+                text: 'Videos could not be rejected.'
             })
         } finally {
             setSaving(false)
         }
     }
 
-    const activateAllPhotos = async (profileId) => {
+    const activateAllVideos = async (profileId) => {
         setSaving(true)
         try {
-            const isLady = Object.keys(photos.ladies).includes(profileId)
+            const isLady = Object.keys(videos.ladies).includes(profileId)
 
-            const profilePhotos = isLady ? photos.ladies[profileId].data : photos.establishments[profileId].data
+            const profileVideos = isLady ? videos.ladies[profileId].data : videos.establishments[profileId].data
 
-            console.log(profilePhotos.map(photo => ({ id: photo.id, status: ACTIVE })))
+            console.log(profileVideos.map(video => ({ id: video.id, status: ACTIVE })))
 
             const { error: updateError } = await supabase
-                .from('images')
-                .upsert(profilePhotos.map(photo => ({ id: photo.id, status: ACTIVE })))
+                .from('videos')
+                .upsert(profileVideos.map(video => ({ id: video.id, status: ACTIVE })))
 
             if (updateError) {
                 throw updateError
             }
 
-            setNewPhotos(newPhotos.filter(newPhoto => isLady ? newPhoto.lady_id !== profileId : newPhoto.establishment_id !== profileId))
+            setNewVideos(newVideos.filter(newVideo => isLady ? newVideo.lady_id !== profileId : newVideo.establishment_id !== profileId))
 
             toastRef.current.show({
                 type: 'success',
-                headerText: 'Photos activated',
-                text: 'Photos were successfuly activated.'
+                headerText: 'Videos activated',
+                text: 'Videos were successfuly activated.'
             })
         } catch(error) {
             console.error(error)
             toastRef.current.show({
                 type: 'error',
                 headerText: 'Activate error',
-                text: 'Photos could not be activated.'
+                text: 'Videos could not be activated.'
             })
         } finally {
             setSaving(false)
         }
     }
 
-    const activatePhoto = async (photoId) => {
+    const activateVideo = async (videoId) => {
         setSaving(true)
         try {
             const { error: updateError } = await supabase
-                .from('images')
+                .from('videos')
                 .update({ status: ACTIVE })
-                .eq('id', photoId)
+                .eq('id', videoId)
 
             if (updateError) {
                 throw updateError
             }
 
-            setNewPhotos(newPhotos.filter(newPhoto => newPhoto.id !== photoId))
+            setNewVideos(newVideos.filter(newVideo => newVideo.id !== videoId))
 
             toastRef.current.show({
                 type: 'success',
-                headerText: 'Photo activated',
-                text: 'Photo was successfuly activated.'
+                headerText: 'Video activated',
+                text: 'Video was successfuly activated.'
             })
         } catch(error) {
             console.error(error)
             toastRef.current.show({
                 type: 'error',
                 headerText: 'Activate error',
-                text: 'Photo could not be activated.'
+                text: 'Video could not be activated.'
             })
         } finally {
             setSaving(false)
         }
     }
 
-    const rejectPhoto = async (photoId) => {
+    const rejectVideo = async (videoId) => {
         setSaving(true)
         try {
             const { error: updateError } = await supabase
-                .from('images')
+                .from('videos')
                 .update({ status: REJECTED })
-                .eq('id', photoId)
+                .eq('id', videoId)
 
             if (updateError) {
                 throw updateError
             }
 
-            setNewPhotos(newPhotos.filter(newPhoto => newPhoto.id !== photoId))
+            setNewVideos(newVideos.filter(newVideo => newVideo.id !== videoId))
 
             toastRef.current.show({
                 type: 'success',
-                headerText: 'Photo rejected',
-                text: 'Photo was successfuly rejected.'
+                headerText: 'Video rejected',
+                text: 'Video was successfuly rejected.'
             })
         } catch(error) {
             console.error(error)
             toastRef.current.show({
                 type: 'error',
                 headerText: 'Rejection error',
-                text: 'Photo could not be rejected.'
+                text: 'Video could not be rejected.'
             })
         } finally {
             setSaving(false)
@@ -228,25 +228,25 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
 
     const onViewProfilePress = (profileId) => {        
         navigate({
-            pathname: Object.keys(photos.ladies).includes(profileId) ? ('/lady/' + profileId) : ('/establishment/' + profileId),
+            pathname: Object.keys(videos.ladies).includes(profileId) ? ('/lady/' + profileId) : ('/establishment/' + profileId),
             search: new URLSearchParams(stripEmptyParams(params)).toString()
         })
     }
 
     const onActivateAllPress = (profileId) => {
-        setActivateAllPhotosForProfile(profileId)
+        setActivateAllVideosForProfile(profileId)
     }
 
     const onRejectAllPress = (profileId) => {
-        setRejectAllPhotosForProfile(profileId)
+        setRejectAllVideosForProfile(profileId)
     }
 
-    const onActivatePress = (photoId) => {
-        setPhotoToActivate(photoId)
+    const onActivatePress = (videoId) => {
+        setVideoToActivate(videoId)
     }
 
-    const onRejectPress = (photoId) => {
-        setPhotoToReject(photoId)
+    const onRejectPress = (videoId) => {
+        setVideoToReject(videoId)
     }
 
     const ladyActions = [
@@ -264,7 +264,7 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
         },
     ]
 
-    const photoActions = [
+    const videoActions = [
         {
             label: 'Approve',
             onPress: onActivatePress
@@ -276,7 +276,7 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
     ]
 
 
-    if (photos == null) {
+    if (videos == null) {
         return (
             <View onLayout={onLayout} style={{ width: normalize(800), maxWidth: '100%', alignSelf: 'center', paddingVertical: SPACING.x_large }}>
                 <ContentLoader
@@ -304,48 +304,48 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
 
     return (
         <View onLayout={onLayout} style={{ paddingBottom: SPACING.large, width: normalize(800), maxWidth: '100%', alignSelf: 'center', paddingHorizontal: SPACING.small }}>
-            {newPhotos.length === 0 && <View style={styles.section}>
+            {newVideos.length === 0 && <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                     <Text style={{ color: COLORS.greyText, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textAlign: 'center' }}>
-                        No photos for review
+                        No videos for review
                     </Text>
                 </View>
             </View>}
 
-            {Object.keys(photos.ladies).length > 0 && (
+            {Object.keys(videos.ladies).length > 0 && (
                 <>
                     <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: FONT_SIZES.h3, paddingBottom: SPACING.small }}>
                         Ladies
                     </Text>
 
-                    {Object.keys(photos.ladies).map(ladyId => (
+                    {Object.keys(videos.ladies).map(ladyId => (
                         <View style={[styles.section, { marginBottom: SPACING.small }]}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: FONT_SIZES.x_large, padding: SPACING.small }}>
-                                    {photos.ladies[ladyId].data[0].ladies.name}
-                                    <Text style={{ color: COLORS.greyText }}>{' • ' + photos.ladies[ladyId].data.length}</Text>
+                                    {videos.ladies[ladyId].data[0].ladies.name}
+                                    <Text style={{ color: COLORS.greyText }}>{' • ' + videos.ladies[ladyId].data.length}</Text>
                                 </Text>
 
                                 <DropdownSelect
-                                    ref={photos.ladies[ladyId].ref}
+                                    ref={videos.ladies[ladyId].ref}
                                     offsetX={windowWidth * index}
                                     values={ladyActions.map(action => action.label)}
-                                    setText={(text) => ladyActions.find(action => action.label === text).onPress(photos.ladies[ladyId].data[0].ladies.id)}
+                                    setText={(text) => ladyActions.find(action => action.label === text).onPress(videos.ladies[ladyId].data[0].ladies.id)}
                                 >
                                     <IconButton
                                         icon="dots-horizontal"
                                         iconColor="#FFF"
                                         containerColor={COLORS.grey + 'B3'}
                                         size={22}
-                                        onPress={() => photos.ladies[ladyId].ref?.current.onDropdownPress()}
+                                        onPress={() => videos.ladies[ladyId].ref?.current.onDropdownPress()}
                                     />
                                 </DropdownSelect>
                             </View>
 
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginLeft: SPACING.small }}>
-                                {photos.ladies[ladyId].data.map(photo => (
-                                    <View key={photo.id} style={{ width: cardWidth, marginBottom: SPACING.medium, marginRight: SPACING.small, borderRadius: 10, overflow: 'hidden' }}>
-                                        <RenderImageWithActions image={photo} actions={photoActions} offsetX={windowWidth * index}/>
+                                {videos.ladies[ladyId].data.map(video => (
+                                    <View key={video.id} style={{ width: cardWidth, marginBottom: SPACING.medium, marginRight: SPACING.small, borderRadius: 10, overflow: 'hidden' }}>
+                                        <RenderVideoWithActions video={video} actions={videoActions} offsetX={windowWidth * index}/>
                                     </View>
                                 ))}
                             </View>
@@ -354,40 +354,40 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
                 </>
             )}
 
-            {Object.keys(photos.establishments).length > 0 && (
+            {Object.keys(videos.establishments).length > 0 && (
                 <>
                     <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: FONT_SIZES.h3, paddingVertical: SPACING.small }}>
                         Establishments
                     </Text>
 
-                    {Object.keys(photos.establishments).map(establishmentId => (
+                    {Object.keys(videos.establishments).map(establishmentId => (
                         <View style={[styles.section, { marginBottom: SPACING.small }]}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: FONT_SIZES.x_large, padding: SPACING.small }}>
-                                    {photos.establishments[establishmentId].data[0].establishments.name}
-                                    <Text style={{ color: COLORS.greyText }}>{' • ' + photos.establishments[establishmentId].data.length}</Text>
+                                    {videos.establishments[establishmentId].data[0].establishments.name}
+                                    <Text style={{ color: COLORS.greyText }}>{' • ' + videos.establishments[establishmentId].data.length}</Text>
                                 </Text>
 
                                 <DropdownSelect
-                                    ref={photos.establishments[establishmentId].ref}
+                                    ref={videos.establishments[establishmentId].ref}
                                     offsetX={windowWidth * index}
                                     values={ladyActions.map(action => action.label)}
-                                    setText={(text) => ladyActions.find(action => action.label === text).onPress(photos.establishments[establishmentId].data[0].establishments.id)}
+                                    setText={(text) => ladyActions.find(action => action.label === text).onPress(videos.establishments[establishmentId].data[0].establishments.id)}
                                 >
                                     <IconButton
                                         icon="dots-horizontal"
                                         iconColor="#FFF"
                                         containerColor={COLORS.grey + 'B3'}
                                         size={22}
-                                        onPress={() => photos.establishments[establishmentId].ref?.current.onDropdownPress()}
+                                        onPress={() => videos.establishments[establishmentId].ref?.current.onDropdownPress()}
                                     />
                                 </DropdownSelect>
                             </View>
 
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginLeft: SPACING.small }}>
-                                {photos.establishments[establishmentId].data.map(photo => (
-                                    <View key={photo.id} style={{ width: cardWidth, marginBottom: SPACING.medium, marginRight: SPACING.small, borderRadius: 10, overflow: 'hidden' }}>
-                                        <RenderImageWithActions image={photo} actions={photoActions} offsetX={windowWidth * index}/>
+                                {videos.establishments[establishmentId].data.map(video => (
+                                    <View key={video.id} style={{ width: cardWidth, marginBottom: SPACING.medium, marginRight: SPACING.small, borderRadius: 10, overflow: 'hidden' }}>
+                                        <RenderVideoWithActions video={video} actions={videoActions} offsetX={windowWidth * index}/>
                                     </View>
                                 ))}
                             </View>
@@ -399,49 +399,49 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
             {saving && <OverlaySpinner />}
 
             <ConfirmationModal
-                visible={!!activateAllPhotosForProfile}
+                visible={!!activateAllVideosForProfile}
                 headerText='Confirm Activation'
-                text='Are you sure you want to approve all Photos?'
-                onCancel={() => setActivateAllPhotosForProfile(undefined)}
-                onConfirm={() => activateAllPhotos(activateAllPhotosForProfile)}
+                text='Are you sure you want to approve all Videos?'
+                onCancel={() => setActivateAllVideosForProfile(undefined)}
+                onConfirm={() => activateAllVideos(activateAllVideosForProfile)}
                 headerErrorText='Activation error'
-                errorText='Photos could not be activated.'
+                errorText='Videos could not be activated.'
                 confirmLabel='Activate'
                 confirmButtonColor='green'
             />
 
             <ConfirmationModal
-                visible={!!rejectAllPhotosForProfile}
+                visible={!!rejectAllVideosForProfile}
                 headerText='Confirm Rejection'
-                text='Are you sure you want to reject all Photos?'
-                onCancel={() => setRejectAllPhotosForProfile(undefined)}
-                onConfirm={() => rejectAllPhotos(rejectAllPhotosForProfile)}
+                text='Are you sure you want to reject all Videos?'
+                onCancel={() => setRejectAllVideosForProfile(undefined)}
+                onConfirm={() => rejectAllVideos(rejectAllVideosForProfile)}
                 headerErrorText='Rejection error'
-                errorText='Photos could not be rejected.'
+                errorText='Videos could not be rejected.'
                 confirmLabel='Reject'
                 confirmButtonColor={COLORS.lightBlack}
             />
 
             <ConfirmationModal
-                visible={!!photoToActivate}
+                visible={!!videoToActivate}
                 headerText='Confirm Activation'
-                text='Are you sure you want to approve selected Photo?'
-                onCancel={() => setPhotoToActivate(undefined)}
-                onConfirm={() => activatePhoto(photoToActivate)}
+                text='Are you sure you want to approve selected Video?'
+                onCancel={() => setVideoToActivate(undefined)}
+                onConfirm={() => activateVideo(videoToActivate)}
                 headerErrorText='Activation error'
-                errorText='Photo could not be activated.'
+                errorText='Video could not be activated.'
                 confirmLabel='Activate'
                 confirmButtonColor='green'
             />
 
             <ConfirmationModal
-                visible={!!photoToReject}
+                visible={!!videoToReject}
                 headerText='Confirm Rejection'
-                text='Are you sure you want to reject selected Photo?'
-                onCancel={() => setPhotoToReject(undefined)}
-                onConfirm={() => rejectPhoto(photoToReject)}
+                text='Are you sure you want to reject selected Video?'
+                onCancel={() => setVideoToReject(undefined)}
+                onConfirm={() => rejectVideo(videoToReject)}
                 headerErrorText='Rejection error'
-                errorText='Photo could not be rejected.'
+                errorText='Video could not be rejected.'
                 confirmLabel='Reject'
                 confirmButtonColor={COLORS.lightBlack}
             />
@@ -450,11 +450,11 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
 }
 
 const mapStateToProps = (store) => ({
-    newPhotos: store.adminState.newPhotos,
+    newVideos: store.adminState.newVideos,
     toastRef: store.appState.toastRef
 })
 
-export default connect(mapStateToProps, { fetchNewPhotos, setNewPhotos })(memo(NewPhotos))
+export default connect(mapStateToProps, { fetchNewVideos, setNewVideos })(memo(NewVideos))
 
 const styles = StyleSheet.create({
     section: {

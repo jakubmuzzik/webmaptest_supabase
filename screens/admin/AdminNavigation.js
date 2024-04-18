@@ -22,6 +22,7 @@ import EditNewLady from './EditNewLady'
 import NewEstablishments from './NewEstablishments'
 import EditNewEstablishment from './EditNewEstablishment'
 import NewPhotos from './NewPhotos'
+import NewVideos from './NewVideos'
 
 import ContentLoader, { Rect } from "react-content-loader/native"
 import { ACTIVE, IN_REVIEW, REJECTED } from '../../labels'
@@ -111,7 +112,7 @@ const AdminNavigation = ({ user_type, toastRef }) => {
             case 'new-videos':
                 return (
                     <View style={{ marginTop: SPACING.large }}>
-                        {/* <NewLadies /> */}
+                        <NewVideos index={route.index}/>
                     </View>
                 )
             case 'edit-lady':
