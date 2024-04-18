@@ -5,7 +5,8 @@ import {
   MAX_HEIGHT,
   MIN_WEIGHT,
   MAX_WEIGHT,
-  isSmallScreen
+  isSmallScreen,
+  SPACING
 } from '../constants'
 import { 
   BODY_TYPES,
@@ -198,6 +199,32 @@ export const calculateAgeFromDate = (dateStr) => {
   const roundedYears = Math.floor(yearsDiff);
 
   return roundedYears;
+}
+
+export const calculateLadyCardWidth = (contentWidth) => {
+  const isXSmallScreen = contentWidth < 300 //1 item
+  const isSmallScreen = contentWidth >= 300 && contentWidth < 550 //2 items
+  const isMediumScreen = contentWidth >= 550 && contentWidth < 950 //3 items
+  const isXMediumScreen = contentWidth >= 950 && contentWidth < 1300 //4 items
+
+  return isXSmallScreen ? (contentWidth) - (SPACING.large + SPACING.large)
+    : isSmallScreen ? (contentWidth / 2) - (SPACING.large + SPACING.large / 2)
+      : isMediumScreen ? (contentWidth / 3) - (SPACING.large + SPACING.large / 3)
+        : isXMediumScreen ? (contentWidth / 4) - (SPACING.large + SPACING.large / 4)
+          : (contentWidth / 6) - (SPACING.large + SPACING.large / 6)
+}
+
+export const calculateEstablishmentCardWidth = (contentWidth) => {
+  const isXSmallScreen = contentWidth < 300 //1 item
+  const isSmallScreen = contentWidth >= 300 && contentWidth < 550 //2 items
+  const isMediumScreen = contentWidth >= 550 && contentWidth < 950 //3 items
+  const isXMediumScreen = contentWidth >= 950 && contentWidth < 1500 //4 items
+
+  return isXSmallScreen ? (contentWidth) - (SPACING.large + SPACING.large)
+    : isSmallScreen ? (contentWidth / 2) - (SPACING.large + SPACING.large / 2)
+      : isMediumScreen ? (contentWidth / 3) - (SPACING.large + SPACING.large / 3)
+        : isXMediumScreen ? (contentWidth / 4) - (SPACING.large + SPACING.large / 4)
+          : (contentWidth / 6) - (SPACING.large + SPACING.large / 6)
 }
 
 export const chunkArray = (arr, chunkSize) => {

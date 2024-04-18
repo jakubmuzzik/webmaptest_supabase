@@ -359,8 +359,8 @@ const Establishment = ({ toastRef }) => {
                                 width: 'auto',
                                 borderRadius: 10
                             }}
-                            source={images[0].download_url}
-                            placeholder={images[0].blurhash}
+                            source={images[0]?.download_url}
+                            placeholder={images[0]?.blurhash}
                             resizeMode="cover"
                             transition={200}
                         />
@@ -687,7 +687,7 @@ const Establishment = ({ toastRef }) => {
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={ladiesUnderEstablishment}
-                    contentContainerStyle={{ paddingHorizontal: SPACING.large, justifyContent: 'center', flexGrow: 1 }}
+                    contentContainerStyle={{ paddingHorizontal: SPACING.page_horizontal, justifyContent: 'center', flexGrow: 1 }}
                     initialNumToRender={30}
                     renderItem={({item, index}) => (
                         <View key={item.id} style={{ marginLeft: index === 0 ? 0 : SPACING.large, width: 150 }}>

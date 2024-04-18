@@ -6,7 +6,12 @@ import {
     CURRENT_MASSEUSES_COUNT_CHANGE,
     CURRENT_ESTABLISHMENTS_COUNT_CHANGE,
     CITIES_STATE_CHANGE,
-    CURRENT_DATA_COUNT_RESET
+    ESTABLISHMENT_PAGINATION_DATA_STATE_CHANGE,
+    LADIES_PAGINATION_DATA_STATE_CHANGE,
+    MASSEUSES_PAGINATION_DATA_STATE_CHANGE,
+    RESET_LADIES_PAGINATION_DATA,
+    RESET_MASSEUSES_PAGINATION_DATA,
+    RESET_ESTABLISHMENTS_PAGINATION_DATA,
 } from '../actionTypes'
 
 const INITIAL_STATE = {
@@ -16,7 +21,10 @@ const INITIAL_STATE = {
     currentLadiesCount: undefined,
     currentMasseusesCount: undefined,
     currentEstablishmentsCount: undefined,
-    cities: undefined
+    cities: undefined,
+    ladiesData: {}, //pagination data
+    masseusesData: {}, //pagination data
+    establishentsData: {} //pagination data
 }
 
 export const app = (state = INITIAL_STATE, action) => {
@@ -51,17 +59,49 @@ export const app = (state = INITIAL_STATE, action) => {
                 ...state,
                 currentEstablishmentsCount: action.currentEstablishmentsCount
             }
-        case CURRENT_DATA_COUNT_RESET:
-            return {
-                ...state,
-                currentLadiesCount: undefined,
-                currentMasseusesCount: undefined,
-                currentEstablishmentsCount: undefined
-            }
         case CITIES_STATE_CHANGE:
             return {
                 ...state,
                 cities: action.cities
+            }
+        case ESTABLISHMENT_PAGINATION_DATA_STATE_CHANGE:
+            return {
+                ...state,
+                establishentsData: {
+                    ...state.establishentsData,
+                    [action.pageNumber]: action.data
+                }
+            }
+        case LADIES_PAGINATION_DATA_STATE_CHANGE:
+            return {
+                ...state,
+                ladiesData: {
+                    ...state.ladiesData,
+                    [action.pageNumber]: action.data
+                }
+            }
+        case MASSEUSES_PAGINATION_DATA_STATE_CHANGE:
+            return {
+                ...state,
+                masseusesData: {
+                    ...state.masseusesData,
+                    [action.pageNumber]: action.data
+                }
+            }
+        case RESET_LADIES_PAGINATION_DATA:
+            return {
+                ...state,
+                ladiesData: {}
+            }
+        case RESET_MASSEUSES_PAGINATION_DATA:
+            return {
+                ...state,
+                masseusesData: {}
+            }
+        case RESET_ESTABLISHMENTS_PAGINATION_DATA:
+            return {
+                ...state,
+                establishentsData: {}
             }
         default:
             return state

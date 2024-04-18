@@ -14,11 +14,11 @@ import CityPicker from '../modal/CityPicker'
 
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
 import { connect } from 'react-redux'
-import { resetAllCurrentDataCount } from '../../redux/actions'
+import { updateCurrentLadiesCount, updateCurrentEstablishmentsCount, updateCurrentMasseusesCount, resetLadiesPaginationData, resetMasseusesPaginationData, resetEstablishmentsPaginationData } from '../../redux/actions'
 
 import { Link, useSearchParams, useLocation, useNavigate } from 'react-router-dom'
 
-const Categories = ({ cities=[], resetAllCurrentDataCount }) => {
+const Categories = ({ cities=[], updateCurrentLadiesCount, updateCurrentEstablishmentsCount, updateCurrentMasseusesCount, resetLadiesPaginationData, resetMasseusesPaginationData, resetEstablishmentsPaginationData }) => {
     const [searchParams] = useSearchParams()
 
     const [index, setIndex] = useState(0)
@@ -137,8 +137,17 @@ const Categories = ({ cities=[], resetAllCurrentDataCount }) => {
 
         setIndex(routes.indexOf(route))
 
-        //reset all current data count that's exposed to Explore component
-        resetAllCurrentDataCount()
+        //reset current profile data that's exposed to Explore component
+        if (route.key === 'esc') {
+            updateCurrentLadiesCount()
+            resetLadiesPaginationData()
+        } else if (route.key === 'mas') {
+            updateCurrentMasseusesCount()
+            resetMasseusesPaginationData()
+        } else if (route.key === 'clu') {
+            updateCurrentEstablishmentsCount()
+            resetEstablishmentsPaginationData()
+        }
 
         navigate({
             pathname: route.path,
@@ -239,7 +248,7 @@ const mapStateToProps = (store) => ({
     cities: store.appState.cities
 })
 
-export default connect(mapStateToProps,{ resetAllCurrentDataCount })(Categories)
+export default connect(mapStateToProps,{ updateCurrentLadiesCount, updateCurrentEstablishmentsCount, updateCurrentMasseusesCount, resetLadiesPaginationData, resetMasseusesPaginationData, resetEstablishmentsPaginationData })(Categories)
 
 const styles = StyleSheet.create({
     categoryContainer: {

@@ -18,15 +18,15 @@ import {
 } from '../labels'
 import RenderEstablishment from '../components/list/RenderEstablishment'
 import { MOCK_DATA, DEFAULT_FILTERS } from '../constants'
-import { stripDefaultFilters, getParam, areValuesEqual, buildFiltersForQuery, getFilterParams } from '../utils'
+import { stripDefaultFilters, getParam, areValuesEqual, buildFiltersForQuery, getFilterParams, calculateEstablishmentCardWidth } from '../utils'
 import { useSearchParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { updateCurrentEstablishmentsCount } from '../redux/actions'
+import { updateCurrentEstablishmentsCount, resetEstablishmentsPaginationData, setEstablishmentsPaginationData } from '../redux/actions'
 import Pagination from '../components/Pagination'
 import LottieView from 'lottie-react-native'
 import { supabase } from '../supabase/config'
 
-const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) => {
+const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount, resetEstablishmentsPaginationData, setEstablishmentsPaginationData, establishentsData }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -43,7 +43,6 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
 
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
     const [isLoading, setIsLoading] = useState(true)
-    const [establishentsData, setEstablishmentsData] = useState({})
     
     useEffect(() => {
         if (!currentEstablishmentsCount) {
@@ -60,7 +59,7 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
             updateCurrentEstablishmentsCount()
 
             //reset pagination data as filters changed
-            setEstablishmentsData({})
+            resetEstablishmentsPaginationData()
             
             loadDataForCurrentPage()
 
@@ -77,19 +76,6 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
         } 
     }, [params.page, filters])
 
-    const loadMockDataForPage = () => {
-        setEstablishmentsData((current) => ({
-            ...current,
-            [params.page] : new Array(MAX_ITEMS_PER_PAGE).fill({
-                name: 'llll',
-                date_of_birth: '25071996',
-                address: {city: 'Praha'},
-                images: [{ download_url: require('../assets/dummy_photo.png') }]
-            }, 0)
-        }))
-        setIsLoading(false)
-    }
-
     const loadDataForCurrentPage = async () => {
         try {
             let query = supabase
@@ -104,15 +90,9 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
             const { data } = await query
 
             if (data && data.length > 0) {
-                setEstablishmentsData((current) => ({
-                    ...current,
-                    [params.page] : data
-                }))
+                setEstablishmentsPaginationData(params.page, data)
             } else {
-                setEstablishmentsData((current) => ({
-                    ...current,
-                    [params.page] : []
-                }))
+                setEstablishmentsPaginationData(params.page, [])
             }
         } catch(error) {
             console.error(error)
@@ -142,24 +122,13 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
         }
     }
 
-    const cardWidth = useMemo(() => {
-        const isXSmallScreen = contentWidth < 300
-        const isSmallScreen = contentWidth >= 300 && contentWidth < 550
-        const isMediumScreen = contentWidth >= 550 && contentWidth < 750
-        const isXMediumScreen = contentWidth >= 750 && contentWidth < 960
-        const isLargeScreen = contentWidth >= 960 && contentWidth < 1300
-
-        return isXSmallScreen ? (contentWidth) - (SPACING.large + SPACING.large)
-            : isSmallScreen ? (contentWidth / 2) - (SPACING.large + SPACING.large / 2)
-            : isMediumScreen ? (contentWidth / 3) - (SPACING.large + SPACING.large / 3)
-            : isXMediumScreen ? (contentWidth / 4) - (SPACING.large + SPACING.large / 4)
-            : isLargeScreen ? (contentWidth / 5) - (SPACING.large + SPACING.large / 5) : (contentWidth / 6) - (SPACING.large + SPACING.large / 6) 
-    }, [contentWidth])
+    const cardWidth = useMemo(() => calculateEstablishmentCardWidth(contentWidth - SPACING.page_horizontal - SPACING.large), [contentWidth])
 
     const renderCard = (data, index) => {
         return (
             <View
-                key={data.id}
+                //key={data.id}
+                key={Math.random()}
                 style={[styles.cardContainer, { width: cardWidth }]}
             >
                 <RenderEstablishment establishment={data} width={cardWidth} delay={index*20}/>
@@ -173,7 +142,7 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
                 <ContentLoader
                     speed={2}
                     width={cardWidth}
-                    style={{ aspectRatio: 3/4, borderRadius: 10 }}
+                    style={{ aspectRatio: 16/9, borderRadius: 10 }}
                     backgroundColor={COLORS.grey}
                     foregroundColor={COLORS.lightGrey}
                 >
@@ -212,12 +181,13 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
     )
 
     return (
-        <View style={{ flex: 1, backgroundColor: COLORS.lightBlack, marginHorizontal: SPACING.page_horizontal - SPACING.large }} 
+        <View style={{ flex: 1, backgroundColor: COLORS.lightBlack, paddingHorizontal: SPACING.page_horizontal - SPACING.large, alignSelf: 'center', width: '100%', maxWidth: 1650 }} 
             onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
         >
             <View style={{ marginLeft: SPACING.large, flexDirection: 'row', flexWrap: 'wrap', marginTop: SPACING.large, flex: 1 }}>
                 {isLoading && renderSkeleton()}
                 {!isLoading && establishentsData[params.page]?.map((data, index) => renderCard(data, index))}
+
                 {!isLoading && establishentsData[params.page]?.length === 0 && renderNoResults()}
             </View>
 
@@ -230,10 +200,11 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount }) =
 }
 
 const mapStateToProps = (store) => ({
-    currentEstablishmentsCount: store.appState.currentEstablishmentsCount
+    currentEstablishmentsCount: store.appState.currentEstablishmentsCount,
+    establishentsData: store.appState.establishentsData
 })
 
-export default connect(mapStateToProps, { updateCurrentEstablishmentsCount })(Clu)
+export default connect(mapStateToProps, { updateCurrentEstablishmentsCount, resetEstablishmentsPaginationData, setEstablishmentsPaginationData })(Clu)
 
 const styles = StyleSheet.create({
     cardContainer: {

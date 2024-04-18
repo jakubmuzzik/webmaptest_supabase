@@ -19,16 +19,16 @@ import {
 } from '../labels'
 import RenderLady from '../components/list/RenderLady'
 import { MOCK_DATA } from '../constants'
-import { normalize, getParam, buildFiltersForQuery, areValuesEqual, getFilterParams, stripDefaultFilters } from '../utils'
+import { calculateLadyCardWidth, getParam, buildFiltersForQuery, areValuesEqual, getFilterParams, stripDefaultFilters } from '../utils'
 import { useSearchParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { updateCurrentLadiesCount } from '../redux/actions'
+import { updateCurrentLadiesCount, setLadiesPaginationData, resetLadiesPaginationData } from '../redux/actions'
 import Pagination from '../components/Pagination'
 import LottieView from 'lottie-react-native'
 
 import { supabase } from '../supabase/config'
 
-const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
+const Esc = ({ updateCurrentLadiesCount, currentLadiesCount, setLadiesPaginationData, resetLadiesPaginationData, ladiesData }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -45,7 +45,6 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
 
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
     const [isLoading, setIsLoading] = useState(true)
-    const [ladiesData, setLadiesData] = useState({})
     
     useEffect(() => {
         if (isNaN(currentLadiesCount)) {
@@ -62,7 +61,7 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
             updateCurrentLadiesCount()
 
             //reset pagination data as filters changed
-            setLadiesData({})
+            resetLadiesPaginationData()
             
             loadDataForCurrentPage()
 
@@ -79,19 +78,6 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
         } 
     }, [params.page, filters])
 
-    const loadMockDataForPage = () => {
-        setLadiesData((current) => ({
-            ...current,
-            [params.page] : new Array(MAX_ITEMS_PER_PAGE).fill({
-                name: 'llll',
-                date_of_birth: '25071996',
-                address: {city: 'Praha'},
-                images: [{ download_url: require('../assets/dummy_photo.png') }]
-            }, 0)
-        }))
-        setIsLoading(false)
-    }
-
     const loadDataForCurrentPage = async () => {
         try {
             let query = supabase
@@ -106,15 +92,9 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
             const { data } = await query
 
             if (data && data.length > 0) {
-                setLadiesData((current) => ({
-                    ...current,
-                    [params.page] : data
-                }))
+                setLadiesPaginationData(params.page, data)
             } else {
-                setLadiesData((current) => ({
-                    ...current,
-                    [params.page] : []
-                }))
+                setLadiesPaginationData(params.page, [])
             }
         } catch(error) {
             console.error(error)
@@ -144,19 +124,7 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
         }
     }
 
-    const cardWidth = useMemo(() => {
-        const isXSmallScreen = contentWidth < 300
-        const isSmallScreen = contentWidth >= 300 && contentWidth < 550
-        const isMediumScreen = contentWidth >= 550 && contentWidth < 750
-        const isXMediumScreen = contentWidth >= 750 && contentWidth < 960
-        const isLargeScreen = contentWidth >= 960 && contentWidth < 1300
-
-        return isXSmallScreen ? (contentWidth) - (SPACING.large + SPACING.large)
-            : isSmallScreen ? (contentWidth / 2) - (SPACING.large + SPACING.large / 2)
-            : isMediumScreen ? (contentWidth / 3) - (SPACING.large + SPACING.large / 3)
-            : isXMediumScreen ? (contentWidth / 4) - (SPACING.large + SPACING.large / 4)
-            : isLargeScreen ? (contentWidth / 5) - (SPACING.large + SPACING.large / 5) : (contentWidth / 6) - (SPACING.large + SPACING.large / 6) 
-    }, [contentWidth])
+    const cardWidth = useMemo(() => calculateLadyCardWidth(contentWidth - SPACING.page_horizontal - SPACING.large), [contentWidth])
 
     const renderCard = (data, index) => {
         return (
@@ -214,7 +182,7 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
     )
 
     return (
-        <View style={{ flex: 1, backgroundColor: COLORS.lightBlack, marginHorizontal: SPACING.page_horizontal - SPACING.large }} 
+        <View style={{ flex: 1, backgroundColor: COLORS.lightBlack, paddingHorizontal: SPACING.page_horizontal - SPACING.large, alignSelf: 'center', width: '100%', maxWidth: 1650 }} 
             onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
         >
             <View style={{ marginLeft: SPACING.large, flexDirection: 'row', flexWrap: 'wrap', marginTop: SPACING.large, flex: 1 }}>
@@ -232,10 +200,11 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount }) => {
 }
 
 const mapStateToProps = (store) => ({
-    currentLadiesCount: store.appState.currentLadiesCount
+    currentLadiesCount: store.appState.currentLadiesCount,
+    ladiesData: store.appState.ladiesData
 })
 
-export default connect(mapStateToProps, { updateCurrentLadiesCount })(Esc)
+export default connect(mapStateToProps, { updateCurrentLadiesCount, setLadiesPaginationData, resetLadiesPaginationData })(Esc)
 
 const styles = StyleSheet.create({
     cardContainer: {

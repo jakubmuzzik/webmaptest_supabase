@@ -57,7 +57,7 @@ const RenderEstablishment = ({ establishment, width, delay = 0 }) => {
                         style={{
                             borderRadius: 10,
                             overflow: 'hidden',
-                            aspectRatio: 3 / 4,
+                            aspectRatio: 16 / 9,
                             width
                         }}
                         source={establishment.images[0].download_url}

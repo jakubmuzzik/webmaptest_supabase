@@ -10,7 +10,6 @@ import {
     CURRENT_MASSEUSES_COUNT_CHANGE,
     CURRENT_ESTABLISHMENTS_COUNT_CHANGE,
     CITIES_STATE_CHANGE,
-    CURRENT_DATA_COUNT_RESET,
     NEW_LADIES_COUNT_CHANGE,
     NEW_ESTABLISHMENTS_COUNT_CHANGE,
     NEW_PHOTOS_COUNT_CHANGE,
@@ -18,7 +17,13 @@ import {
     NEW_LADIES_CHANGE,
     NEW_ESTABLISHMENTS_CHANGE,
     NEW_PHOTOS_CHANGE,
-    NEW_VIDEOS_CHANGE
+    NEW_VIDEOS_CHANGE,
+    ESTABLISHMENT_PAGINATION_DATA_STATE_CHANGE,
+    LADIES_PAGINATION_DATA_STATE_CHANGE,
+    MASSEUSES_PAGINATION_DATA_STATE_CHANGE,
+    RESET_LADIES_PAGINATION_DATA,
+    RESET_MASSEUSES_PAGINATION_DATA,
+    RESET_ESTABLISHMENTS_PAGINATION_DATA,
 } from './actionTypes'
 import { supabase } from '../supabase/config'
 import { IN_REVIEW, ACTIVE } from '../labels'
@@ -59,10 +64,6 @@ export const updateCurrentEstablishmentsCount = (currentEstablishmentsCount) => 
     currentEstablishmentsCount
 })
 
-export const resetAllCurrentDataCount = () => ({
-    type: CURRENT_DATA_COUNT_RESET
-})
-
 export const updateCities = (cities) => ({
     type: CITIES_STATE_CHANGE,
     cities
@@ -93,37 +94,35 @@ export const setNewVideosCount = (newVideosCount) => ({
     newVideosCount
 })
 
-export const setNewLadies = (newLadies) => (dispatch, getState) => {
-    dispatch({ type: NEW_LADIES_CHANGE, newLadies })
+export const setLadiesPaginationData = (pageNumber, data) => ({
+    type: LADIES_PAGINATION_DATA_STATE_CHANGE,
+    pageNumber,
+    data
+})
 
-    if (getState().adminState.newLadiesCount !== newLadies.length) {
-        dispatch({ type: NEW_LADIES_COUNT_CHANGE, newLadiesCount: newLadies.length })
-    }
-}
+export const setMasseusesPaginationData = (pageNumber, data) => ({
+    type: MASSEUSES_PAGINATION_DATA_STATE_CHANGE,
+    pageNumber,
+    data
+})
 
-export const setNewEstablishments = (newEstablishments) => (dispatch, getState) => {
-    dispatch({ type: NEW_ESTABLISHMENTS_CHANGE, newEstablishments })
+export const setEstablishmentsPaginationData = (pageNumber, data) => ({
+    type: ESTABLISHMENT_PAGINATION_DATA_STATE_CHANGE,
+    pageNumber,
+    data
+})
 
-    if (getState().adminState.newEstablishmentsCount !== newEstablishments.length) {
-        dispatch({ type: NEW_ESTABLISHMENTS_COUNT_CHANGE, newEstablishmentsCount: newEstablishments.length })
-    }
-}
+export const resetLadiesPaginationData = () => ({
+    type: RESET_LADIES_PAGINATION_DATA
+})
 
-export const setNewPhotos = (newPhotos) => (dispatch, getState) => {
-    dispatch({ type: NEW_PHOTOS_CHANGE, newPhotos })
+export const resetMasseusesPaginationData = () => ({
+    type: RESET_MASSEUSES_PAGINATION_DATA
+})
 
-    if (getState().adminState.newPhotosCount !== newPhotos.length) {
-        dispatch({ type: NEW_PHOTOS_COUNT_CHANGE, newPhotosCount: newPhotos.length })
-    }
-}
-
-export const setNewVideos = (newVideos) => (dispatch, getState) => {
-    dispatch({ type: NEW_VIDEOS_CHANGE, newVideos })
-
-    if (getState().adminState.newVideosCount !== newVideos.length) {
-        dispatch({ type: NEW_VIDEOS_COUNT_CHANGE, newVideosCount: newVideos.length })
-    }
-}
+export const resetEstablishmentsPaginationData = () => ({
+    type: RESET_ESTABLISHMENTS_PAGINATION_DATA
+})
 
 /**
  * 
@@ -155,6 +154,38 @@ export const fetchLadies = () => async (dispatch, getState) => {
         dispatch({ type: LADIES_STATE_CHANGE, ladies: [] })
     } else {
         dispatch({ type: LADIES_STATE_CHANGE, ladies: data })
+    }
+}
+
+export const setNewLadies = (newLadies) => (dispatch, getState) => {
+    dispatch({ type: NEW_LADIES_CHANGE, newLadies })
+
+    if (getState().adminState.newLadiesCount !== newLadies.length) {
+        dispatch({ type: NEW_LADIES_COUNT_CHANGE, newLadiesCount: newLadies.length })
+    }
+}
+
+export const setNewEstablishments = (newEstablishments) => (dispatch, getState) => {
+    dispatch({ type: NEW_ESTABLISHMENTS_CHANGE, newEstablishments })
+
+    if (getState().adminState.newEstablishmentsCount !== newEstablishments.length) {
+        dispatch({ type: NEW_ESTABLISHMENTS_COUNT_CHANGE, newEstablishmentsCount: newEstablishments.length })
+    }
+}
+
+export const setNewPhotos = (newPhotos) => (dispatch, getState) => {
+    dispatch({ type: NEW_PHOTOS_CHANGE, newPhotos })
+
+    if (getState().adminState.newPhotosCount !== newPhotos.length) {
+        dispatch({ type: NEW_PHOTOS_COUNT_CHANGE, newPhotosCount: newPhotos.length })
+    }
+}
+
+export const setNewVideos = (newVideos) => (dispatch, getState) => {
+    dispatch({ type: NEW_VIDEOS_CHANGE, newVideos })
+
+    if (getState().adminState.newVideosCount !== newVideos.length) {
+        dispatch({ type: NEW_VIDEOS_COUNT_CHANGE, newVideosCount: newVideos.length })
     }
 }
 

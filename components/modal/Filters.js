@@ -31,6 +31,7 @@ import {
     PUBIC_HAIR_VALUES,
     SEXUAL_ORIENTATION,
     SERVICES,
+    MASSAGE_SERVICES,
     HAIR_COLORS,
     BREAST_SIZES,
     BREAST_TYPES,
@@ -235,7 +236,7 @@ const Filters = forwardRef((props, ref) => {
                                 <Text style={styles.filterHeader}>Services</Text>
 
                                 <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                                    {SERVICES.map((service) => {
+                                    {(location.pathname === '/' ? SERVICES : MASSAGE_SERVICES).map((service) => {
                                         const selected = filters.services.includes(service)
                                         return (
                                             <Chip key={service}

@@ -18,16 +18,16 @@ import {
     MASSAGE_SERVICES
 } from '../labels'
 import RenderLady from '../components/list/RenderLady'
-import { stripDefaultFilters, getParam, buildFiltersForQuery, areValuesEqual, getFilterParams } from '../utils'
+import { stripDefaultFilters, getParam, buildFiltersForQuery, areValuesEqual, getFilterParams, calculateLadyCardWidth } from '../utils'
 import { MOCK_DATA, DEFAULT_FILTERS } from '../constants'
 import { useSearchParams } from 'react-router-dom'
-import { updateCurrentMasseusesCount } from '../redux/actions'
+import { updateCurrentMasseusesCount, resetMasseusesPaginationData, setMasseusesPaginationData } from '../redux/actions'
 import { connect } from 'react-redux'
 import Pagination from '../components/Pagination'
 import LottieView from 'lottie-react-native'
 import { supabase } from '../supabase/config'
 
-const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
+const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount, resetMasseusesPaginationData, setMasseusesPaginationData, masseusesData }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -44,7 +44,6 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
 
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
     const [isLoading, setIsLoading] = useState(true)
-    const [masseusesData, setMasseusesData] = useState({})
 
     useEffect(() => {
         if (!currentMasseusesCount) {
@@ -61,7 +60,7 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
             updateCurrentMasseusesCount()
 
             //reset pagination data as filters changed
-            setMasseusesData({})
+            resetMasseusesPaginationData()
             
             loadDataForCurrentPage()
 
@@ -78,19 +77,6 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
         } 
     }, [params.page, filters])
 
-    const loadMockDataForPage = () => {
-        setMasseusesData((current) => ({
-            ...current,
-            [params.page] : new Array(MAX_ITEMS_PER_PAGE).fill({
-                name: 'llll',
-                date_of_birth: '25071996',
-                address: {city: 'Praha'},
-                images: [{ download_url: require('../assets/dummy_photo.png') }]
-            }, 0)
-        }))
-        setIsLoading(false)
-    }
-
     const loadDataForCurrentPage = async () => {
         try {
             let query = supabase
@@ -106,15 +92,9 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
             const { data } = await query
 
             if (data && data.length > 0) {
-                setMasseusesData((current) => ({
-                    ...current,
-                    [params.page] : data
-                }))
+                setMasseusesPaginationData(params.page, data)
             } else {
-                setMasseusesData((current) => ({
-                    ...current,
-                    [params.page] : []
-                }))
+                setMasseusesPaginationData(params.page, [])
             }
         } catch(error) {
             console.error(error)
@@ -145,19 +125,7 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
         }
     }
 
-    const cardWidth = useMemo(() => {
-        const isXSmallScreen = contentWidth < 300
-        const isSmallScreen = contentWidth >= 300 && contentWidth < 550
-        const isMediumScreen = contentWidth >= 550 && contentWidth < 750
-        const isXMediumScreen = contentWidth >= 750 && contentWidth < 960
-        const isLargeScreen = contentWidth >= 960 && contentWidth < 1300
-
-        return isXSmallScreen ? (contentWidth) - (SPACING.large + SPACING.large)
-            : isSmallScreen ? (contentWidth / 2) - (SPACING.large + SPACING.large / 2)
-            : isMediumScreen ? (contentWidth / 3) - (SPACING.large + SPACING.large / 3)
-            : isXMediumScreen ? (contentWidth / 4) - (SPACING.large + SPACING.large / 4)
-            : isLargeScreen ? (contentWidth / 5) - (SPACING.large + SPACING.large / 5) : (contentWidth / 6) - (SPACING.large + SPACING.large / 6) 
-    }, [contentWidth])
+    const cardWidth = useMemo(() => calculateLadyCardWidth(contentWidth - SPACING.page_horizontal - SPACING.large), [contentWidth])
 
     const renderCard = (data, index) => {
         return (
@@ -215,7 +183,7 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
     )
 
     return (
-        <View style={{ flex: 1, backgroundColor: COLORS.lightBlack, marginHorizontal: SPACING.page_horizontal - SPACING.large }} 
+        <View style={{ flex: 1, backgroundColor: COLORS.lightBlack, paddingHorizontal: SPACING.page_horizontal - SPACING.large, alignSelf: 'center', width: '100%', maxWidth: 1650 }} 
             onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
         >
             <View style={{ marginLeft: SPACING.large, flexDirection: 'row', flexWrap: 'wrap', marginTop: SPACING.large, flex: 1 }}>
@@ -233,10 +201,11 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount }) => {
 }
 
 const mapStateToProps = (store) => ({
-    currentMasseusesCount: store.appState.currentMasseusesCount
+    currentMasseusesCount: store.appState.currentMasseusesCount,
+    masseusesData: store.appState.masseusesData
 })
 
-export default connect(mapStateToProps, { updateCurrentMasseusesCount })(Mas)
+export default connect(mapStateToProps, { updateCurrentMasseusesCount, resetMasseusesPaginationData, setMasseusesPaginationData })(Mas)
 
 const styles = StyleSheet.create({
     cardContainer: {
