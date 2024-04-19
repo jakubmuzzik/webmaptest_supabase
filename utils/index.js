@@ -384,8 +384,8 @@ export const buildFiltersForQuery = (query, filterParams) => {
     query = query.or(filterParams.breast_type.map(value => 'breast_type.eq.' + value).join(','))
   }
 
-  if (filterNames.includes('languages')) {
-    query = query.overlaps('languages', filterParams.languages)
+  if (filterNames.includes('speaks')) {
+    query = query.overlaps('languages', filterParams.speaks)
   }
 
   if (filterNames.includes('nationality')) {
