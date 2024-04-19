@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/webmaptest_supabase/static/js/main.d2f6b4d0.js",
+    "main.js": "/webmaptest_supabase/static/js/main.f4febfec.js",
     "static/js/825.232c83e5.chunk.js": "/webmaptest_supabase/static/js/825.232c83e5.chunk.js",
     "static/js/252.eb5f13af.js": "/webmaptest_supabase/static/js/252.eb5f13af.js",
     "static/media/header_logo2.png": "/webmaptest_supabase/static/media/header_logo2.e402890e748e5a77f86a.png",
@@ -18,9 +18,11 @@
     "static/media/Entypo.ttf": "/webmaptest_supabase/static/media/Entypo.fc6169344c041cffcdae.ttf",
     "static/media/CATEGORY1.png": "/webmaptest_supabase/static/media/CATEGORY1.b399b69eb29bb1dd5e73.png",
     "static/media/dummy_photo.png": "/webmaptest_supabase/static/media/dummy_photo.aa962d803f130c31e5d7.png",
+    "static/media/establishment.jpg": "/webmaptest_supabase/static/media/establishment.991e19e52f683cfec4ec.jpg",
     "static/media/CATEGORY3.png": "/webmaptest_supabase/static/media/CATEGORY3.16da66562373f11d7c2f.png",
     "static/media/CATEGORY4.png": "/webmaptest_supabase/static/media/CATEGORY4.26331dd0ba3561672a08.png",
     "static/media/Octicons.ttf": "/webmaptest_supabase/static/media/Octicons.6b742a230954dc640ba2.ttf",
+    "static/media/lady.jpg": "/webmaptest_supabase/static/media/lady.da10f4df75b65e067661.jpg",
     "static/media/FontAwesome5_Regular.ttf": "/webmaptest_supabase/static/media/FontAwesome5_Regular.1017bce89c72f95bcf8e.ttf",
     "static/media/logo-header.png": "/webmaptest_supabase/static/media/logo-header.6575dd315c027bd4e2bb.png",
     "static/media/us.png": "/webmaptest_supabase/static/media/us.fa44cd5298e756aadaac.png",
@@ -39,12 +41,12 @@
     "favicon-16.png": "/webmaptest_supabase/favicon-16.png",
     "manifest.json": "/webmaptest_supabase/manifest.json",
     "serve.json": "/webmaptest_supabase/serve.json",
-    "main.d2f6b4d0.js.map": "/webmaptest_supabase/static/js/main.d2f6b4d0.js.map",
+    "main.f4febfec.js.map": "/webmaptest_supabase/static/js/main.f4febfec.js.map",
     "825.232c83e5.chunk.js.map": "/webmaptest_supabase/static/js/825.232c83e5.chunk.js.map",
     "252.eb5f13af.js.map": "/webmaptest_supabase/static/js/252.eb5f13af.js.map"
   },
   "entrypoints": [
     "static/js/252.eb5f13af.js",
-    "static/js/main.d2f6b4d0.js"
+    "static/js/main.f4febfec.js"
   ]
 }
