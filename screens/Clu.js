@@ -25,6 +25,7 @@ import { updateCurrentEstablishmentsCount, resetEstablishmentsPaginationData, se
 import Pagination from '../components/Pagination'
 import LottieView from 'lottie-react-native'
 import { supabase } from '../supabase/config'
+import { isBrowser } from 'react-device-detect'
 
 const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount, resetEstablishmentsPaginationData, setEstablishmentsPaginationData, establishentsData }) => {
     const [searchParams] = useSearchParams()
@@ -122,7 +123,7 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount, res
         }
     }
 
-    const cardWidth = useMemo(() => calculateEstablishmentCardWidth(contentWidth - SPACING.page_horizontal - SPACING.large), [contentWidth])
+    const cardWidth = useMemo(() => calculateEstablishmentCardWidth(contentWidth - (isBrowser ? (SPACING.page_horizontal + SPACING.large) : 0)), [contentWidth])
 
     const renderCard = (data, index) => {
         return (

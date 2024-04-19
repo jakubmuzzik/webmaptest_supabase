@@ -25,6 +25,7 @@ import { connect } from 'react-redux'
 import { updateCurrentLadiesCount, setLadiesPaginationData, resetLadiesPaginationData } from '../redux/actions'
 import Pagination from '../components/Pagination'
 import LottieView from 'lottie-react-native'
+import { isBrowser } from 'react-device-detect'
 
 import { supabase } from '../supabase/config'
 
@@ -124,7 +125,7 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount, setLadiesPagination
         }
     }
 
-    const cardWidth = useMemo(() => calculateLadyCardWidth(contentWidth - SPACING.page_horizontal - SPACING.large), [contentWidth])
+    const cardWidth = useMemo(() => calculateLadyCardWidth(contentWidth - (isBrowser ? (SPACING.page_horizontal + SPACING.large) : 0)), [contentWidth])
 
     const renderCard = (data, index) => {
         return (
