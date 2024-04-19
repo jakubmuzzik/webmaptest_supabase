@@ -193,6 +193,7 @@ const Filters = forwardRef((props, ref) => {
                             setText={(text) => setFilters(filters => ({ ...filters, city: text === 'Anywhere' ? undefined : text}))}
                             rightIconName='chevron-down'
                             leftIconName='map-marker'
+                            leftIconColor={COLORS.red}
                         />
                     </View>
 
@@ -212,6 +213,7 @@ const Filters = forwardRef((props, ref) => {
                             setText={(text) => setFilters(filters => ({ ...filters, outcall: text === 'Outcall', incall: text === 'Incall' }))}
                             rightIconName='chevron-down'
                             leftIconName='arrow-collapse'
+                            leftIconColor={COLORS.red}
                         />
                     </View>
                    
@@ -532,6 +534,7 @@ const Filters = forwardRef((props, ref) => {
                     setText={(text) => setFilters(filters => ({ ...filters, city: text === 'Anywhere' ? undefined : text }))}
                     rightIconName='chevron-down'
                     leftIconName='map-marker'
+                    leftIconColor={COLORS.red}
                 />
             </View>
 

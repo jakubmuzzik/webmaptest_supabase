@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { COLORS, FONTS, FONT_SIZES, SPACING, SUPPORTED_LANGUAGES, MAX_ITEMS_PER_PAGE } from '../constants'
 import { useSearchParams } from 'react-router-dom'
-import { getParam, normalize, stripEmptyParams } from '../utils'
+import { getParam, normalize, stripEmptyParams, calculateLadyCardWidth, calculateEstablishmentCardWidth } from '../utils'
 import { MOCK_DATA } from '../constants'
 import ContentLoader, { Rect } from "react-content-loader/native"
 import RenderLady from '../components/list/RenderLady'
@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import SwappableText from '../components/animated/SwappableText'
 import LottieView from 'lottie-react-native'
 import { supabase } from '../supabase/config'
+import { isBrowser } from 'react-device-detect'
 
 const SearchResults = ({ toastRef }) => {
     const [searchParams] = useSearchParams()
@@ -43,8 +44,6 @@ const SearchResults = ({ toastRef }) => {
     }, [params.query])
 
     const search = async () => {
-        console.log('searching')
-        console.log(params.query)
         setIsLoading(true)
         try {
             const results = await Promise.all([
@@ -87,54 +86,33 @@ const SearchResults = ({ toastRef }) => {
         }
     }
 
-    const cardWidth = useMemo(() => {
-        const isXSmallScreen = contentWidth < 300
-        const isSmallScreen = contentWidth >= 300 && contentWidth < 550
-        const isMediumScreen = contentWidth >= 550 && contentWidth < 750
-        const isXMediumScreen = contentWidth >= 750 && contentWidth < 960
-        const isLargeScreen = contentWidth >= 960 && contentWidth < 1300
+    const ladyCardWidth = useMemo(() => calculateLadyCardWidth(contentWidth - (isBrowser ? (SPACING.page_horizontal + SPACING.large) : 0)), [contentWidth])
 
-        return isXSmallScreen ? (contentWidth) - (SPACING.large + SPACING.large)
-            : isSmallScreen ? (contentWidth / 2) - (SPACING.large + SPACING.large / 2)
-            : isMediumScreen ? (contentWidth / 3) - (SPACING.large + SPACING.large / 3)
-            : isXMediumScreen ? (contentWidth / 4) - (SPACING.large + SPACING.large / 4)
-            : isLargeScreen ? (contentWidth / 5) - (SPACING.large + SPACING.large / 5) : (contentWidth / 6) - (SPACING.large + SPACING.large / 6) 
-    }, [contentWidth])
+    const estCardWidth = useMemo(() => calculateEstablishmentCardWidth(contentWidth - (isBrowser ? (SPACING.page_horizontal + SPACING.large) : 0)), [contentWidth])
 
     const renderLady = (data, index) => (
         <View
-            style={[styles.cardContainer, { width: cardWidth }]}
+            style={[styles.cardContainer, { width: ladyCardWidth }]}
             key={data.id}
         >
-            <RenderLady lady={data} width={cardWidth} delay={index * 20} />
+            <RenderLady lady={data} width={ladyCardWidth} delay={index * 20} />
         </View>
     )
 
     const renderEstablishment = (data, index) => (
         <View
-            style={[styles.cardContainer, { width: cardWidth }]}
+            style={[styles.cardContainer, { width: estCardWidth }]}
             key={data.id}
         >
-            <RenderEstablishment establishment={data} width={cardWidth} delay={index * 20} />
+            <RenderEstablishment establishment={data} width={estCardWidth} delay={index * 20} />
         </View>
     )
 
     const renderSkeletonLoader = () => (
         <>
-            {/* <ContentLoader
-                speed={2}
-                width={cardWidth * 2}
-                height={FONT_SIZES.h1}
-                style={{ marginHorizontal: SPACING.large, borderRadius: 5 }}
-                backgroundColor={COLORS.grey}
-                foregroundColor={COLORS.lightGrey}
-            >
-                <Rect x="0" y="0" rx="0" ry="0" width="100%" height={FONT_SIZES.h1} />
-            </ContentLoader> */}
-
             <ContentLoader
                 speed={2}
-                width={(cardWidth * 2) * 0.4}
+                width={(ladyCardWidth * 2) * 0.4}
                 height={FONT_SIZES.h1}
                 style={{ marginHorizontal: SPACING.large, marginTop: SPACING.large, borderRadius: 5, alignSelf: 'center' }}
                 backgroundColor={COLORS.grey}
@@ -145,10 +123,10 @@ const SearchResults = ({ toastRef }) => {
 
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginLeft: SPACING.large, marginTop: SPACING.medium }}>
                 {MOCK_DATA.map((_, index) => (
-                    <View key={index} style={{ marginRight: SPACING.large, marginBottom: SPACING.large, overflow: 'hidden', width: cardWidth }}>
+                    <View key={index} style={{ marginRight: SPACING.large, marginBottom: SPACING.large, overflow: 'hidden', width: ladyCardWidth }}>
                         <ContentLoader
                             speed={2}
-                            width={cardWidth}
+                            width={ladyCardWidth}
                             style={{ aspectRatio: 3 / 4, borderRadius: 10 }}
                             backgroundColor={COLORS.grey}
                             foregroundColor={COLORS.lightGrey}
@@ -198,7 +176,7 @@ const SearchResults = ({ toastRef }) => {
     )
 
     return (
-        <View onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)} style={{ backgroundColor: COLORS.lightBlack, flex: 1, marginHorizontal: SPACING.page_horizontal - SPACING.large, paddingTop: SPACING.large }}>
+        <View onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)} style={{ flex: 1, backgroundColor: COLORS.lightBlack, paddingHorizontal: SPACING.page_horizontal - SPACING.large, alignSelf: 'center', width: '100%', maxWidth: 1650, paddingTop: SPACING.large }}>
             <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, marginHorizontal: SPACING.large, color: COLORS.greyText, textAlign: 'center' }}>
                 Search results
             </Text>

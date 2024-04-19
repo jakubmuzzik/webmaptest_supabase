@@ -31,6 +31,7 @@ const DropdownSelect = forwardRef((props, ref) => {
         containerStyle = {},
         setText,
         leftIconName,
+        leftIconColor = '#49454f',
         rightIconName,
         renderInput,
         children,
@@ -235,7 +236,7 @@ const DropdownSelect = forwardRef((props, ref) => {
                     error={errorMessage}
                     mode={mode}
                     value={text}
-                    left={leftIconName && <TextInput.Icon size={normalize(20)} icon={leftIconName} pointerEvents="none" />}
+                    left={leftIconName && <TextInput.Icon size={normalize(20)} color={leftIconColor} icon={leftIconName} pointerEvents="none" />}
                     right={rightIconName && <TextInput.Icon size={normalize(20)} icon={rightIconName} pointerEvents="none" />}
                     contentStyle={[
                         text ? { ...textStyle } : { ...placeholderStyle }

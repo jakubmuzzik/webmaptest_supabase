@@ -204,7 +204,7 @@ const Categories = ({ cities=[], updateCurrentLadiesCount, updateCurrentEstablis
                 />
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-                <HoverableView style={{ marginHorizontal: SPACING.x_small }} hoveredOpacity={0.7}>
+                {/* <HoverableView style={{ marginHorizontal: SPACING.x_small }} hoveredOpacity={0.7}>
                     <TouchableOpacity style={styles.locationWrapper} activeOpacity={0.8}
                         onPress={() => setLocationModalVisible(true)}
                     >
@@ -215,7 +215,7 @@ const Categories = ({ cities=[], updateCurrentLadiesCount, updateCurrentEstablis
                         </View>}
                         <MaterialIcons style={{ paddingLeft: isLargeScreen ? SPACING.xx_small : 0 }} name="keyboard-arrow-down" size={normalize(24)} color={COLORS.red} />
                     </TouchableOpacity>
-                </HoverableView>
+                </HoverableView> */}
 
                 <HoverableView hoveredBackgroundColor={COLORS.lightGrey} style={{ justifyContent: 'center', alignItems: 'flex-end', borderWidth: 2, borderRadius: 15, borderColor: filtersCount > 0 ? COLORS.red :COLORS.hoveredLightGrey, marginRight: SPACING.page_horizontal }}>
                     <TouchableOpacity onPress={onFiltersPress} style={{ paddingHorizontal: SPACING.x_small, paddingVertical: SPACING.xx_small, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -239,7 +239,7 @@ const Categories = ({ cities=[], updateCurrentLadiesCount, updateCurrentEstablis
             </View>
 
             <Filters ref={filtersRef} visible={filtersVisible} setVisible={setFiltersVisible} />
-            <CityPicker visible={locationModalVisible} cities={cities} setVisible={setLocationModalVisible} params={params} routeName={routeName} />
+            {/* <CityPicker visible={locationModalVisible} cities={cities} setVisible={setLocationModalVisible} params={params} routeName={routeName} /> */}
         </View>
     )
 }
