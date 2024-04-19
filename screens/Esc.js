@@ -48,10 +48,10 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount, setLadiesPagination
     const [isLoading, setIsLoading] = useState(true)
     
     useEffect(() => {
-        if (isNaN(currentLadiesCount)) {
+        if (currentLadiesCount == null) {
             getLadiesCount()
         }
-    }, [currentLadiesCount])
+    }, [currentLadiesCount, filters])
 
     useLayoutEffect(() => {
         //filters changed
@@ -115,11 +115,7 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount, setLadiesPagination
                 
             const { count } = await query
 
-            if (!isNaN(count)) {
-                updateCurrentLadiesCount(count)
-            } else {
-                updateCurrentLadiesCount(0)
-            }
+            updateCurrentLadiesCount(count ?? 0)
         } catch(e) {
             console.error(e)
         }

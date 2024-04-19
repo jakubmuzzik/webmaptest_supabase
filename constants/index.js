@@ -123,6 +123,7 @@ export const MIN_WEIGHT = 50
 export const MAX_WEIGHT = 90
 
 export const DEFAULT_FILTERS = {
+    city: undefined,
     ageRange: [MIN_AGE, MAX_AGE],
     heightRange: [MIN_HEIGHT, MAX_HEIGHT],
     weightRange: [MIN_WEIGHT, MAX_WEIGHT],
@@ -140,7 +141,8 @@ export const DEFAULT_FILTERS = {
     breast_type: [],
     speaks: [],
     nationality: [],
-    sexualOrientation: []
+    //sexualOrientation: [],
+    establishment_type: []
 }
 
 export const MOCK_DATA = [

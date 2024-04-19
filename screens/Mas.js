@@ -47,10 +47,10 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount, resetMasseuse
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        if (!currentMasseusesCount) {
+        if (currentMasseusesCount == null) {
             getMasseusesCount()
         }
-    }, [currentMasseusesCount])
+    }, [currentMasseusesCount, filters])
 
     useLayoutEffect(() => {
         //filters changed
@@ -116,11 +116,7 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount, resetMasseuse
                 
             const { count, error } = await query
 
-            if (!isNaN(count)) {
-                updateCurrentMasseusesCount(count)
-            } else {
-                updateCurrentMasseusesCount(0)
-            }
+            updateCurrentMasseusesCount(count ?? 0)
         } catch(e) {
             console.error(e)
         }

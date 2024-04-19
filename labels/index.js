@@ -55,7 +55,6 @@ export const DELETED = 'DELETED'
 
 export const BODY_TYPE_SLIM = 'Slim' // TODO - do this for all filter values
 
-
 export const BODY_TYPES = [BODY_TYPE_SLIM, 'Athletic', 'Muscular', 'Curvy']
 export const PUBIC_HAIR_VALUES = ['Shaved', 'Trimmed', 'Natural']
 export const SEXUAL_ORIENTATION = ['Heterosexual', 'Homosexual', 'Bisexual', 'Transsexual']
@@ -67,7 +66,7 @@ export const BREAST_TYPES = ['Natural', 'Silicone']
 export const EYE_COLORS = ['Blue', 'Brown', 'Gray', 'Green', 'Hazel']
 export const LANGUAGES = ['English', 'French', 'German', 'Japanese', 'Italian', 'Russian', 'Spanish', 'Chinese', 'Arabic', 'Hindi', 'Portuguese', 'Turkish', 'Indonesian', 'Dutch', 'Korean', 'Bengali', 'Thai', 'Punjabi', 'Greek', 'Polish', 'Malay', 'Tagalog', 'Danish', 'Swedish', 'Finnish', 'Czech', 'Hungarian', 'Ukrainian']
 export const NATIONALITIES = ['Australian','Brazilian','Canadian','Chinese','French','German','Indian','Italian','Japanese','Korean','Mexican', 'Mixed', 'Russian','Spanish','American']
-export const ESTABLISHMENT_TYPES = ['Club']
+export const ESTABLISHMENT_TYPES = ['Club', 'Brothel', 'Massage salon']
 
 export const LABELS = {
     [HOME]: {

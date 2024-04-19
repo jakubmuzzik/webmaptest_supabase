@@ -19,7 +19,8 @@ import {
   BREAST_TYPES,
   EYE_COLORS,
   LANGUAGES,
-  NATIONALITIES
+  NATIONALITIES,
+  ESTABLISHMENT_TYPES
 } from '../labels'
 
 import { encode } from "blurhash"
@@ -281,6 +282,7 @@ export const getFilterParams = (searchParams) => {
   const isBoolean = (value) => value === 'true' || value === 'false'
 
   return stripEmptyParams({
+    city: searchParams.get('city'),
     ageRange,
     heightRange,
     weightRange,
@@ -297,7 +299,8 @@ export const getFilterParams = (searchParams) => {
     breast_type: searchParams.get('breast_type') ? decodeURIComponent(searchParams.get('breast_type')).split(',').filter(val => BREAST_TYPES.includes(val)) : undefined,
     speaks: searchParams.get('speaks') ? decodeURIComponent(searchParams.get('speaks')).split(',').filter(val => LANGUAGES.includes(val)) : undefined,
     nationality: searchParams.get('nationality') ? decodeURIComponent(searchParams.get('nationality')).split(',').filter(val => NATIONALITIES.includes(val)) : undefined,
-    sexualOrientation: searchParams.get('sexualOrientation') ? decodeURIComponent(searchParams.get('sexualOrientation')).split(',').filter(val => SEXUAL_ORIENTATION.includes(val)) : undefined
+    establishment_type: searchParams.get('establishment_type') ? decodeURIComponent(searchParams.get('establishment_type')).split(',').filter(val => ESTABLISHMENT_TYPES.includes(val)) : undefined,
+    //sexualOrientation: searchParams.get('sexualOrientation') ? decodeURIComponent(searchParams.get('sexualOrientation')).split(',').filter(val => SEXUAL_ORIENTATION.includes(val)) : undefined
   })
 }
 
@@ -309,7 +312,26 @@ export const buildFiltersForQuery = (query, filterParams) => {
   }
 
   if (filterNames.includes('ageRange')) {
+    const calculateMinDateOfBirthFromAge = (age) => {
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      
+      const birthYear = currentYear - age - 1;
 
+      return new Date(Date.UTC(birthYear, today.getMonth(), today.getDate())).toISOString()
+    }
+
+    const calculateMaxDateOfBirthFromAge = (age) => {
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      
+      const birthYear = currentYear - age;
+
+      return new Date(Date.UTC(birthYear, today.getMonth(), today.getDate())).toISOString()
+    }
+    
+    query = query.lte('date_of_birth', calculateMaxDateOfBirthFromAge(filterParams.ageRange[0]))
+    query = query.gte('date_of_birth', calculateMinDateOfBirthFromAge(filterParams.ageRange[1]))
   }
 
   if (filterNames.includes('heightRange')) {
@@ -318,8 +340,8 @@ export const buildFiltersForQuery = (query, filterParams) => {
   }
 
   if (filterNames.includes('weightRange')) {
-    query = query.gte('weight', filterParams.heightRange[0])
-    query = query.lte('weight', filterParams.heightRange[1])
+    query = query.gte('weight', filterParams.weightRange[0])
+    query = query.lte('weight', filterParams.weightRange[1])
   }
 
   if (filterNames.includes('onlyIndependent')) {
@@ -339,27 +361,27 @@ export const buildFiltersForQuery = (query, filterParams) => {
   }
 
   if (filterNames.includes('body_type')) {
-    query = query.overlaps('body_type', filterParams.body_type)
+    query = query.or(filterParams.body_type.map(value => 'body_type.eq.' + value).join(','))
   }
 
   if (filterNames.includes('hair_color')) {
-    query = query.overlaps('hair_color', filterParams.hair_color)
+    query = query.or(filterParams.hair_color.map(value => 'hair_color.eq.' + value).join(','))
   }
 
   if (filterNames.includes('eye_color')) {
-    query = query.overlaps('eye_color', filterParams.eye_color)
+    query = query.or(filterParams.eye_color.map(value => 'eye_color.eq.' + value).join(','))
   }
 
   if (filterNames.includes('pubic_hair')) {
-    query = query.overlaps('pubic_hair', filterParams.pubic_hair)
+    query = query.or(filterParams.pubic_hair.map(value => 'pubic_hair.eq.' + value).join(','))
   }
 
   if (filterNames.includes('breast_size')) {
-    query = query.overlaps('breast_size', filterParams.breast_size)
+    query = query.or(filterParams.breast_size.map(value => 'breast_size.eq.' + value).join(','))
   }
 
   if (filterNames.includes('breast_type')) {
-    query = query.overlaps('breast_type', filterParams.breast_type)
+    query = query.or(filterParams.breast_type.map(value => 'breast_type.eq.' + value).join(','))
   }
 
   if (filterNames.includes('languages')) {
@@ -367,13 +389,12 @@ export const buildFiltersForQuery = (query, filterParams) => {
   }
 
   if (filterNames.includes('nationality')) {
-    query = query.overlaps('nationality', filterParams.nationality)
+    query = query.or(filterParams.nationality.map(value => 'nationality.eq.' + value).join(','))
   }
 
-  /*
-
-
-  whereConditions.push(where('sexuality', 'array-contains-any', filterNames.includes('sexualOrientation') ? filterParams.sexualOrientation : SEXUAL_ORIENTATION))*/
+  if (filterNames.includes('establishment_type')) {
+    query = query.or(filterParams.establishment_type.map(value => 'establishment_type.eq.' + value).join(','))
+  }
 
   return query
 }

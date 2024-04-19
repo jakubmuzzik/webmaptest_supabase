@@ -46,10 +46,10 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount, res
     const [isLoading, setIsLoading] = useState(true)
     
     useEffect(() => {
-        if (!currentEstablishmentsCount) {
+        if (currentEstablishmentsCount == null) {
             getEstablishmentsCount()
         }
-    }, [currentEstablishmentsCount])
+    }, [currentEstablishmentsCount, filters])
 
     useLayoutEffect(() => {
         //filters changed
@@ -107,17 +107,13 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount, res
             let query = supabase
                 .from('establishments')
                 .select('*', { count: 'exact', head: true })
-                .match({ status: ACTIVE })      
+                .match({ status: ACTIVE })    
 
             query = buildFiltersForQuery(query, filters)
                 
             const { count } = await query
 
-            if (!isNaN(count)) {
-                updateCurrentEstablishmentsCount(count)
-            } else {
-                updateCurrentEstablishmentsCount(0)
-            }
+            updateCurrentEstablishmentsCount(count ?? 0)
         } catch(e) {
             console.error(e)
         }
