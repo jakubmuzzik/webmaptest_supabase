@@ -1,9 +1,8 @@
 {
   "files": {
-    "main.js": "/webmaptest_supabase/static/js/main.f4febfec.js",
+    "main.js": "/webmaptest_supabase/static/js/main.7e045e1c.js",
     "static/js/825.232c83e5.chunk.js": "/webmaptest_supabase/static/js/825.232c83e5.chunk.js",
     "static/js/252.eb5f13af.js": "/webmaptest_supabase/static/js/252.eb5f13af.js",
-    "static/media/header_logo2.png": "/webmaptest_supabase/static/media/header_logo2.e402890e748e5a77f86a.png",
     "static/media/MaterialCommunityIcons.ttf": "/webmaptest_supabase/static/media/MaterialCommunityIcons.5d42b4e60858731e7b65.ttf",
     "static/media/Ionicons.ttf": "/webmaptest_supabase/static/media/Ionicons.3517aeaa34b2f8cd8eef.ttf",
     "static/media/MaterialIcons.ttf": "/webmaptest_supabase/static/media/MaterialIcons.120b4c7bbd155bd0a04d.ttf",
@@ -13,6 +12,7 @@
     "static/media/Poppins-Medium.ttf": "/webmaptest_supabase/static/media/Poppins-Medium.673ed42382ab264e0bf5.ttf",
     "static/media/Poppins-Bold.ttf": "/webmaptest_supabase/static/media/Poppins-Bold.cdb29a5d7ccf57ff05a3.ttf",
     "static/media/FontAwesome5_Brands.ttf": "/webmaptest_supabase/static/media/FontAwesome5_Brands.9e138496e8f1719c6ebf.ttf",
+    "static/media/thumbnail.jpeg": "/webmaptest_supabase/static/media/thumbnail.b0ab4da7616bc7ab2bc4.jpeg",
     "static/media/CATEGORY2.png": "/webmaptest_supabase/static/media/CATEGORY2.0158a82aed98a3155f45.png",
     "static/media/AntDesign.ttf": "/webmaptest_supabase/static/media/AntDesign.163adab9dbd7cb1ed12a.ttf",
     "static/media/Entypo.ttf": "/webmaptest_supabase/static/media/Entypo.fc6169344c041cffcdae.ttf",
@@ -41,12 +41,12 @@
     "favicon-16.png": "/webmaptest_supabase/favicon-16.png",
     "manifest.json": "/webmaptest_supabase/manifest.json",
     "serve.json": "/webmaptest_supabase/serve.json",
-    "main.f4febfec.js.map": "/webmaptest_supabase/static/js/main.f4febfec.js.map",
+    "main.7e045e1c.js.map": "/webmaptest_supabase/static/js/main.7e045e1c.js.map",
     "825.232c83e5.chunk.js.map": "/webmaptest_supabase/static/js/825.232c83e5.chunk.js.map",
     "252.eb5f13af.js.map": "/webmaptest_supabase/static/js/252.eb5f13af.js.map"
   },
   "entrypoints": [
     "static/js/252.eb5f13af.js",
-    "static/js/main.f4febfec.js"
+    "static/js/main.7e045e1c.js"
   ]
 }
