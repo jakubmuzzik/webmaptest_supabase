@@ -230,7 +230,7 @@ const Filters = forwardRef((props, ref) => {
                 <Text style={styles.filterHeader}>Services</Text>
 
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                    {(location.pathname === '/' ? SERVICES : MASSAGE_SERVICES).map((service) => {
+                    {(location.pathname === '/esc' ? SERVICES : MASSAGE_SERVICES).map((service) => {
                         const selected = filters.services.includes(service)
                         return (
                             <Chip key={service}

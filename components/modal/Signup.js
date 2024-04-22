@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useRef, useEffect, memo } from 'react'
-import { Modal, TouchableOpacity, TouchableWithoutFeedback, View, Text, FlatList, Image, StyleSheet, Dimensions, ScrollView } from 'react-native'
+import { Modal, TouchableOpacity, TouchableWithoutFeedback, View, Text, ImageBackground, Image, StyleSheet, Dimensions, ScrollView } from 'react-native'
 import Animated, {
     Extrapolation,
     interpolate,
@@ -109,8 +109,8 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
             borderRadius: 24,
             width: normalize(500),
             maxWidth: '90%',
-            height: normalize(500),
-            maxHeight: '80%',
+            height: normalize(650),
+            maxHeight: '90%',
             overflow: 'hidden',
             transform: [{ translateY: translateY.value }]
         }
@@ -174,7 +174,7 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
                         Sign up
                     </Text>
 
-                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, paddingTop: SPACING.small, marginBottom: SPACING.medium }}>
+                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, paddingTop: SPACING.x_small, marginBottom: SPACING.x_small }}>
                         How would you like to Sign up?
                     </Text>
 
@@ -183,30 +183,32 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
                             flex: 1,
                             marginRight: SPACING.xx_small,
                             flexDirection: 'column',
-                            padding: SPACING.x_small,
                             borderRadius: 5,
                             borderColor: profileType === 'lady' ? COLORS.red : COLORS.placeholder,
                             backgroundColor: profileType === 'lady' ? 'rgba(220, 46, 46, .10)' : 'transparent',
-                            borderWidth: 1
+                            borderWidth: 1,
+                            height: 350
                         }}
                             onPress={() => setProfileType('lady')}
                             rippleColor="rgba(220, 46, 46, .10)"
                         >
-                            <>
+                            <ImageBackground source={{ uri: require('../../assets/lady.jpg') }}
+                                style={{ flex: 1, padding: SPACING.x_small }}
+                                imageStyle={{ opacity: profileType === 'lady' ? 1 : 0.7 }}
+                                resizeMode='cover'>
                                 <View>
-                                    <Entypo name="mask" size={28} color="black" />
+                                    <Entypo name="mask" size={28} color="white" />
                                 </View>
-                                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginTop: SPACING.x_small }}>
+                                <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginTop: SPACING.x_small }}>
                                     As Independent Lady
                                 </Text>
-                            </>
+                            </ImageBackground>
                         </TouchableRipple>
 
                         <TouchableRipple style={{
                             flex: 1,
                             marginLeft: SPACING.xx_small,
                             flexDirection: 'column',
-                            padding: SPACING.x_small,
                             borderRadius: 5,
                             borderColor: profileType === 'member' ? COLORS.red : COLORS.placeholder,
                             backgroundColor: profileType === 'member' ? 'rgba(220, 46, 46, .10)' : 'transparent',
@@ -215,14 +217,17 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
                             onPress={() => setProfileType('member')}
                             rippleColor="rgba(220, 46, 46, .10)"
                         >
-                            <>
+                            <ImageBackground source={{ uri: require('../../assets/establishment.jpg') }}
+                               style={{ flex: 1, padding: SPACING.x_small }}
+                                imageStyle={{ opacity: profileType === 'member' ? 1 : 0.7 }}
+                                resizeMode='cover'>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <MaterialCommunityIcons name="guy-fawkes-mask" size={28} color="black" />
+                                    <MaterialCommunityIcons name="guy-fawkes-mask" size={28} color="white" />
                                 </View>
-                                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginTop: SPACING.x_small }}>
+                                <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginTop: SPACING.x_small }}>
                                     As Establishment
                                 </Text>
-                            </>
+                            </ImageBackground>
 
                         </TouchableRipple>
                     </View>

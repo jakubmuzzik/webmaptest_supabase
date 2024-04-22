@@ -16,7 +16,7 @@ const Pagination = ({ dataCount, maxItemsPerPage = MAX_ITEMS_PER_PAGE }) => {
     const params = useMemo(() => ({
         //does not need to have a supported language val.. do not translating anything here...
         //same for city..
-        language: searchParams.get('city'),
+        language: searchParams.get('language'),
         city: searchParams.get('city'),
         page: searchParams.get('page') && !isNaN(searchParams.get('page')) ? searchParams.get('page') : 1
     }), [searchParams])

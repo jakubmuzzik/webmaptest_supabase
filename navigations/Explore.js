@@ -68,13 +68,13 @@ const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishme
         }
     })
 
-    const currentDataCount = location.pathname === '/' ? currentLadiesCount : location.pathname === '/mas' ? currentMasseusesCount : currentEstablishmentsCount
+    const currentDataCount = location.pathname === '/esc' ? currentLadiesCount : location.pathname === '/mas' ? currentMasseusesCount : currentEstablishmentsCount
 
     const getDataCountText = () => {
         if (currentDataCount === 1) {
-            return location.pathname === '/' ? currentDataCount + ' lady' : location.pathname === '/mas' ? currentDataCount + ' masseuse' : currentDataCount + ' establishment'
+            return location.pathname === '/esc' ? currentDataCount + ' lady' : location.pathname === '/mas' ? currentDataCount + ' masseuse' : currentDataCount + ' establishment'
         } else {
-            return location.pathname === '/' ? currentDataCount + ' ladies' : location.pathname === '/mas' ? currentDataCount + ' masseuses' : currentDataCount + ' establishments'
+            return location.pathname === '/esc' ? currentDataCount + ' ladies' : location.pathname === '/mas' ? currentDataCount + ' masseuses' : currentDataCount + ' establishments'
         }
     }
 
@@ -113,7 +113,7 @@ const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishme
                 </View>
 
                 <SwappableText 
-                    value={location.pathname === '/' ? 'Ladies' : location.pathname === '/mas' ? 'Massages' : 'Establishments'} 
+                    value={location.pathname === '/esc' ? 'Ladies' : location.pathname === '/mas' ? 'Massages' : 'Establishments'} 
                     style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, color: '#FFF', textAlign: 'center' }}
                     duration={200}
                 />

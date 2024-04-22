@@ -134,10 +134,16 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
         <>
             <Route path='/' element={
                 <LayoutWithHeader>
+                    <Home />
+                </LayoutWithHeader>
+            } />
+
+            <Route element={
+                <LayoutWithHeader>
                     <Explore />
                 </LayoutWithHeader>
             } >
-                <Route index element={<Esc />} />
+                <Route path='/esc' element={<Esc />} />
                 <Route path='/mas' element={<Mas />} />
                 <Route path='/clu' element={<Clu />} />
             </Route>
@@ -239,7 +245,7 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
 
             <Route path='*' element={
                 <LayoutWithHeader>
-                    <NotFound />
+                    <Home />
                 </LayoutWithHeader>
             } />
 
