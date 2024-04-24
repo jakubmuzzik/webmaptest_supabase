@@ -625,7 +625,7 @@ const mapStateToProps = (store) => ({
     cities: store.appState.cities
 })
 
-export default connect(mapStateToProps)(memo(Filters))
+export default connect(mapStateToProps, null, null, { forwardRef: true })(memo(Filters))
 
 const styles = StyleSheet.create({
     modal__header: {

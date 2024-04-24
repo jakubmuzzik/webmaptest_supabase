@@ -20,7 +20,7 @@ import {
 import RenderLady from '../components/list/RenderLady'
 import { MOCK_DATA } from '../constants'
 import { calculateLadyCardWidth, getParam, buildFiltersForQuery, areValuesEqual, getFilterParams, stripDefaultFilters } from '../utils'
-import { useSearchParams } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { updateCurrentLadiesCount, setLadiesPaginationData, resetLadiesPaginationData } from '../redux/actions'
 import Pagination from '../components/Pagination'

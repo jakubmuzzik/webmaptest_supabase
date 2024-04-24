@@ -18,7 +18,7 @@ import { updateCurrentLadiesCount, updateCurrentEstablishmentsCount, updateCurre
 
 import { Link, useSearchParams, useLocation, useNavigate } from 'react-router-dom'
 
-const Categories = ({ cities=[], updateCurrentLadiesCount, updateCurrentEstablishmentsCount, updateCurrentMasseusesCount, resetLadiesPaginationData, resetMasseusesPaginationData, resetEstablishmentsPaginationData }) => {
+const Categories = ({ cities = [], updateCurrentLadiesCount, updateCurrentEstablishmentsCount, updateCurrentMasseusesCount, resetLadiesPaginationData, resetMasseusesPaginationData, resetEstablishmentsPaginationData }) => {
     const [searchParams] = useSearchParams()
 
     const [index, setIndex] = useState(0)
@@ -27,19 +27,45 @@ const Categories = ({ cities=[], updateCurrentLadiesCount, updateCurrentEstablis
             path: '/esc',
             title: 'Ladies',
             key: 'esc',
-            icon: (focused) => <Entypo name="mask" size={FONT_SIZES.medium + 5} color={focused ? '#FFF' : 'rgba(255,255,255,0.7)'} />
+            icon: (focused) => <Image
+                style={{
+                    height: 30,
+                    width: 30,
+                    tintColor: focused ? COLORS.white : 'rgba(255,255,255,0.7)'
+                }}
+                source={require('../../assets/lady-icon.png')}
+                resizeMode="contain"
+            />
         },
         {
             path: '/mas',
             title: 'Massages',
             key: 'mas',
-            icon: (focused) => <FontAwesome5 name="person-booth" size={FONT_SIZES.medium + 5} color={focused ? '#FFF' : 'rgba(255,255,255,0.7)'} />
+            icon: (focused) => <Image
+                style={{
+                    height: 30,
+                    width: 30,
+                    tintColor: focused ? COLORS.white : 'rgba(255,255,255,0.7)',
+                    marginRight: 5
+                }}
+                source={require('../../assets/massage-icon2.png')}
+                resizeMode="contain"
+            />
         },
         {
             path: '/clu',
             title: 'Establishments',
             key: 'clu',
-            icon: (focused) => <MaterialIcons name="meeting-room" size={FONT_SIZES.medium + 5} color={focused ? '#FFF' : 'rgba(255,255,255,0.7)'} />
+            icon: (focused) => <Image
+                style={{
+                    height: 30,
+                    width: 30,
+                    tintColor: focused ? COLORS.white : 'rgba(255,255,255,0.7)',
+                    marginRight: 5
+                }}
+                source={require('../../assets/ladies.png')}
+                resizeMode="contain"
+            />
         }
     ].map((route, index) => ({ ...route, index })))
 
@@ -75,7 +101,7 @@ const Categories = ({ cities=[], updateCurrentLadiesCount, updateCurrentEstablis
         if (filtersRef.current) {
             setFiltersCount(Object.keys(filtersRef.current.filterParams).length)
         }
-    }, [params])
+    }, [searchParams])
 
     const { width } = useWindowDimensions()
     const isSmallScreen = width <= SMALL_SCREEN_THRESHOLD
@@ -169,11 +195,11 @@ const Categories = ({ cities=[], updateCurrentLadiesCount, updateCurrentEstablis
                 <Link style={{ textDecoration: 'none' }} to={{ pathname: route.path, search: new URLSearchParams(stripEmptyParams({ language: params.language, city: params.city })).toString() }}>
                     <View style={styles.categoryContainer}>
                         {route.icon(focused)}
-                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: focused ? '#FFF' : 'rgba(255,255,255,0.7)' }}>
+                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: focused ? '#FFF' : 'rgba(255,255,255,0.7)' }}>
                             {route.title}
                         </Text>
                     </View>
-                </Link>  
+                </Link>
             )}
             onTabPress={onTabPress}
         />
@@ -189,7 +215,7 @@ const Categories = ({ cities=[], updateCurrentLadiesCount, updateCurrentEstablis
             },
             shadowOpacity: 0.27,
             shadowRadius: 4.65,
-            
+
             elevation: 6,
         }}>
 
@@ -217,15 +243,15 @@ const Categories = ({ cities=[], updateCurrentLadiesCount, updateCurrentEstablis
                     </TouchableOpacity>
                 </HoverableView> */}
 
-                <HoverableView hoveredBackgroundColor={COLORS.lightGrey} style={{ justifyContent: 'center', alignItems: 'flex-end', borderWidth: 2, borderRadius: 15, borderColor: filtersCount > 0 ? COLORS.red :COLORS.hoveredLightGrey, marginRight: SPACING.page_horizontal }}>
-                    <TouchableOpacity onPress={onFiltersPress} style={{ paddingHorizontal: SPACING.x_small, paddingVertical: SPACING.xx_small, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                <HoverableView hoveredBackgroundColor={COLORS.lightGrey} style={{ justifyContent: 'center', alignItems: 'flex-end', borderWidth: 2, borderRadius: 12, borderColor: filtersCount > 0 ? COLORS.red : COLORS.hoveredLightGrey, marginRight: SPACING.page_horizontal }}>
+                    <TouchableOpacity onPress={onFiltersPress} style={{ paddingHorizontal: SPACING.xx_small, paddingVertical: SPACING.xxx_small, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <Image
                             resizeMode="contain"
                             source={require('../../assets/icons/filter.svg')}
                             tintColor='#FFF'
                             style={{
                                 width: normalize(18),
-                                height:  normalize(18)
+                                height: normalize(18)
                             }}
                         />
                         {!isSmallScreen && <Text style={{ marginLeft: SPACING.xx_small, fontFamily: FONTS.medium, letterSpacing: 1, fontSize: FONT_SIZES.medium, color: '#FFF' }}>
@@ -248,13 +274,13 @@ const mapStateToProps = (store) => ({
     cities: store.appState.cities
 })
 
-export default connect(mapStateToProps,{ updateCurrentLadiesCount, updateCurrentEstablishmentsCount, updateCurrentMasseusesCount, resetLadiesPaginationData, resetMasseusesPaginationData, resetEstablishmentsPaginationData })(Categories)
+export default connect(mapStateToProps, { updateCurrentLadiesCount, updateCurrentEstablishmentsCount, updateCurrentMasseusesCount, resetLadiesPaginationData, resetMasseusesPaginationData, resetEstablishmentsPaginationData })(Categories)
 
 const styles = StyleSheet.create({
     categoryContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        //flexDirection: 'row'
+        flexDirection: 'row'
     },
     selectedCategoryContainer: {
         borderBottomWidth: 1,

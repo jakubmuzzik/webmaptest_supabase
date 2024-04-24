@@ -4,6 +4,7 @@ import { COLORS, FONTS, FONT_SIZES, SPACING, SUPPORTED_LANGUAGES } from '../cons
 import HoverableView from '../components/HoverableView'
 import { MaterialIcons } from '@expo/vector-icons'
 import { normalize, getParam, stripEmptyParams } from '../utils'
+import { Image } from 'expo-image'
 import {
     ACTIVE,
     SELECT_CITY,
@@ -21,13 +22,16 @@ import Animated, {
 import RenderLady from '../components/list/RenderLady'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useSearchParams, Link } from 'react-router-dom'
-
+import { resetLadiesPaginationData, updateCurrentLadiesCount } from '../redux/actions'
 import { supabase } from '../supabase/config'
 
 import Login from '../components/modal/Login'
 import Signup from '../components/modal/Signup'
+import { connect } from 'react-redux'
 
-const Home = () => {
+import HoverableCategoryCard from '../components/animated/HoverableCategoryCard'
+
+const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -41,6 +45,7 @@ const Home = () => {
     const [loginVisible, setLoginVisible] = useState(false)
     const [signUpVisible, setSignUpVisible] = useState(false)
     const [newLadies, setNewLadies] = useState()
+    const [selectedCategory, setSelectedCategory] = useState('Ladies')
 
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
 
@@ -55,9 +60,9 @@ const Home = () => {
 
     const headerTitleAnimatedStyle = useAnimatedStyle(() => {
         return {
-            fontFamily: FONTS.bold, 
-            fontSize: normalize(45), 
-            color: '#FFF', 
+            fontFamily: FONTS.bold,
+            fontSize: normalize(45),
+            color: '#FFF',
             textAlign: 'center',
             opacity: headerTitleOpacity.value,
             transform: [{ translateY: headerTitleTranslateY.value }],
@@ -66,11 +71,11 @@ const Home = () => {
 
     const headerSubTitleAnimatedStyle = useAnimatedStyle(() => {
         return {
-            maxWidth: 600, 
-            fontFamily: FONTS.medium, 
-            fontSize: FONT_SIZES.large, 
-            color: COLORS.greyText, 
-            marginTop: 0, 
+            maxWidth: 600,
+            fontFamily: FONTS.medium,
+            fontSize: FONT_SIZES.large,
+            color: COLORS.greyText,
+            marginTop: 0,
             textAlign: 'center',
             opacity: headerSubTitleOpacity.value,
             transform: [{ translateY: headerSubTitleTranslateY.value }],
@@ -90,8 +95,8 @@ const Home = () => {
             transform: [{ translateY: headerSignUpButtonTranslateY.value }],
         }
     })
-    
-    useEffect(() => { 
+
+    useEffect(() => {
         headerTitleTranslateY.value = withTiming(0, {
             duration: 300,
             useNativeDriver: true
@@ -142,7 +147,7 @@ const Home = () => {
             }
 
             setNewLadies(data)
-        } catch(error) {
+        } catch (error) {
             console.error(error)
         }
     }
@@ -294,11 +299,25 @@ const Home = () => {
         </ScrollView>
     )
 
+    const onExploreClick = () => {
+        //TODO - check user's city on background and update params with the city... 
+        // put it conditionally to the link
+        resetLadiesPaginationData()
+        updateCurrentLadiesCount()
+    }
+
+    const onViewAllNewLadiesClick = () => {
+        //TODO - check user's city on background and update params with the city... 
+        //TODO - put sort param to the LINK
+        resetLadiesPaginationData()
+        updateCurrentLadiesCount()
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: COLORS.lightBlack }} onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}>
             <View style={{ marginBottom: SPACING.medium }}>
                 <ImageBackground
-                    source={require('../assets/th.png')}
+                    //source={require('../assets/th.png')}
                     style={{
                         width: '100%',
                         height: 500,
@@ -343,12 +362,16 @@ const Home = () => {
                                         style={{ ...StyleSheet.absoluteFill, justifyContent: 'center', alignItems: 'center' }}
                                     />
                                     <Link
+                                        onClick={onExploreClick}
                                         style={{
                                             textDecoration: 'none',
-                                        }} to={{
+                                        }}
+                                        to={{
                                             pathname: '/esc',
                                             search: new URLSearchParams(stripEmptyParams({ language: params.language })).toString()
-                                        }}>
+                                        }}
+                                        state={{ clearRedux: true }}
+                                    >
                                         <View style={{
                                             flexDirection: 'row',
                                             paddingHorizontal: SPACING.small,
@@ -399,7 +422,9 @@ const Home = () => {
 
             <View style={{ paddingVertical: SPACING.medium }}>
                 <View style={{ paddingHorizontal: SPACING.page_horizontal, flexDirection: 'row', alignItems: 'center' }}>
-                    <Text numberOfLines={1} style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h2, color: '#FFF', marginRight: SPACING.small }}>New ladies</Text>
+                    <Text numberOfLines={1} style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h2, color: '#FFF', marginRight: SPACING.small }}>
+                        New ladies
+                    </Text>
                     <HoverableView
                         style={{
                             borderRadius: 30,
@@ -411,22 +436,35 @@ const Home = () => {
                         backgroundColor='rgba(255,255,255,0.1)'
                         hoveredBackgroundColor='rgba(255,255,255,0.2)'
                     >
-                        <TouchableOpacity style={{ paddingHorizontal: SPACING.xxx_small, paddingVertical: 4, flexDirection: "row", alignItems: 'center' }}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.small, color: COLORS.white, marginHorizontal: SPACING.xxx_small }}>
-                                View all
-                            </Text>
-                            <MaterialIcons name="keyboard-arrow-right" size={normalize(20)} color={COLORS.white} />
-                        </TouchableOpacity>
+                        <Link
+                            onClick={onViewAllNewLadiesClick}
+                            style={{
+                                textDecoration: 'none',
+
+                            }}
+                            to={{
+                                pathname: '/esc',
+                                search: new URLSearchParams(stripEmptyParams({ language: params.language })).toString()
+                            }}
+                            state={{ clearRedux: true }}
+                        >
+                            <View style={{ paddingHorizontal: SPACING.xxx_small, paddingVertical: 4, flexDirection: "row", alignItems: 'center' }}>
+                                <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.small, color: COLORS.white, marginHorizontal: SPACING.xxx_small }}>
+                                    View all
+                                </Text>
+                                <MaterialIcons name="keyboard-arrow-right" size={normalize(20)} color={COLORS.white} />
+                            </View>
+                        </Link>
                     </HoverableView>
                 </View>
 
-                {newLadies != null && newLadies.length > 0 && <FlatList 
+                {newLadies != null && newLadies.length > 0 && <FlatList
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={newLadies}
                     contentContainerStyle={{ paddingHorizontal: SPACING.page_horizontal, flexGrow: 1, marginTop: SPACING.medium }}
                     initialNumToRender={30}
-                    renderItem={({item, index}) => (
+                    renderItem={({ item, index }) => (
                         <View key={item.id} style={{ marginLeft: index === 0 ? 0 : SPACING.large, width: 150 }}>
                             <RenderLady lady={item} width={150} delay={index * 20} />
                         </View>
@@ -435,10 +473,23 @@ const Home = () => {
                 {newLadies == null && renderNewLadiesSkeleton()}
             </View>
 
+            <View style={{ paddingVertical: SPACING.large, marginTop: SPACING.medium }}>
+                <View style={{ paddingHorizontal: SPACING.page_horizontal }}>
+                    <Text style={{ textAlign: 'center', fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, color: COLORS.white }}>
+                        Random selection from our categories
+                    </Text>
+                    <View style={{ marginTop: SPACING.large, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <HoverableCategoryCard contentWidth={contentWidth} selected={selectedCategory === 'Ladies'} onCategoryPress={setSelectedCategory} categoryName="Ladies" imagePath={require('../assets/lady.jpg')} />
+                        <HoverableCategoryCard contentWidth={contentWidth} selected={selectedCategory === 'Massages'} onCategoryPress={setSelectedCategory} categoryName="Massages" imagePath={require('../assets/lady.jpg')} />
+                        <HoverableCategoryCard contentWidth={contentWidth} selected={selectedCategory === 'Establishments'} onCategoryPress={setSelectedCategory} categoryName="Establishments" imagePath={require('../assets/establishment.jpg')} />
+                    </View>
+                </View>
+            </View>
+
             <Login visible={loginVisible} setVisible={setLoginVisible} onSignUpPress={onSignUpPress} />
             <Signup visible={signUpVisible} setVisible={setSignUpVisible} onLoginPress={onLoginPress} />
         </View>
     )
 }
 
-export default Home
+export default connect(null, { updateCurrentLadiesCount, resetLadiesPaginationData })(Home)
