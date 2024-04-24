@@ -48,6 +48,8 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
     const [selectedCategory, setSelectedCategory] = useState('Ladies')
 
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
+    //13 = max length of category name
+    const categoryCardNameFontSize = contentWidth / 13 / 3.5
 
     const headerTitleTranslateY = useSharedValue(10)
     const headerTitleOpacity = useSharedValue(0)
@@ -317,7 +319,7 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
         <View style={{ flex: 1, backgroundColor: COLORS.lightBlack }} onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}>
             <View style={{ marginBottom: SPACING.medium }}>
                 <ImageBackground
-                    //source={require('../assets/th.png')}
+                    source={require('../assets/th.png')}
                     style={{
                         width: '100%',
                         height: 500,
@@ -479,9 +481,9 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
                         Random selection from our categories
                     </Text>
                     <View style={{ marginTop: SPACING.large, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <HoverableCategoryCard contentWidth={contentWidth} selected={selectedCategory === 'Ladies'} onCategoryPress={setSelectedCategory} categoryName="Ladies" imagePath={require('../assets/lady.jpg')} />
-                        <HoverableCategoryCard contentWidth={contentWidth} selected={selectedCategory === 'Massages'} onCategoryPress={setSelectedCategory} categoryName="Massages" imagePath={require('../assets/lady.jpg')} />
-                        <HoverableCategoryCard contentWidth={contentWidth} selected={selectedCategory === 'Establishments'} onCategoryPress={setSelectedCategory} categoryName="Establishments" imagePath={require('../assets/establishment.jpg')} />
+                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Ladies'} onCategoryPress={setSelectedCategory} categoryName="Ladies" imagePath={require('../assets/establishment.jpg')} />
+                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Massages'} onCategoryPress={setSelectedCategory} categoryName="Massages" imagePath={require('../assets/establishment.jpg')} />
+                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Establishments'} onCategoryPress={setSelectedCategory} categoryName="Establishments" imagePath={require('../assets/establishment.jpg')} />
                     </View>
                 </View>
             </View>
