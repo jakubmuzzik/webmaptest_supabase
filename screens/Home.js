@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useRef } from 'react'
 import { View, Text, ImageBackground, ScrollView, TouchableOpacity, StyleSheet, Dimensions, FlatList } from 'react-native'
 import { COLORS, FONTS, FONT_SIZES, SPACING, SUPPORTED_LANGUAGES, MAX_ITEMS_PER_PAGE } from '../constants'
 import HoverableView from '../components/HoverableView'
@@ -25,16 +25,17 @@ import RenderLady from '../components/list/RenderLady'
 import RenderEstablishment from '../components/list/RenderEstablishment'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useSearchParams, Link } from 'react-router-dom'
-import { resetLadiesPaginationData, updateCurrentLadiesCount } from '../redux/actions'
+import { resetLadiesPaginationData, updateCurrentLadiesCount, updateCurrentEstablishmentsCount, updateCurrentMasseusesCount, resetMasseusesPaginationData, resetEstablishmentsPaginationData } from '../redux/actions'
 import { supabase } from '../supabase/config'
 
 import Login from '../components/modal/Login'
 import Signup from '../components/modal/Signup'
 import { connect } from 'react-redux'
+import SwappableText from '../components/animated/SwappableText'
 
 import HoverableCategoryCard from '../components/animated/HoverableCategoryCard'
 
-const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
+const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount, updateCurrentEstablishmentsCount, updateCurrentMasseusesCount, resetMasseusesPaginationData, resetEstablishmentsPaginationData }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -57,14 +58,14 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
     //13 = max length of category name
     const categoryCardNameFontSize = contentWidth / 13 / 3.5
 
-    const headerTitleTranslateY = useSharedValue(10)
-    const headerTitleOpacity = useSharedValue(0)
-    const headerSubTitleTranslateY = useSharedValue(20)
-    const headerSubTitleOpacity = useSharedValue(0)
-    const headerExploreButtonTranslateY = useSharedValue(30)
-    const headerExploreButtonOpacity = useSharedValue(0)
-    const headerSignUpButtonTranslateY = useSharedValue(30)
-    const headerSignUpButtonOpacity = useSharedValue(0)
+    const headerTitleTranslateY = useSharedValue(isBrowser ? 10 : 0)
+    const headerTitleOpacity = useSharedValue(isBrowser ? 0 : 1)
+    const headerSubTitleTranslateY = useSharedValue(isBrowser ? 20 : 0)
+    const headerSubTitleOpacity = useSharedValue(isBrowser ? 0 : 1)
+    const headerExploreButtonTranslateY = useSharedValue(isBrowser ? 30 : 0)
+    const headerExploreButtonOpacity = useSharedValue(isBrowser ? 0 : 1)
+    const headerSignUpButtonTranslateY = useSharedValue(isBrowser ? 30 : 0)
+    const headerSignUpButtonOpacity = useSharedValue(isBrowser ? 0 : 1)
 
     const headerTitleAnimatedStyle = useAnimatedStyle(() => {
         return {
@@ -105,39 +106,41 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
     })
 
     useEffect(() => {
-        headerTitleTranslateY.value = withTiming(0, {
-            duration: 300,
-            useNativeDriver: true
-        })
-        headerTitleOpacity.value = withTiming(1, {
-            duration: 500,
-            useNativeDriver: true
-        })
-        headerSubTitleTranslateY.value = withDelay(50, withTiming(0, {
-            duration: 300,
-            useNativeDriver: true
-        }))
-        headerSubTitleOpacity.value = withDelay(50, withTiming(1, {
-            duration: 500,
-            useNativeDriver: true
-        }))
-        headerExploreButtonTranslateY.value = withDelay(100, withTiming(0, {
-            duration: 300,
-            useNativeDriver: true
-        }))
-        headerExploreButtonOpacity.value = withDelay(100, withTiming(1, {
-            duration: 500,
-            useNativeDriver: true
-        }))
-        headerSignUpButtonTranslateY.value = withDelay(150, withTiming(0, {
-            duration: 300,
-            useNativeDriver: true
-        }))
-        headerSignUpButtonOpacity.value = withDelay(150, withTiming(1, {
-            duration: 500,
-            useNativeDriver: true
-        }))
-
+        if (isBrowser) {
+            headerTitleTranslateY.value = withTiming(0, {
+                duration: 300,
+                useNativeDriver: true
+            })
+            headerTitleOpacity.value = withTiming(1, {
+                duration: 500,
+                useNativeDriver: true
+            })
+            headerSubTitleTranslateY.value = withDelay(50, withTiming(0, {
+                duration: 300,
+                useNativeDriver: true
+            }))
+            headerSubTitleOpacity.value = withDelay(50, withTiming(1, {
+                duration: 500,
+                useNativeDriver: true
+            }))
+            headerExploreButtonTranslateY.value = withDelay(100, withTiming(0, {
+                duration: 300,
+                useNativeDriver: true
+            }))
+            headerExploreButtonOpacity.value = withDelay(100, withTiming(1, {
+                duration: 500,
+                useNativeDriver: true
+            }))
+            headerSignUpButtonTranslateY.value = withDelay(150, withTiming(0, {
+                duration: 300,
+                useNativeDriver: true
+            }))
+            headerSignUpButtonOpacity.value = withDelay(150, withTiming(1, {
+                duration: 500,
+                useNativeDriver: true
+            }))
+        }
+        
         init()
     }, [])
 
@@ -262,6 +265,47 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
     const onSignUpPress = () => {
         setLoginVisible(false)
         setSignUpVisible(true)
+    }
+
+    const onExploreClick = () => {
+        //TODO - check user's city on background and update params with the city... 
+        // put it conditionally to the link
+        resetLadiesPaginationData()
+        updateCurrentLadiesCount()
+    }
+
+    const onViewAllNewLadiesClick = () => {
+        //TODO - check user's city on background and update params with the city... 
+        //TODO - put sort param to the LINK
+        resetLadiesPaginationData()
+        updateCurrentLadiesCount()
+    }
+
+    const onViewMoreRandomProfilesClick = () => {
+        if (selectedCategory === 'Ladies') {
+            resetLadiesPaginationData()
+            updateCurrentLadiesCount()
+        } else if (selectedCategory === 'Massages') {
+            resetMasseusesPaginationData()
+            updateCurrentMasseusesCount()
+        } else if (selectedCategory === 'Establishments') {
+            resetEstablishmentsPaginationData()
+            updateCurrentEstablishmentsCount()
+        }
+    }
+
+    const ladyCardWidth = useMemo(() => calculateLadyCardWidth(contentWidth - (isBrowser ? (SPACING.page_horizontal + SPACING.large) : 0)), [contentWidth])
+    const estCardWidth = useMemo(() => calculateEstablishmentCardWidth(contentWidth - (isBrowser ? (SPACING.page_horizontal + SPACING.large) : 0)), [contentWidth])
+
+    const renderLadyCard = (data, index) => {
+        return (
+            <View
+                key={data.id}
+                style={[styles.cardContainer, { width: ladyCardWidth }]}
+            >
+                <RenderLady lady={data} width={ladyCardWidth} delay={index * 20} animate={isBrowser}/>
+            </View>
+        )
     }
 
     const renderNewLadiesSkeleton = () => (
@@ -401,34 +445,6 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
         </ScrollView>
     )
 
-    const onExploreClick = () => {
-        //TODO - check user's city on background and update params with the city... 
-        // put it conditionally to the link
-        resetLadiesPaginationData()
-        updateCurrentLadiesCount()
-    }
-
-    const onViewAllNewLadiesClick = () => {
-        //TODO - check user's city on background and update params with the city... 
-        //TODO - put sort param to the LINK
-        resetLadiesPaginationData()
-        updateCurrentLadiesCount()
-    }
-
-    const ladyCardWidth = useMemo(() => calculateLadyCardWidth(contentWidth - (isBrowser ? (SPACING.page_horizontal + SPACING.large) : 0)), [contentWidth])
-    const estCardWidth = useMemo(() => calculateEstablishmentCardWidth(contentWidth - (isBrowser ? (SPACING.page_horizontal + SPACING.large) : 0)), [contentWidth])
-
-    const renderLadyCard = (data, index) => {
-        return (
-            <View
-                key={data.id}
-                style={[styles.cardContainer, { width: ladyCardWidth }]}
-            >
-                <RenderLady lady={data} width={ladyCardWidth} delay={index * 20} animate={isBrowser}/>
-            </View>
-        )
-    }
-
     const renderLadiesSkeleton = () => {
         return new Array(MAX_ITEMS_PER_PAGE).fill(null, 0).map((_, index) => (
             <View key={index} style={[styles.cardContainer, { width: ladyCardWidth }]}>
@@ -552,13 +568,15 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
                                     style={{
                                         borderRadius: 10,
                                         borderWidth: 1,
-                                        borderColor: '#FFF',
+                                        borderColor: COLORS.red,
                                         alignItems: 'center',
                                         overflow: 'hidden',
                                         marginLeft: SPACING.xx_small
                                     }}
-                                    backgroundColor='rgba(255,255,255,0.1)'
-                                    hoveredBackgroundColor='rgba(255,255,255,0.2)'
+                                    // backgroundColor='rgba(255,255,255,0.1)'
+                                    // hoveredBackgroundColor='rgba(255,255,255,0.2)'
+                                    backgroundColor={COLORS.darkRedBackground}
+                                    hoveredBackgroundColor={COLORS.hoveredDarkRedBackground}
                                 >
                                     <TouchableOpacity
                                         onPress={() => setSignUpVisible(true)}
@@ -586,32 +604,30 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
                     </Text>
                     <HoverableView
                         style={{
-                            borderRadius: 30,
+                            borderRadius: 8,
                             borderWidth: 1,
-                            borderColor: '#FFF',
+                            borderColor: COLORS.red,
                             alignItems: 'center',
                             overflow: 'hidden'
                         }}
-                        backgroundColor='rgba(255,255,255,0.1)'
-                        hoveredBackgroundColor='rgba(255,255,255,0.2)'
+                        backgroundColor={COLORS.darkRedBackground}
+                        hoveredBackgroundColor={COLORS.hoveredDarkRedBackground}
                     >
                         <Link
                             onClick={onViewAllNewLadiesClick}
                             style={{
-                                textDecoration: 'none',
-
+                                textDecoration: 'none'
                             }}
                             to={{
                                 pathname: '/esc',
                                 search: new URLSearchParams(stripEmptyParams({ language: params.language })).toString()
-                            }}
-                            state={{ clearRedux: true }}
+                            }}                            
                         >
                             <View style={{ paddingHorizontal: SPACING.xxx_small, paddingVertical: 4, flexDirection: "row", alignItems: 'center' }}>
                                 <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.small, color: COLORS.white, marginHorizontal: SPACING.xxx_small }}>
                                     View all
                                 </Text>
-                                <MaterialIcons name="keyboard-arrow-right" size={normalize(20)} color={COLORS.white} />
+                                <MaterialIcons name="keyboard-arrow-right" size={normalize(20)} color={COLORS.red} />
                             </View>
                         </Link>
                     </HoverableView>
@@ -632,21 +648,28 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
                 {newLadies == null && renderNewLadiesSkeleton()}
             </View>
 
-            <View style={{ paddingVertical: SPACING.large, marginTop: SPACING.medium }}>
+            <View style={{ paddingTop: SPACING.large, marginTop: SPACING.medium }}>
                 <View style={{ paddingHorizontal: SPACING.page_horizontal }}>
-                    <Text style={{ textAlign: 'center', fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, color: COLORS.white }}>
-                        Random selection from our categories
+                    <Text style={{ textAlign: 'center', fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.red }}>
+                        {/* Random selection from our categories */}
+                        Explore by categories
                     </Text>
-                    <View style={{ marginTop: SPACING.large, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Ladies'} onCategoryPress={setSelectedCategory} categoryName="Ladies" imagePath={require('../assets/lady.jpg')} />
-                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Massages'} onCategoryPress={setSelectedCategory} categoryName="Massages" imagePath={require('../assets/lady.jpg')} />
-                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Establishments'} onCategoryPress={setSelectedCategory} categoryName="Establishments" imagePath={require('../assets/establishment.jpg')} />
+                    <Text style={{ textAlign: 'center', fontFamily: FONTS.bold, fontSize: FONT_SIZES.h3, color: COLORS.white, marginHorizontal: SPACING.page_horizontal }}>
+                        Random selection of our profiles
+                </Text>
+                    <View style={{ marginTop: SPACING.small, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Ladies'} onCategoryPress={setSelectedCategory} categoryName="Ladies" imagePath={require('../assets/lady-linear-gradient.png')} />
+                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Massages'} onCategoryPress={setSelectedCategory} categoryName="Massages" imagePath={require('../assets/massage-linear-gradient.png')} />
+                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Establishments'} onCategoryPress={setSelectedCategory} categoryName="Establishments" imagePath={require('../assets/ladies-linear-gradient.png')} />
                     </View>
                 </View>
             </View>
 
-            <View style={{ flex: 1, backgroundColor: COLORS.lightBlack, paddingHorizontal: SPACING.page_horizontal - SPACING.large, alignSelf: 'center', width: '100%', maxWidth: 1650 }}>
-                <View style={{ marginLeft: SPACING.large, flexDirection: 'row', flexWrap: 'wrap', marginTop: SPACING.small, flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: COLORS.lightBlack, paddingHorizontal: SPACING.page_horizontal - SPACING.large, alignSelf: 'center', width: '100%', maxWidth: 1650, marginBottom: SPACING.large }}>
+                {/* <Text style={{ textAlign: 'center', fontFamily: FONTS.bold, fontSize: FONT_SIZES.h3, color: COLORS.white, marginHorizontal: SPACING.page_horizontal }}>
+                    {'Random selection of our ' + (selectedCategory === 'Massages' ? 'Masseuses' : selectedCategory)}
+                </Text> */}
+                <View style={{ marginLeft: SPACING.large, flexDirection: 'row', flexWrap: 'wrap', marginTop: SPACING.medium, flex: 1 }}>
                     {selectedCategory === 'Ladies' && randomLadies == null && renderLadiesSkeleton()}
                     {selectedCategory === 'Ladies' && randomLadies != null && randomLadies.map((data, index) => renderLadyCard(data, index))}
 
@@ -656,6 +679,38 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
                     {selectedCategory === 'Establishments' && randomEstablishments == null && renderEstSkeleton()}
                     {selectedCategory === 'Establishments' && randomEstablishments != null && randomEstablishments.map((data, index) => renderEstCard(data, index))}
                 </View>
+
+                <HoverableView
+                    style={{
+                        borderRadius: 8,
+                        borderWidth: 1,
+                        borderColor: COLORS.red,
+                        alignItems: 'center',
+                        overflow: 'hidden',
+                        width: 'fit-content',
+                        alignSelf: 'center'
+                    }}
+                    backgroundColor={COLORS.darkRedBackground}
+                    hoveredBackgroundColor={COLORS.hoveredDarkRedBackground}
+                >
+                    <Link
+                        onClick={onViewMoreRandomProfilesClick}
+                        style={{
+                            textDecoration: 'none'
+                        }}
+                        to={{
+                            pathname: selectedCategory === 'Ladies' ? '/esc' : selectedCategory === 'Massages' ? '/mas' : '/clu',
+                            search: new URLSearchParams(stripEmptyParams({ language: params.language })).toString()
+                        }}
+                    >
+                        <View style={{ paddingHorizontal: SPACING.xxx_small, paddingVertical: 6, flexDirection: "row", alignItems: 'center' }}>
+                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: COLORS.white, marginHorizontal: SPACING.xxx_small }}>
+                                View all
+                            </Text>
+                            <MaterialIcons name="keyboard-arrow-right" size={normalize(20)} color={COLORS.red} />
+                        </View>
+                    </Link>
+                </HoverableView>
             </View>
 
             <Login visible={loginVisible} setVisible={setLoginVisible} onSignUpPress={onSignUpPress} />
@@ -664,7 +719,7 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
     )
 }
 
-export default connect(null, { updateCurrentLadiesCount, resetLadiesPaginationData })(Home)
+export default connect(null, { updateCurrentLadiesCount, resetLadiesPaginationData, updateCurrentEstablishmentsCount, updateCurrentMasseusesCount, resetMasseusesPaginationData, resetEstablishmentsPaginationData })(Home)
 
 const styles = StyleSheet.create({
     cardContainer: {

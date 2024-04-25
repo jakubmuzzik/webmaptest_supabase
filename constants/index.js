@@ -70,7 +70,10 @@ export const COLORS = {
     lightPurple: '#cfbcff',
     purple: '#6152bb',
     darkestBlue: '#05375a',
-    white: '#FFF'
+    white: '#FFF',
+    darkRedBackground: 'rgba(173, 13, 13, 0.11)',
+    hoveredDarkRedBackground: 'rgba(173, 13, 13, 0.21)',
+    darkRedBorderColor: 'rgb(89 4 5)'
 }
 
 export const FONT_SIZES = {

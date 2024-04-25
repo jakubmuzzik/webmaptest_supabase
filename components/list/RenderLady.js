@@ -74,7 +74,7 @@ const RenderLady = ({ lady, width, delay = 0, animate=true }) => {
                 </View>
             </Link>
 
-            <Text numberOfLines={1} style={{ textAlign: 'center', fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white, marginTop: SPACING.x_small }}>
+            <Text numberOfLines={1} style={{ textAlign: 'center', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white, marginTop: SPACING.x_small }}>
                 {lady.name}
             </Text>
             <Text numberOfLines={1} style={{ textAlign: 'center', fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, color: COLORS.greyText }}>
