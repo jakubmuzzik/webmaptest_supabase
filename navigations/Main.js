@@ -24,6 +24,7 @@ import RequireAdminUser from './RequireAdminUser'
 import Lady from '../screens/Lady'
 import Establishment from '../screens/Establishment'
 import AdminNavigation from '../screens/admin/AdminNavigation'
+import { BlurView } from 'expo-blur'
 
 import { COLORS, FONTS, FONT_SIZES, SMALL_SCREEN_THRESHOLD, SPACING, SUPPORTED_LANGUAGES } from '../constants'
 
@@ -37,9 +38,9 @@ const { height: initialHeight } = Dimensions.get('window')
 
 const LayoutWithHeader = ({ children }) => (
     <>
-        <View style={{ position: 'fixed', zIndex: 1, width: '100%', flexDirection: 'column', backgroundColor: COLORS.lightBlack }}>
+        <BlurView overlayColor='#000000' style={{ position: 'fixed', zIndex: 1, width: '100%', flexDirection: 'column', backgroundColor: 'rgba(0, 0, 0, 0.80)',  }}>
             <Header />
-        </View>
+        </BlurView>
 
         <View style={{ flex: 1, marginTop: normalize(70) }}>
             {children}

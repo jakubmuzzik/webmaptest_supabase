@@ -9,6 +9,7 @@ import Animated, { withTiming, useSharedValue, useAnimatedStyle } from 'react-na
 import SwappableText from '../components/animated/SwappableText'
 import { connect } from 'react-redux'
 import ContentLoader, { Rect } from "react-content-loader/native"
+import { BlurView } from 'expo-blur'
 
 const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishmentsCount }) => {
     const [searchParams] = useSearchParams()
@@ -24,6 +25,7 @@ const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishme
     const positiveScrollYDelta = useRef(0)
 
     const translateY = useSharedValue(0)
+    const opacity = useSharedValue(1)
 
     useEffect(() => {
         const handleScroll = () => {
@@ -36,6 +38,9 @@ const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishme
                     translateY.value = withTiming(0, {
                         useNativeDriver: true
                     })
+                    opacity.value = withTiming(1, {
+                        useNativeDriver: true
+                    })
                 }
             }
 
@@ -43,6 +48,9 @@ const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishme
         
             if (positiveScrollYDelta.current >= normalize(70) && window.scrollY > 200 && translateY.value === 0) {
                 translateY.value = withTiming(-normalize(70), {
+                    useNativeDriver: true
+                })
+                opacity.value = withTiming(0, {
                     useNativeDriver: true
                 })
             }
@@ -62,9 +70,9 @@ const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishme
             transform: [{ translateY: translateY.value }], 
             width: '100%', 
             flexDirection: 'column', 
-            backgroundColor: 
-            COLORS.lightBlack, 
-            top: normalize(70)
+            backgroundColor: 'transparent',
+            top: normalize(70),
+            opacity: opacity.value
         }
     })
 
@@ -124,7 +132,9 @@ const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishme
     return (
         <>
             <Animated.View style={containersStyle}>
-                <Categories />
+                <BlurView>
+                    <Categories />
+                </BlurView>
             </Animated.View>
 
             <View style={{ marginTop: normalize(62.5), flexGrow: 1 }}>

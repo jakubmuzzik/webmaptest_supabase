@@ -17,7 +17,7 @@ const HoverableCategoryCard = ({ selected, imagePath, categoryName, contentWidth
                 style={{
 
                     transitionDuration: '150ms',
-                    borderRadius: 15,
+                    borderRadius: 10,
                     overflow: 'hidden',
 
                     cursor: 'default'
@@ -34,7 +34,7 @@ const HoverableCategoryCard = ({ selected, imagePath, categoryName, contentWidth
                         borderWidth: 1,
                         borderColor: (isHovered || selected) ? COLORS.darkRed : COLORS.darkGrey,
                         backgroundColor: selected ? COLORS.darkRedBackground : 'transparent',
-                        borderRadius: 15,
+                        borderRadius: 10,
                         alignItems: 'center',
                         padding: SPACING.xx_small
                     }}

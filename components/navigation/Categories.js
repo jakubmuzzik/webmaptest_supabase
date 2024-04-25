@@ -207,16 +207,12 @@ const Categories = ({ cities = [], updateCurrentLadiesCount, updateCurrentEstabl
 
     return (
         <View style={{
-            flex: 1, backgroundColor: COLORS.grey, borderTopWidth: 1, borderColor: COLORS.lightGrey, flexDirection: 'row',
-            shadowColor: COLORS.lightBlack,
-            shadowOffset: {
-                width: 0,
-                height: 3,
-            },
-            shadowOpacity: 0.27,
-            shadowRadius: 4.65,
-
-            elevation: 6,
+            flex: 1, 
+            backgroundColor: '#1b0404a3', 
+            borderTopWidth: 1, 
+            borderColor: COLORS.lightGrey, 
+            flexDirection: 'row',
+            shadowColor: COLORS.lightBlack
         }}>
 
             <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: SPACING.page_horizontal }}>
@@ -244,7 +240,7 @@ const Categories = ({ cities = [], updateCurrentLadiesCount, updateCurrentEstabl
                 </HoverableView> */}
 
                 <HoverableView hoveredBackgroundColor={COLORS.lightGrey} style={{ justifyContent: 'center', alignItems: 'flex-end', borderWidth: 2, borderRadius: 12, borderColor: filtersCount > 0 ? COLORS.red : COLORS.hoveredLightGrey, marginRight: SPACING.page_horizontal }}>
-                    <TouchableOpacity onPress={onFiltersPress} style={{ paddingHorizontal: SPACING.xx_small, paddingVertical: SPACING.xxx_small, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <TouchableOpacity onPress={onFiltersPress} style={{ paddingHorizontal: SPACING.xx_small, paddingVertical: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <Image
                             resizeMode="contain"
                             source={require('../../assets/icons/filter.svg')}
@@ -280,7 +276,8 @@ const styles = StyleSheet.create({
     categoryContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        paddingVertical: 5
     },
     selectedCategoryContainer: {
         borderBottomWidth: 1,
