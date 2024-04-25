@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/webmaptest_supabase/static/js/main.fb7f4d6f.js",
+    "main.js": "/webmaptest_supabase/static/js/main.7cdc4734.js",
     "static/js/825.232c83e5.chunk.js": "/webmaptest_supabase/static/js/825.232c83e5.chunk.js",
     "static/js/767.b99e602a.js": "/webmaptest_supabase/static/js/767.b99e602a.js",
     "static/media/th.png": "/webmaptest_supabase/static/media/th.9c8191363bdd362779a4.png",
@@ -8,12 +8,15 @@
     "static/media/Ionicons.ttf": "/webmaptest_supabase/static/media/Ionicons.3517aeaa34b2f8cd8eef.ttf",
     "static/media/MaterialIcons.ttf": "/webmaptest_supabase/static/media/MaterialIcons.120b4c7bbd155bd0a04d.ttf",
     "static/media/FontAwesome5_Solid.ttf": "/webmaptest_supabase/static/media/FontAwesome5_Solid.07c3313b24f7b1ca85ee.ttf",
+    "static/media/ladies-linear-gradient.png": "/webmaptest_supabase/static/media/ladies-linear-gradient.52604db8b60e8452d4d7.png",
     "static/media/Poppins-Light.ttf": "/webmaptest_supabase/static/media/Poppins-Light.7641a0f76ca9ef6c252c.ttf",
     "static/media/Poppins-Regular.ttf": "/webmaptest_supabase/static/media/Poppins-Regular.35d26b781dc5fda684cc.ttf",
     "static/media/Poppins-Medium.ttf": "/webmaptest_supabase/static/media/Poppins-Medium.673ed42382ab264e0bf5.ttf",
     "static/media/Poppins-Bold.ttf": "/webmaptest_supabase/static/media/Poppins-Bold.cdb29a5d7ccf57ff05a3.ttf",
     "static/media/ladies.png": "/webmaptest_supabase/static/media/ladies.5b198bbbea8ae5625822.png",
     "static/media/FontAwesome5_Brands.ttf": "/webmaptest_supabase/static/media/FontAwesome5_Brands.9e138496e8f1719c6ebf.ttf",
+    "static/media/massage-linear-gradient.png": "/webmaptest_supabase/static/media/massage-linear-gradient.b8f88e86c7e648bcf659.png",
+    "static/media/lady-linear-gradient.png": "/webmaptest_supabase/static/media/lady-linear-gradient.627f5c5382a993c56504.png",
     "static/media/AntDesign.ttf": "/webmaptest_supabase/static/media/AntDesign.163adab9dbd7cb1ed12a.ttf",
     "static/media/Entypo.ttf": "/webmaptest_supabase/static/media/Entypo.fc6169344c041cffcdae.ttf",
     "static/media/CATEGORY1.png": "/webmaptest_supabase/static/media/CATEGORY1.b399b69eb29bb1dd5e73.png",
@@ -41,12 +44,12 @@
     "favicon-16.png": "/webmaptest_supabase/favicon-16.png",
     "manifest.json": "/webmaptest_supabase/manifest.json",
     "serve.json": "/webmaptest_supabase/serve.json",
-    "main.fb7f4d6f.js.map": "/webmaptest_supabase/static/js/main.fb7f4d6f.js.map",
+    "main.7cdc4734.js.map": "/webmaptest_supabase/static/js/main.7cdc4734.js.map",
     "825.232c83e5.chunk.js.map": "/webmaptest_supabase/static/js/825.232c83e5.chunk.js.map",
     "767.b99e602a.js.map": "/webmaptest_supabase/static/js/767.b99e602a.js.map"
   },
   "entrypoints": [
     "static/js/767.b99e602a.js",
-    "static/js/main.fb7f4d6f.js"
+    "static/js/main.7cdc4734.js"
   ]
 }
