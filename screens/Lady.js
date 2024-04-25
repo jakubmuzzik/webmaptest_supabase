@@ -13,7 +13,6 @@ import { MotiText, MotiView } from "moti"
 import ContentLoader, { Rect } from "react-content-loader/native"
 import Toast from "../components/Toast"
 import { Link } from 'react-router-dom'
-import RenderLady from "../components/list/RenderLady"
 
 import Animated, {
     useSharedValue,
@@ -73,8 +72,8 @@ const Lady = ({ toastRef }) => {
 
     const establishmentNameAnimatedStyle = useAnimatedStyle(() => {
         return {
-            color: COLORS.greyText, 
-            fontSize: FONT_SIZES.large, 
+            color: COLORS.greyText,
+            fontSize: FONT_SIZES.large,
             fontFamily: FONTS.medium,
             transform: [{ rotateX: establishmentNameRotateX.value }],
         }
@@ -82,30 +81,30 @@ const Lady = ({ toastRef }) => {
 
     const leftPhotoAnimatedStyle = useAnimatedStyle(() => {
         return {
-            width: '50%', 
-            flexShrink: 1, 
+            width: '50%',
+            flexShrink: 1,
             marginRight: SPACING.xxx_small,
             opacity: leftPhotoOpacity.value,
-            transform: [{ translateY:leftPhotoTranslateY.value  }],
+            transform: [{ translateY: leftPhotoTranslateY.value }],
         }
     })
 
     const rightPhotosAnimatedStyle1 = useAnimatedStyle(() => {
         return {
-            flexDirection: 'row', 
-            marginBottom: SPACING.xxx_small, 
+            flexDirection: 'row',
+            marginBottom: SPACING.xxx_small,
             flexGrow: 1,
             opacity: rightPhotosOpacity1.value,
-            transform: [{ translateY:rightPhotosTranslateY1.value  }],
+            transform: [{ translateY: rightPhotosTranslateY1.value }],
         }
     })
 
     const rightPhotosAnimatedStyle2 = useAnimatedStyle(() => {
         return {
-            flexDirection: 'row', 
+            flexDirection: 'row',
             flexGrow: 1,
             opacity: rightPhotosOpacity2.value,
-            transform: [{ translateY:rightPhotosTranslateY2.value  }],
+            transform: [{ translateY: rightPhotosTranslateY2.value }],
         }
     })
 
@@ -204,7 +203,7 @@ const Lady = ({ toastRef }) => {
             setLoading(false)
         } catch (error) {
             console.error(error)
-            
+
             setData(undefined)
 
             toastRef.current.show({
@@ -251,7 +250,7 @@ const Lady = ({ toastRef }) => {
     const onEstablishmentLinkPress = async () => {
         navigate({
             pathname: '/establishment/' + data.establishment_id,
-            search: new URLSearchParams({ 
+            search: new URLSearchParams({
                 ...stripEmptyParams(params)
             }).toString(),
             state: null
@@ -310,7 +309,7 @@ const Lady = ({ toastRef }) => {
                         speed={2}
                         height={'100%'}
                         width='100%'
-                        style={{ borderRadius: 10, alignSelf: 'center', aspectRatio: 3/4 }}
+                        style={{ borderRadius: 10, alignSelf: 'center', aspectRatio: 3 / 4 }}
                         backgroundColor={COLORS.grey}
                         foregroundColor={COLORS.lightGrey}
                     >
@@ -323,7 +322,7 @@ const Lady = ({ toastRef }) => {
                             speed={2}
                             height={'100%'}
                             width='100%'
-                            style={{ borderRadius: 10, alignSelf: 'center', marginRight: SPACING.xxx_small, aspectRatio: 3/4, }}
+                            style={{ borderRadius: 10, alignSelf: 'center', marginRight: SPACING.xxx_small, aspectRatio: 3 / 4, }}
                             backgroundColor={COLORS.grey}
                             foregroundColor={COLORS.lightGrey}
                         >
@@ -333,7 +332,7 @@ const Lady = ({ toastRef }) => {
                             speed={2}
                             height={'100%'}
                             width='100%'
-                            style={{ borderRadius: 10, alignSelf: 'center', aspectRatio: 3/4, }}
+                            style={{ borderRadius: 10, alignSelf: 'center', aspectRatio: 3 / 4, }}
                             backgroundColor={COLORS.grey}
                             foregroundColor={COLORS.lightGrey}
                         >
@@ -345,7 +344,7 @@ const Lady = ({ toastRef }) => {
                             speed={2}
                             height={'100%'}
                             width='100%'
-                            style={{ borderRadius: 10, alignSelf: 'center', marginRight: SPACING.xxx_small, aspectRatio: 3/4, }}
+                            style={{ borderRadius: 10, alignSelf: 'center', marginRight: SPACING.xxx_small, aspectRatio: 3 / 4, }}
                             backgroundColor={COLORS.grey}
                             foregroundColor={COLORS.lightGrey}
                         >
@@ -355,7 +354,7 @@ const Lady = ({ toastRef }) => {
                             speed={2}
                             height={'100%'}
                             width='100%'
-                            style={{ borderRadius: 10, alignSelf: 'center', aspectRatio: 3/4, }}
+                            style={{ borderRadius: 10, alignSelf: 'center', aspectRatio: 3 / 4, }}
                             backgroundColor={COLORS.grey}
                             foregroundColor={COLORS.lightGrey}
                         >
@@ -411,7 +410,7 @@ const Lady = ({ toastRef }) => {
                 {data.whatsapp && <TouchableOpacity style={{ padding: 5, width: 28, height: 28, backgroundColor: '#108a0c', borderRadius: '50%', marginRight: SPACING.xxx_small, alignItems: 'center', justifyContent: 'center' }}>
                     <FontAwesome5 name="whatsapp" size={18} color="white" />
                 </TouchableOpacity>}
-               {data.viber && <TouchableOpacity style={{ padding: 5, width: 28, height: 28, backgroundColor: '#7d3daf', borderRadius: '50%', marginRight: SPACING.xxx_small, alignItems: 'center', justifyContent: 'center' }}>
+                {data.viber && <TouchableOpacity style={{ padding: 5, width: 28, height: 28, backgroundColor: '#7d3daf', borderRadius: '50%', marginRight: SPACING.xxx_small, alignItems: 'center', justifyContent: 'center' }}>
                     <FontAwesome5 name="viber" size={18} color="white" />
                 </TouchableOpacity>}
                 {data.telegram && <TouchableOpacity style={{ padding: 5, width: 28, height: 28, backgroundColor: '#38a5e4', borderRadius: 30, alignItems: 'center', justifyContent: 'center' }}>
@@ -436,7 +435,7 @@ const Lady = ({ toastRef }) => {
     const renderPhotosGrid = () => (
         <>
             <View style={{ flexDirection: 'row', }}>
-                <Animated.View 
+                <Animated.View
                     /*transition={{
                         type: 'timing',
                         duration: 300,
@@ -531,7 +530,7 @@ const Lady = ({ toastRef }) => {
                 </View>
             </View>
 
-            <View style={{ alignSelf: 'center', flexDirection: 'row', marginTop: SPACING.small }}>
+            <View style={{ alignSelf: 'center', flexDirection: 'row', marginTop: SPACING.x_small, backgroundColor: COLORS.darkRedBackground, borderRadius: 5, borderWidth: 1, borderColor: COLORS.darkRedBorderColor2, paddingHorizontal: SPACING.xxx_small, paddingVertical: 4 }}>
                 <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText }}>
                     {Object.keys(images).length} {Object.keys(images).length > 1 ? 'photos' : 'photo'}
                 </Text>
@@ -554,109 +553,126 @@ const Lady = ({ toastRef }) => {
 
     const renderAbout = () => (
         <View style={[styles.section, { marginTop: SPACING.xxx_large }]}>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
-                <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
-                    About
-                </Text>
-                {!data.establishment_id && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
-                    • Independent lady
-                </Text>}
-                {data.establishment_id && establishmentName && (
-                    <Animated.Text
-                        numberOfLines={2}
-                        style={establishmentNameAnimatedStyle}
-                    >
-                        • Lady from <Text onPress={onEstablishmentLinkPress} style={{ color: COLORS.red, textDecorationLine: 'underline' }}>{establishmentName}</Text>
-                    </Animated.Text>
-                )}
-            </View>
+            <LinearGradient colors={[
+                COLORS.darkRedBackground,
+                COLORS.darkRedBackground2,
+            ]}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
+            />
 
-            <Text style={{ color: '#FFF', fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, lineHeight: 22 }}
-                onLayout={onTextLayout}
-                numberOfLines={moreTextShown ? undefined : 5}
-            >
-                {data.description}
-            </Text>
-            {
-                showTextTriggeringButton && (
-                    <Text
-                        onPress={() => setMoreTextShown(v => !v)}
-                        style={{ color: '#FFF', fontFamily: FONTS.medium, marginTop: SPACING.small, fontSize: FONT_SIZES.medium }}>
-                        {moreTextShown ? 'Read less...' : 'Read more...'}
+            <View style={{ padding: SPACING.small }}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
+                    <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
+                        About
                     </Text>
-                )
-            }
+                    {!data.establishment_id && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
+                        • Independent lady
+                    </Text>}
+                    {data.establishment_id && establishmentName && (
+                        <Animated.Text
+                            numberOfLines={2}
+                            style={establishmentNameAnimatedStyle}
+                        >
+                            • Lady from <Text onPress={onEstablishmentLinkPress} style={{ color: COLORS.red, textDecorationLine: 'underline' }}>{establishmentName}</Text>
+                        </Animated.Text>
+                    )}
+                </View>
+
+                <Text style={{ color: '#FFF', fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, lineHeight: 22 }}
+                    onLayout={onTextLayout}
+                    numberOfLines={moreTextShown ? undefined : 5}
+                >
+                    {data.description}
+                </Text>
+                {
+                    showTextTriggeringButton && (
+                        <Text
+                            onPress={() => setMoreTextShown(v => !v)}
+                            style={{ color: '#FFF', fontFamily: FONTS.medium, marginTop: SPACING.small, fontSize: FONT_SIZES.medium }}>
+                            {moreTextShown ? 'Read less...' : 'Read more...'}
+                        </Text>
+                    )
+                }
+            </View>
         </View>
     )
 
     const renderPersonalDetails = () => (
-        <View style={[styles.section, { paddingHorizontal: 0 }]}>
-            <Text style={[styles.sectionHeaderText, { marginLeft: SPACING.small }]}>
-                Personal Details
-            </Text>
-            <View style={{ flex: 1, flexDirection: isSmallScreen ? 'column' : 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-                <View style={{ flexDirection: 'column', flex: 1, marginHorizontal: SPACING.small }}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Age</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{calculateAgeFromDate(data.date_of_birth)}</Text>
+        <View style={styles.section}>
+            <LinearGradient colors={[
+                COLORS.darkRedBackground,
+                COLORS.darkRedBackground2,
+            ]}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
+            />
+            <View style={{ paddingVertical: SPACING.small }}>
+                <Text style={[styles.sectionHeaderText, { marginLeft: SPACING.small }]}>
+                    Personal Details
+                </Text>
+                <View style={{ flex: 1, flexDirection: isSmallScreen ? 'column' : 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'column', flex: 1, marginHorizontal: SPACING.small }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Age</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{calculateAgeFromDate(data.date_of_birth)}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Sexual orientation</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.sexuality}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Nationality</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.nationality}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                            <Text style={styles.attributeName}>Languages</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.languages.join(', ')}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Height</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.height} cm</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Weight</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.weight} kg</Text>
+                        </View>
                     </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Sexual orientation</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.sexuality}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Nationality</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.nationality}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        <Text style={styles.attributeName}>Languages</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.languages.join(', ')}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Height</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.height} cm</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Weight</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.weight} kg</Text>
-                    </View>
-                </View>
-                <View style={{ flexDirection: 'column', flex: 1, marginHorizontal: SPACING.small }}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Body type</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.body_type}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Pubic hair</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.pubic_hair}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Breast size</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.breast_size}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Breast type</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.breast_type}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Hair color</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.hair_color}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.attributeName} numberOfLines={1}>Eye color</Text>
-                        <View style={styles.attributeDivider}></View>
-                        <Text style={styles.attributeValue}>{data.eye_color}</Text>
+                    <View style={{ flexDirection: 'column', flex: 1, marginHorizontal: SPACING.small }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Body type</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.body_type}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Pubic hair</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.pubic_hair}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Breast size</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.breast_size}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Breast type</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.breast_type}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Hair color</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.hair_color}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.attributeName} numberOfLines={1}>Eye color</Text>
+                            <View style={styles.attributeDivider}></View>
+                            <Text style={styles.attributeValue}>{data.eye_color}</Text>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -665,27 +681,36 @@ const Lady = ({ toastRef }) => {
 
     const renderServices = () => (
         <View style={styles.section}>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
-                <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
-                    Services
-                </Text>
-                {data.services.every(service => MASSAGE_SERVICES.includes(service)) && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
-                    • Only massages
-                </Text>}
-            </View>
+            <LinearGradient colors={[
+                COLORS.darkRedBackground,
+                COLORS.darkRedBackground2,
+            ]}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
+            />
 
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                {data.services.map(service => (
-                    <View key={service} style={styles.chip}>
-                        <Text style={styles.chipText}>{service}</Text>
-                    </View>
-                ))}
+            <View style={{ padding: SPACING.small }}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
+                    <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
+                        Services
+                    </Text>
+                    {data.services.every(service => MASSAGE_SERVICES.includes(service)) && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
+                        • Only massages
+                    </Text>}
+                </View>
+
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                    {data.services.map(service => (
+                        <View key={service} style={styles.chip}>
+                            <Text style={styles.chipText}>{service}</Text>
+                        </View>
+                    ))}
+                </View>
             </View>
         </View>
     )
 
     const renderWorkingHours = () => {
-        const todaysDay = new Date().toLocaleString('en-us', {weekday:'long'}).toLowerCase()
+        const todaysDay = new Date().toLocaleString('en-us', { weekday: 'long' }).toLowerCase()
         const todaysWorkingHours = data.working_hours.find(working_hours => working_hours.day === todaysDay)
 
         let availableNow = false
@@ -710,68 +735,77 @@ const Lady = ({ toastRef }) => {
 
         return (
             <View style={styles.section}>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
-                    <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
-                        Working hours
-                    </Text>
-                    {availableNow && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
-                        <Text style={{ color: availableNow ? 'green' : COLORS.greyText }}>•</Text>
-                        &nbsp;Currently Available
-                    </Text>}
-                </View>
+                <LinearGradient colors={[
+                    COLORS.darkRedBackground,
+                    COLORS.darkRedBackground2,
+                ]}
+                    style={{ position: 'absolute', width: '100%', height: '100%' }}
+                />
 
-                <View style={styles.table}>
-                    <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                        <View style={[styles.column, { backgroundColor: COLORS.darkRed2 }]} backgroundColor={COLORS.lightGrey} hoveredBackgroundColor={COLORS.grey}>
-                            <Text style={styles.tableHeaderText}>Day</Text>
-                        </View>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={styles.tableHeaderValue}>Monday</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={styles.tableHeaderValue}>Tuesday</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={styles.tableHeaderValue}>Wednesday</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={styles.tableHeaderValue}>Thursday</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={styles.tableHeaderValue}>Friday</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={styles.tableHeaderValue}>Saturday</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={styles.tableHeaderValue}>Sunday</Text>
-                        </HoverableView>
+                <View style={{ padding: SPACING.small }}>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
+                        <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
+                            Working hours
+                        </Text>
+                        {availableNow && <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
+                            <Text style={{ color: availableNow ? 'green' : COLORS.greyText }}>•</Text>
+                            &nbsp;Currently Available
+                        </Text>}
                     </View>
-                    <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                        <View style={[styles.column, { backgroundColor: COLORS.darkRed2 }]}>
-                            <Text style={styles.tableHeaderText}>Availability</Text>
+
+                    <View style={styles.table}>
+                        <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
+                            <View style={[styles.column, { backgroundColor: COLORS.darkRed2 }]} backgroundColor={COLORS.lightGrey} hoveredBackgroundColor={COLORS.grey}>
+                                <Text style={styles.tableHeaderText}>Day</Text>
+                            </View>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={styles.tableHeaderValue}>Monday</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={styles.tableHeaderValue}>Tuesday</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={styles.tableHeaderValue}>Wednesday</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={styles.tableHeaderValue}>Thursday</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={styles.tableHeaderValue}>Friday</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={styles.tableHeaderValue}>Saturday</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={styles.tableHeaderValue}>Sunday</Text>
+                            </HoverableView>
                         </View>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[0].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[0].enabled ? (data.working_hours[0].from + ' - ' + data.working_hours[0].until) : 'Not available'}</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[1].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[1].enabled ? (data.working_hours[1].from + ' - ' + data.working_hours[1].until) : 'Not available'}</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[2].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[2].enabled ? (data.working_hours[2].from + ' - ' + data.working_hours[2].until) : 'Not available'}</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[3].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[3].enabled ? (data.working_hours[3].from + ' - ' + data.working_hours[3].until) : 'Not available'}</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[4].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[4].enabled ? (data.working_hours[4].from + ' - ' + data.working_hours[4].until) : 'Not available'}</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[5].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[5].enabled ? (data.working_hours[5].from + ' - ' + data.working_hours[5].until) : 'Not available'}</Text>
-                        </HoverableView>
-                        <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                            <Text style={[styles.tableHeaderValue, { color: data.working_hours[6].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[6].enabled ? (data.working_hours[6].from + ' - ' + data.working_hours[6].until) : 'Not available'}</Text>
-                        </HoverableView>
+                        <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
+                            <View style={[styles.column, { backgroundColor: COLORS.darkRed2 }]}>
+                                <Text style={styles.tableHeaderText}>Availability</Text>
+                            </View>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={[styles.tableHeaderValue, { color: data.working_hours[0].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[0].enabled ? (data.working_hours[0].from + ' - ' + data.working_hours[0].until) : 'Not available'}</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={[styles.tableHeaderValue, { color: data.working_hours[1].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[1].enabled ? (data.working_hours[1].from + ' - ' + data.working_hours[1].until) : 'Not available'}</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={[styles.tableHeaderValue, { color: data.working_hours[2].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[2].enabled ? (data.working_hours[2].from + ' - ' + data.working_hours[2].until) : 'Not available'}</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={[styles.tableHeaderValue, { color: data.working_hours[3].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[3].enabled ? (data.working_hours[3].from + ' - ' + data.working_hours[3].until) : 'Not available'}</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={[styles.tableHeaderValue, { color: data.working_hours[4].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[4].enabled ? (data.working_hours[4].from + ' - ' + data.working_hours[4].until) : 'Not available'}</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={[styles.tableHeaderValue, { color: data.working_hours[5].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[5].enabled ? (data.working_hours[5].from + ' - ' + data.working_hours[5].until) : 'Not available'}</Text>
+                            </HoverableView>
+                            <HoverableView style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                <Text style={[styles.tableHeaderValue, { color: data.working_hours[6].enabled ? COLORS.white : COLORS.greyText }]}>{data.working_hours[6].enabled ? (data.working_hours[6].from + ' - ' + data.working_hours[6].until) : 'Not available'}</Text>
+                            </HoverableView>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -785,46 +819,55 @@ const Lady = ({ toastRef }) => {
 
         return (
             <View style={styles.section}>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
-                    <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
-                        Pricing
-                    </Text>
-                    <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
-                        • {data.currency}
-                    </Text>
-                </View>
+                <LinearGradient colors={[
+                    COLORS.darkRedBackground,
+                    COLORS.darkRedBackground2,
+                ]}
+                    style={{ position: 'absolute', width: '100%', height: '100%' }}
+                />
 
-                <View style={styles.table}>
-                    <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                        <View style={[styles.column, { backgroundColor: COLORS.darkRed2 }]} backgroundColor={COLORS.lightGrey} hoveredBackgroundColor={COLORS.grey}>
-                            <Text style={styles.tableHeaderText}>Length</Text>
-                        </View>
-                        {data.prices.map(price => (
-                            <HoverableView key={price.length} style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                                <Text style={styles.tableHeaderValue}>{price.length} {price.length > 1 ? 'hours' : 'hour'}</Text>
-                            </HoverableView>
-                        ))}
+                <View style={{ padding: SPACING.small }}>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
+                        <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
+                            Pricing
+                        </Text>
+                        <Text numberOfLines={1} style={{ color: COLORS.greyText, fontSize: FONT_SIZES.large, fontFamily: FONTS.medium }}>
+                            • {data.currency}
+                        </Text>
                     </View>
-                    {data.incall && <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                        <View style={[styles.column, { backgroundColor: COLORS.darkRed2 }]}>
-                            <Text style={styles.tableHeaderText}>Incall</Text>
+
+                    <View style={styles.table}>
+                        <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
+                            <View style={[styles.column, { backgroundColor: COLORS.darkRed2 }]} backgroundColor={COLORS.lightGrey} hoveredBackgroundColor={COLORS.grey}>
+                                <Text style={styles.tableHeaderText}>Length</Text>
+                            </View>
+                            {data.prices.map(price => (
+                                <HoverableView key={price.length} style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                    <Text style={styles.tableHeaderValue}>{price.length} {price.length > 1 ? 'hours' : 'hour'}</Text>
+                                </HoverableView>
+                            ))}
                         </View>
-                        {data.prices.map(price => (
-                            <HoverableView key={price.length} style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                                <Text style={styles.tableHeaderValue}>{price.incall} {CURRENCY_SYMBOLS[data.currency]}</Text>
-                            </HoverableView>
-                        ))}
-                    </View>}
-                    {data.outcall && <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                        <View style={[styles.column, { backgroundColor: COLORS.darkRed2 }]}>
-                            <Text style={styles.tableHeaderText}>Outcall</Text>
-                        </View>
-                        {data.prices.map(price => (
-                            <HoverableView key={price.length} style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
-                                <Text style={styles.tableHeaderValue}>{price.outcall} {CURRENCY_SYMBOLS[data.currency]}</Text>
-                            </HoverableView>
-                        ))}
-                    </View>}
+                        {data.incall && <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
+                            <View style={[styles.column, { backgroundColor: COLORS.darkRed2 }]}>
+                                <Text style={styles.tableHeaderText}>Incall</Text>
+                            </View>
+                            {data.prices.map(price => (
+                                <HoverableView key={price.length} style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                    <Text style={styles.tableHeaderValue}>{price.incall} {CURRENCY_SYMBOLS[data.currency]}</Text>
+                                </HoverableView>
+                            ))}
+                        </View>}
+                        {data.outcall && <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
+                            <View style={[styles.column, { backgroundColor: COLORS.darkRed2 }]}>
+                                <Text style={styles.tableHeaderText}>Outcall</Text>
+                            </View>
+                            {data.prices.map(price => (
+                                <HoverableView key={price.length} style={styles.column} backgroundColor={COLORS.grey} hoveredBackgroundColor={COLORS.lightGrey}>
+                                    <Text style={styles.tableHeaderValue}>{price.outcall} {CURRENCY_SYMBOLS[data.currency]}</Text>
+                                </HoverableView>
+                            ))}
+                        </View>}
+                    </View>
                 </View>
             </View>
         )
@@ -832,56 +875,65 @@ const Lady = ({ toastRef }) => {
 
     const renderAddress = () => (
         <View style={styles.section}>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
-                <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
-                    Address
-                </Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', flexShrink: 1 }}>
-                    <MaterialCommunityIcons name="map-marker" size={20} color={COLORS.white} style={{ marginRight: 3 }} />
-                    <Text numberOfLines={1} style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: data.address ? COLORS.white : COLORS.error }}>
-                        {data.address ? (data.hidden_address ? data.address.city : data.address.title) : 'Enter your address'}
-                    </Text>
-                </View>
-            </View>
+            <LinearGradient colors={[
+                COLORS.darkRedBackground,
+                COLORS.darkRedBackground2,
+            ]}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
+            />
 
-            {!data.hidden_address && <View style={{ width: '100%', height: 300, borderRadius: 5, overflow: 'hidden' }}>
-                <MapView
-                    ref={mapRef}
-                    googleMapsApiKey="AIzaSyCA1Gw6tQbTOm9ME6Ru0nulUNFAOotVY3s"
-                    provider="google"
-                    style={{ flex: 1 }}
-                    animationEnabled
-                    zoomTapEnabled
-                    loadingFallback={loadingMapFallback}
-                    initialCamera={{
-                        center: {
-                            latitude: data.address.lat,
-                            longitude: data.address.lng,
-                        },
-                        zoom: 13,
-                    }}
-                >
-                    <Marker
-                        coordinate={{
-                            latitude: data.address.lat,
-                            longitude: data.address.lng
+            <View style={{ padding: SPACING.small }}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
+                    <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
+                        Address
+                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', flexShrink: 1 }}>
+                        <MaterialCommunityIcons name="map-marker" size={20} color={COLORS.white} style={{ marginRight: 3 }} />
+                        <Text numberOfLines={1} style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: data.address ? COLORS.white : COLORS.error }}>
+                            {data.address ? (data.hidden_address ? data.address.city : data.address.title) : 'Enter your address'}
+                        </Text>
+                    </View>
+                </View>
+
+                {!data.hidden_address && <View style={{ width: '100%', height: 300, borderRadius: 5, overflow: 'hidden' }}>
+                    <MapView
+                        ref={mapRef}
+                        googleMapsApiKey="AIzaSyCA1Gw6tQbTOm9ME6Ru0nulUNFAOotVY3s"
+                        provider="google"
+                        style={{ flex: 1 }}
+                        animationEnabled
+                        zoomTapEnabled
+                        loadingFallback={loadingMapFallback}
+                        initialCamera={{
+                            center: {
+                                latitude: data.address.lat,
+                                longitude: data.address.lng,
+                            },
+                            zoom: 13,
                         }}
-                        title={data.name}
                     >
-                        <Image
-                            source={require('../assets/sport_marker.png')}
-                            style={{
-                                width: 30,
-                                height: 30,
-                                position: 'absolute',
-                                top: -30,
-                                left: -15
+                        <Marker
+                            coordinate={{
+                                latitude: data.address.lat,
+                                longitude: data.address.lng
                             }}
-                            resizeMode="contain"
-                        />
-                    </Marker>
-                </MapView>
-            </View>}
+                            title={data.name}
+                        >
+                            <Image
+                                source={require('../assets/sport_marker.png')}
+                                style={{
+                                    width: 30,
+                                    height: 30,
+                                    position: 'absolute',
+                                    top: -30,
+                                    left: -15
+                                }}
+                                resizeMode="contain"
+                            />
+                        </Marker>
+                    </MapView>
+                </View>}
+            </View>
         </View>
     )
 
@@ -892,10 +944,10 @@ const Lady = ({ toastRef }) => {
     return (
         <>
             <LinearGradient colors={[
-                COLORS.grey,
+                COLORS.darkRedBackground,
                 COLORS.lightBlack,
             ]}
-                style={{ position: 'absolute', width: '100%', height: Dimensions.get('window').height - normalize(70) }}
+                style={{ position: 'absolute', width: '100%', height: Dimensions.get('window').height - normalize(400) }}
             />
 
             <View style={{ alignSelf: 'center', maxWidth: '100%', width: 800 + SPACING.xxx_small, padding: SPACING.large }}>
@@ -930,11 +982,13 @@ export default connect(mapStateToProps)(Lady)
 const styles = StyleSheet.create({
     section: {
         marginTop: SPACING.large,
-        padding: SPACING.small,
-        borderRadius: 20,
+        //padding: SPACING.small,
+        borderRadius: 10,
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,.08)',
-        backgroundColor: COLORS.grey,
+        borderColor: COLORS.darkRedBorderColor2,
+        //backgroundColor: COLORS.darkRedBackground,
+        backgroundColor: 'transparent',
+        overflow: 'hidden'
 
         //boxShadow:  '-5px 5px 20px #1d1c20,5px -5px 20px #1d1c20'
 

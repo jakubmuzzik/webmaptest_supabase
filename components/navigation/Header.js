@@ -405,7 +405,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
     const renderRightHeader = () => {
         return (isSmallScreen || currentAuthUser.id) ? (
             <>
-                {isSmallScreen && <HoverableView style={{ ...styles.searchWrapper, borderColor: searchBorderColor, flexGrow: 1, flexShrink: 1 }} hoveredBackgroundColor={COLORS.hoveredLightGrey} backgroundColor={COLORS.lightGrey}>
+                {isSmallScreen && <HoverableView style={{ ...styles.searchWrapper, borderColor: searchBorderColor, flexGrow: 1, flexShrink: 1 }} hoveredBackgroundColor={COLORS.lightGrey} backgroundColor={COLORS.grey}>
                     <Ionicons name="search" size={normalize(20)} color="white" />
                     <TextInput
                         style={styles.search}
@@ -506,7 +506,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                         {renderLeftHeader()}
                     </View>
                     {!isSmallScreen && <View style={styles.headerMiddle}>
-                        <HoverableView style={{ ...styles.searchWrapper, borderColor: searchBorderColor }} hoveredBackgroundColor={COLORS.hoveredLightGrey} backgroundColor={COLORS.lightGrey}>
+                        <HoverableView style={{ ...styles.searchWrapper, borderColor: searchBorderColor }} hoveredBackgroundColor={COLORS.lightGrey} backgroundColor={COLORS.grey}>
                             <Ionicons name="search" size={normalize(20)} color="white" />
                             <TextInput
                                 style={styles.search}
@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: SPACING.page_horizontal,
-        backgroundColor: COLORS.grey,
+        backgroundColor: COLORS.darkRedBackground,
         height: normalize(70)
     },
     headerLarge: {
@@ -569,7 +569,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: SPACING.page_horizontal,
         paddingVertical: SPACING.x_small,
-        backgroundColor: COLORS.grey,
+        backgroundColor: COLORS.darkRedBackground,
         height: normalize(70)
     },
     headerLeftSmall: {

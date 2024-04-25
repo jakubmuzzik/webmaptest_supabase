@@ -72,8 +72,10 @@ export const COLORS = {
     darkestBlue: '#05375a',
     white: '#FFF',
     darkRedBackground: 'rgba(173, 13, 13, 0.11)',
+    darkRedBackground2: 'rgba(173, 13, 13, 0.055)',
     hoveredDarkRedBackground: 'rgba(173, 13, 13, 0.21)',
-    darkRedBorderColor: 'rgb(89 4 5)'
+    darkRedBorderColor: 'rgb(89 4 5)',
+    darkRedBorderColor2: '#3f000033'
 }
 
 export const FONT_SIZES = {
