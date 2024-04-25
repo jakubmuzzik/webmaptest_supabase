@@ -15,7 +15,7 @@ import {
     DEFAULT_FILTERS
 } from '../constants'
 import { 
-    ACTIVE,
+    ACTIVE, SERVICES,
 } from '../labels'
 import RenderLady from '../components/list/RenderLady'
 import { MOCK_DATA } from '../constants'
@@ -109,7 +109,8 @@ const Esc = ({ updateCurrentLadiesCount, currentLadiesCount, setLadiesPagination
             let query = supabase
                 .from('ladies')
                 .select('*', { count: 'exact', head: true })
-                .match({ status: ACTIVE })      
+                .match({ status: ACTIVE })   
+                .overlaps('services', SERVICES)     
 
             query = buildFiltersForQuery(query, filters)
                 

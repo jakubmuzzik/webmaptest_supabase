@@ -1,14 +1,16 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import { View, Text, ImageBackground, ScrollView, TouchableOpacity, StyleSheet, Dimensions, FlatList } from 'react-native'
-import { COLORS, FONTS, FONT_SIZES, SPACING, SUPPORTED_LANGUAGES } from '../constants'
+import { COLORS, FONTS, FONT_SIZES, SPACING, SUPPORTED_LANGUAGES, MAX_ITEMS_PER_PAGE } from '../constants'
 import HoverableView from '../components/HoverableView'
 import { MaterialIcons } from '@expo/vector-icons'
-import { normalize, getParam, stripEmptyParams } from '../utils'
-import { Image } from 'expo-image'
+import { normalize, getParam, stripEmptyParams, calculateEstablishmentCardWidth, calculateLadyCardWidth } from '../utils'
+import { isBrowser } from 'react-device-detect'
 import {
     ACTIVE,
     SELECT_CITY,
-    translateLabels
+    translateLabels,
+    SERVICES,
+    MASSAGE_SERVICES
 } from '../labels'
 import ContentLoader, { Rect } from "react-content-loader/native"
 
@@ -20,6 +22,7 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import RenderLady from '../components/list/RenderLady'
+import RenderEstablishment from '../components/list/RenderEstablishment'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useSearchParams, Link } from 'react-router-dom'
 import { resetLadiesPaginationData, updateCurrentLadiesCount } from '../redux/actions'
@@ -46,6 +49,9 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
     const [signUpVisible, setSignUpVisible] = useState(false)
     const [newLadies, setNewLadies] = useState()
     const [selectedCategory, setSelectedCategory] = useState('Ladies')
+    const [randomLadies, setRandomLadies] = useState()
+    const [randomMasseuses, setRandomMasseuses] = useState()
+    const [randomEstablishments, setRandomEstablishments] = useState()
 
     const [contentWidth, setContentWidth] = useState(document.body.clientWidth - (SPACING.page_horizontal - SPACING.large) * 2)
     //13 = max length of category name
@@ -135,6 +141,16 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
         init()
     }, [])
 
+    useEffect(() => {
+        if (selectedCategory === 'Ladies') {
+            fetchRandomLadies()
+        } else if (selectedCategory === 'Massages') {
+            fetchRandomMasseuses()
+        } else if (selectedCategory === 'Establishments') {
+            fetchRandomEstablishments()
+        }
+    }, [selectedCategory, randomLadies, randomMasseuses, randomEstablishments])
+
     const init = async () => {
         try {
             const { data, error } = await supabase
@@ -149,6 +165,90 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
             }
 
             setNewLadies(data)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const fetchRandomLadies = async () => {
+        if (randomLadies != null) {
+            return
+        }
+
+        try {
+            const { data, error } = await supabase.rpc('get_random_ladies', { services: SERVICES })
+
+            if (error) {
+                throw error
+            }
+
+            setRandomLadies(data.map(d => {
+                if (d.images == null) {
+                    d.images = []
+                }
+
+                if (d.videos == null) {
+                    d.videos = []
+                }
+
+                return d
+            }))
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const fetchRandomMasseuses = async () => {
+        if (randomMasseuses != null) {
+            return
+        }
+
+        try {
+            const { data, error } = await supabase.rpc('get_random_ladies', { services: MASSAGE_SERVICES })
+
+            if (error) {
+                throw error
+            }
+
+            setRandomMasseuses(data.map(d => {
+                if (d.images == null) {
+                    d.images = []
+                }
+
+                if (d.videos == null) {
+                    d.videos = []
+                }
+
+                return d
+            }))
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const fetchRandomEstablishments = async () => {
+        if (randomEstablishments != null) {
+            return
+        }
+
+        try {
+            const { data, error } = await supabase.rpc('get_random_establishments')
+
+            if (error) {
+                throw error
+            }
+
+            setRandomEstablishments(data.map(d => {
+                if (d.images == null) {
+                    d.images = []
+                }
+
+                if (d.videos == null) {
+                    d.videos = []
+                }
+
+                return d
+            }))
         } catch (error) {
             console.error(error)
         }
@@ -313,6 +413,63 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
         //TODO - put sort param to the LINK
         resetLadiesPaginationData()
         updateCurrentLadiesCount()
+    }
+
+    const ladyCardWidth = useMemo(() => calculateLadyCardWidth(contentWidth - (isBrowser ? (SPACING.page_horizontal + SPACING.large) : 0)), [contentWidth])
+    const estCardWidth = useMemo(() => calculateEstablishmentCardWidth(contentWidth - (isBrowser ? (SPACING.page_horizontal + SPACING.large) : 0)), [contentWidth])
+
+    const renderLadyCard = (data, index) => {
+        return (
+            <View
+                key={data.id}
+                style={[styles.cardContainer, { width: ladyCardWidth }]}
+            >
+                <RenderLady lady={data} width={ladyCardWidth} delay={index * 20} animate={isBrowser}/>
+            </View>
+        )
+    }
+
+    const renderLadiesSkeleton = () => {
+        return new Array(MAX_ITEMS_PER_PAGE).fill(null, 0).map((_, index) => (
+            <View key={index} style={[styles.cardContainer, { width: ladyCardWidth }]}>
+                <ContentLoader
+                    speed={2}
+                    width={ladyCardWidth}
+                    style={{ aspectRatio: 3/4, borderRadius: 10 }}
+                    backgroundColor={COLORS.grey}
+                    foregroundColor={COLORS.lightGrey}
+                >
+                    <Rect x="0" y="0" rx="0" ry="0" width="100%" height="100%" />
+                </ContentLoader>
+            </View>
+        ))
+    }
+
+    const renderEstCard = (data, index) => {
+        return (
+            <View
+                key={data.id}
+                style={[styles.cardContainer, { width: estCardWidth }]}
+            >
+                <RenderEstablishment establishment={data} width={estCardWidth} delay={index*20} animate={isBrowser}/>
+            </View>
+        )
+    }
+
+    const renderEstSkeleton = () => {
+        return new Array(MAX_ITEMS_PER_PAGE).fill(null, 0).map((_, index) => (
+            <View key={index} style={[styles.cardContainer, { width: estCardWidth }]}>
+                <ContentLoader
+                    speed={2}
+                    width={estCardWidth}
+                    style={{ aspectRatio: 16/9, borderRadius: 10 }}
+                    backgroundColor={COLORS.grey}
+                    foregroundColor={COLORS.lightGrey}
+                >
+                    <Rect x="0" y="0" rx="0" ry="0" width="100%" height="100%" />
+                </ContentLoader>
+            </View>
+        ))
     }
 
     return (
@@ -481,10 +638,23 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
                         Random selection from our categories
                     </Text>
                     <View style={{ marginTop: SPACING.large, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Ladies'} onCategoryPress={setSelectedCategory} categoryName="Ladies" imagePath={require('../assets/establishment.jpg')} />
-                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Massages'} onCategoryPress={setSelectedCategory} categoryName="Massages" imagePath={require('../assets/establishment.jpg')} />
+                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Ladies'} onCategoryPress={setSelectedCategory} categoryName="Ladies" imagePath={require('../assets/lady.jpg')} />
+                        <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Massages'} onCategoryPress={setSelectedCategory} categoryName="Massages" imagePath={require('../assets/lady.jpg')} />
                         <HoverableCategoryCard contentWidth={contentWidth} categoryCardNameFontSize={categoryCardNameFontSize} selected={selectedCategory === 'Establishments'} onCategoryPress={setSelectedCategory} categoryName="Establishments" imagePath={require('../assets/establishment.jpg')} />
                     </View>
+                </View>
+            </View>
+
+            <View style={{ flex: 1, backgroundColor: COLORS.lightBlack, paddingHorizontal: SPACING.page_horizontal - SPACING.large, alignSelf: 'center', width: '100%', maxWidth: 1650 }}>
+                <View style={{ marginLeft: SPACING.large, flexDirection: 'row', flexWrap: 'wrap', marginTop: SPACING.small, flex: 1 }}>
+                    {selectedCategory === 'Ladies' && randomLadies == null && renderLadiesSkeleton()}
+                    {selectedCategory === 'Ladies' && randomLadies != null && randomLadies.map((data, index) => renderLadyCard(data, index))}
+
+                    {selectedCategory === 'Massages' && randomMasseuses == null && renderLadiesSkeleton()}
+                    {selectedCategory === 'Massages' && randomMasseuses != null && randomMasseuses.map((data, index) => renderLadyCard(data, index))}
+
+                    {selectedCategory === 'Establishments' && randomEstablishments == null && renderEstSkeleton()}
+                    {selectedCategory === 'Establishments' && randomEstablishments != null && randomEstablishments.map((data, index) => renderEstCard(data, index))}
                 </View>
             </View>
 
@@ -495,3 +665,12 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount }) => {
 }
 
 export default connect(null, { updateCurrentLadiesCount, resetLadiesPaginationData })(Home)
+
+const styles = StyleSheet.create({
+    cardContainer: {
+        marginRight: SPACING.large,
+        marginBottom: SPACING.large,
+        overflow: 'hidden'
+        //flexShrink: 1
+    },
+})

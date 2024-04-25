@@ -15,7 +15,7 @@ import Animated, {
     withDelay
 } from 'react-native-reanimated'
 
-const RenderEstablishment = ({ establishment, width, delay = 0 }) => {
+const RenderEstablishment = ({ establishment, width, delay = 0, animate=true }) => {
     const [searchParams] = useSearchParams()
 
     const params = useMemo(() => ({
@@ -24,8 +24,8 @@ const RenderEstablishment = ({ establishment, width, delay = 0 }) => {
 
     const [isHovered, setIsHovered] = useState(false)
 
-    const translateY = useSharedValue(20)
-    const opacity = useSharedValue(0)
+    const translateY = useSharedValue(animate ? 20 : 0)
+    const opacity = useSharedValue(animate ? 0 : 1)
 
     const containerAnimatedStyle = useAnimatedStyle(() => {
         return {
@@ -38,12 +38,14 @@ const RenderEstablishment = ({ establishment, width, delay = 0 }) => {
     })
 
     useEffect(() => {
-        translateY.value = withDelay(delay, withTiming(0, {
-            useNativeDriver: true
-        }))
-        opacity.value = withDelay(delay,withTiming(1, {
-            useNativeDriver: true
-        }))
+        if (animate) {
+            translateY.value = withDelay(delay, withTiming(0, {
+                useNativeDriver: true
+            }))
+            opacity.value = withDelay(delay,withTiming(1, {
+                useNativeDriver: true
+            }))
+        }
     }, [])
 
     return (

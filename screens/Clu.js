@@ -124,8 +124,7 @@ const Clu = ({ currentEstablishmentsCount, updateCurrentEstablishmentsCount, res
     const renderCard = (data, index) => {
         return (
             <View
-                //key={data.id}
-                key={Math.random()}
+                key={data.id}
                 style={[styles.cardContainer, { width: cardWidth }]}
             >
                 <RenderEstablishment establishment={data} width={cardWidth} delay={index*20}/>
