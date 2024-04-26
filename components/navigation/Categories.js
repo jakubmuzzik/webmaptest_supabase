@@ -211,8 +211,7 @@ const Categories = ({ cities = [], updateCurrentLadiesCount, updateCurrentEstabl
             backgroundColor: '#1b0404a3', 
             borderTopWidth: 1, 
             borderColor: COLORS.lightGrey, 
-            flexDirection: 'row',
-            shadowColor: COLORS.lightBlack
+            flexDirection: 'row'
         }}>
 
             <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: SPACING.page_horizontal }}>

@@ -38,7 +38,7 @@ const { height: initialHeight } = Dimensions.get('window')
 
 const LayoutWithHeader = ({ children }) => (
     <>
-        <BlurView overlayColor='#000000' style={{ position: 'fixed', zIndex: 1, width: '100%', flexDirection: 'column', backgroundColor: 'rgba(0, 0, 0, 0.80)',  }}>
+        <BlurView style={{ position: 'fixed', zIndex: 1, width: '100%', flexDirection: 'column' }}>
             <Header />
         </BlurView>
 

@@ -39,6 +39,7 @@ import Signup from '../modal/Signup'
 import { logOut } from '../../redux/actions'
 import { Avatar } from 'react-native-paper'
 import { connect } from 'react-redux'
+import { BlurView } from 'expo-blur'
 
 import { useSearchParams, Link, useLocation, useNavigate } from 'react-router-dom'
 
@@ -556,7 +557,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: SPACING.page_horizontal,
-        backgroundColor: 'transparent',//COLORS.darkRedBackground,
+        backgroundColor: '#1b0404a3',//COLORS.darkRedBackground,
         height: normalize(70)
     },
     headerLarge: {
