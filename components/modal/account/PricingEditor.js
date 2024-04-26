@@ -72,6 +72,8 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: COLORS.grey
         }
     })
 
@@ -182,7 +184,7 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#FFF',
+            backgroundColor: COLORS.grey,
             borderRadius: 24,
             width: normalize(800),
             maxWidth: '90%',
@@ -211,20 +213,20 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                                 <Animated.Text style={modalHeaderTextStyles}>Edit Pricing</Animated.Text>
                             </View>
                             <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                                 </HoverableView>
                             </View>
                         </View>
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small }}>
+                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small, color: COLORS.white }}>
                                 Edit Pricing
                             </Text>
 
                             <View style={{ marginHorizontal: SPACING.small }}>
-                                <Text style={{ marginBottom: SPACING.xx_small, color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginRight: SPACING.xx_small }}>
+                                <Text style={{ marginBottom: SPACING.xx_small, color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginRight: SPACING.xx_small, color: COLORS.white }}>
                                     Available for:
                                 </Text>
 
@@ -233,24 +235,24 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                                     theme={{ roundness: 1.5 }}
                                     buttons={[
                                         {
-                                            style: { borderColor: COLORS.placeholder, backgroundColor: changedPricing.incall && changedPricing.outcall ? COLORS.red : 'transparent', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 },
+                                            style: { borderColor: COLORS.darkRedBorderColor, backgroundColor: changedPricing.incall && changedPricing.outcall ? COLORS.red : 'transparent', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 },
                                             value: changedPricing.incall && changedPricing.outcall,
-                                            label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: changedPricing.incall && changedPricing.outcall ? '#FFF' : '#000' }}>Both</Text>,
+                                            label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>Both</Text>,
                                             onPress: () => onServiceTypeChange({ outcall: true, incall: true }),
                                             rippleColor: "rgba(220, 46, 46, .10)"
                                         },
                                         {
-                                            style: { borderColor: COLORS.placeholder, backgroundColor: changedPricing.outcall && !changedPricing.incall ? COLORS.red : 'transparent' },
+                                            style: { borderColor: COLORS.darkRedBorderColor, backgroundColor: changedPricing.outcall && !changedPricing.incall ? COLORS.red : 'transparent' },
                                             value: changedPricing.outcall && !changedPricing.incall,
-                                            label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: changedPricing.outcall && !changedPricing.incall ? '#FFF' : '#000' }}>Outcall</Text>,
+                                            label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>Outcall</Text>,
                                             checkedColor: '#FFF',
                                             onPress: () => onServiceTypeChange({ outcall: true, incall: false }),
                                             rippleColor: "rgba(220, 46, 46, .10)"
                                         },
                                         {
-                                            style: { borderColor: COLORS.placeholder, backgroundColor: changedPricing.incall && !changedPricing.outcall ? COLORS.red : 'transparent', borderTopRightRadius: 10, borderBottomRightRadius: 10 },
+                                            style: { borderColor: COLORS.darkRedBorderColor, backgroundColor: changedPricing.incall && !changedPricing.outcall ? COLORS.red : 'transparent', borderTopRightRadius: 10, borderBottomRightRadius: 10 },
                                             value: changedPricing.incall && !changedPricing.outcall,
-                                            label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: changedPricing.incall && !changedPricing.outcall ? '#FFF' : '#000' }}>Incall</Text>,
+                                            label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>Incall</Text>,
                                             checkedColor: '#FFF',
                                             onPress: () => onServiceTypeChange({ incall: true, outcall: false }),
                                             rippleColor: "rgba(220, 46, 46, .10)"
@@ -260,7 +262,7 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                             </View>
 
                             <View style={{ flexDirection: 'row', marginHorizontal: SPACING.small, marginBottom: SPACING.xx_small, marginTop: SPACING.medium, alignItems: 'center' }}>
-                                <Text style={{ color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginRight: SPACING.xx_small }}>
+                                <Text style={{ color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginRight: SPACING.xx_small, color: COLORS.white }}>
                                     Pricing
                                 </Text>
                                 <DropdownSelect
@@ -274,10 +276,10 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                                         onPress={() => currencyDropdownRef.current?.onDropdownPress()}
                                         style={{ marginLeft: SPACING.xxx_small, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
                                     >
-                                        <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#000' }}>
+                                        <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: COLORS.white }}>
                                             {changedPricing.currency}
                                         </Text>
-                                        <MaterialCommunityIcons style={{ marginLeft: 4, }} name="chevron-down" size={normalize(20)} color="black" />
+                                        <MaterialCommunityIcons style={{ marginLeft: 4, }} name="chevron-down" size={normalize(20)} color="white" />
                                     </TouchableOpacity>
                                 </DropdownSelect>
                             </View>
@@ -291,7 +293,7 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
 
                             {changedPricing.prices.length > 0 && <View style={[styles.table, { marginHorizontal: SPACING.small, marginBottom: SPACING.xx_small }]}>
                                 <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                                    <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
+                                    <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground }]}>
                                         <Text style={styles.tableHeaderText}>Length</Text>
                                     </View>
                                     {changedPricing.prices.map(price => (
@@ -301,7 +303,7 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                                     ))}
                                 </View>
                                 {changedPricing.incall && <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                                    <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
+                                    <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground }]}>
                                         <Text style={styles.tableHeaderText}>Incall • {CURRENCY_SYMBOLS[changedPricing.currency]}</Text>
                                     </View>
                                     {changedPricing.prices.map((price, index) => (
@@ -311,11 +313,12 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                                                     fontFamily: FONTS.regular,
                                                     fontSize: FONT_SIZES.medium,
                                                     outlineStyle: 'none',
-                                                    color: '#000',
+                                                    color: COLORS.white,
                                                     height: styles.column.height - 8,
-                                                    borderColor: '#000',
+                                                    borderColor: COLORS.darkRedBorderColor2,
                                                     borderWidth: 1,
-                                                    borderRadius: 5
+                                                    borderRadius: 5,
+                                                    backgroundColor: '#372b2b',
                                                 }]}
                                                 onChangeText={(text) => onPriceChange(text, index, 'incall')}
                                                 value={price.incall}
@@ -326,7 +329,7 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                                     ))}
                                 </View>}
                                 {changedPricing.outcall && <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                                    <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
+                                    <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground }]}>
                                         <Text style={styles.tableHeaderText}>Outcall • {CURRENCY_SYMBOLS[changedPricing.currency]}</Text>
                                     </View>
                                     {changedPricing.prices.map((price, index) => (
@@ -336,11 +339,12 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                                                     fontFamily: FONTS.regular,
                                                     fontSize: FONT_SIZES.medium,
                                                     outlineStyle: 'none',
-                                                    color: '#000',
+                                                    color: COLORS.white,
                                                     height: styles.column.height - 8,
-                                                    borderColor: '#000',
+                                                    borderColor: COLORS.darkRedBorderColor2,
                                                     borderWidth: 1,
-                                                    borderRadius: 5
+                                                    borderRadius: 5,
+                                                    backgroundColor: '#372b2b',
                                                 }]}
                                                 onChangeText={(text) => onPriceChange(text, index, 'outcall')}
                                                 value={price.outcall}
@@ -351,14 +355,14 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                                     ))}
                                 </View>}
                                 <View style={{ flexBasis: 45, flexShrink: 0, flexGrow: 0 }}>
-                                    <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
+                                    <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground }]}>
 
                                     </View>
                                     {changedPricing.prices.map((price, index) => (
                                         <View key={price.length} style={{ alignItems: 'center', justifyContent: 'center', paddingRight: 4, height: normalize(45) }}>
                                             <IconButton
                                                 icon="delete-outline"
-                                                iconColor='black'
+                                                iconColor='white'
                                                 size={20}
                                                 onPress={() => onPriceDeletePress(index)}
                                             />
@@ -375,15 +379,15 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                                     setText={onAddNewPrice}
                                 >
                                     <Button
-                                        labelStyle={{ fontSize: normalize(20), color: '#000' }}
-                                        //style={{ borderRadius: 10, borderColor: '#000', borderWidth: 2 }}
+                                        labelStyle={{ fontSize: normalize(20), color: COLORS.white }}
+                                        style={{ backgroundColor: COLORS.darkRedBackground, borderColor: COLORS.red }}
                                         contentStyle={{ height: 35 }}
                                         rippleColor="rgba(0, 0, 0, .1)"
                                         icon="plus"
                                         mode="outlined"
                                         onPress={onAddNewPricePress}
                                     >
-                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}>
+                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}>
                                             Add price
                                         </Text>
                                     </Button>
@@ -393,9 +397,9 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
 
                         <View style={{ borderTopWidth: 1, borderTopColor: COLORS.placeholder, paddingHorizontal: SPACING.small, paddingVertical: SPACING.x_small, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Button
-                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.lightBlack }}
+                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.white }}
                                 style={{ flexShrink: 1, borderRadius: 10, borderWidth: 0 }}
-                                buttonColor="#FFF"
+                                buttonColor={COLORS.grey}
                                 mode="outlined"
                                 rippleColor='rgba(0,0,0,.1)'
                                 onPress={closeModal}
@@ -406,11 +410,12 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
                             <Button
                                 labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: '#FFF' }}
                                 style={{ flexShrink: 1, borderRadius: 10 }}
-                                buttonColor={COLORS.lightBlack}
+                                buttonColor={COLORS.red}
                                 mode="contained"
                                 onPress={onSavePress}
                                 loading={isSaving}
                                 disabled={isSaving || !isChanged || doesNotHaveAllPricesFilled()}
+                                theme={{ colors: { surfaceDisabled: COLORS.hoveredLightGrey }}}
                             >
                                 Save
                             </Button>
@@ -453,8 +458,8 @@ const styles = StyleSheet.create({
         shadowRadius: 5
     },
     table: {
-        borderWidth: 1,
-        borderColor: COLORS.lightGrey,
+        borderWidth: 2,
+        borderColor: COLORS.darkRedBackground,
         flexDirection: 'row',
         borderRadius: 10,
         overflow: 'hidden'
@@ -467,7 +472,7 @@ const styles = StyleSheet.create({
     tableHeaderValue: {
         fontFamily: FONTS.medium,
         fontSize: FONT_SIZES.medium,
-        color: '#000'
+        color: COLORS.white
     },
     column: {
         paddingHorizontal: SPACING.xx_small,

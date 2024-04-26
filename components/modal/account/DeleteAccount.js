@@ -73,6 +73,8 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment }) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: COLORS.grey
         }
     })
 
@@ -128,7 +130,7 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment }) => {
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#FFF',
+            backgroundColor: COLORS.grey,
             borderRadius: 24,
             width: normalize(500),
             maxWidth: '90%',
@@ -163,8 +165,8 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment }) => {
                                 <Animated.Text style={modalHeaderTextStyles}>Delete account</Animated.Text>
                             </View>
                             <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                                 </HoverableView>
                             </View>
                         </View>
@@ -212,9 +214,9 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment }) => {
 
                         <View style={{ borderTopWidth: 1, borderTopColor: COLORS.placeholder, paddingHorizontal: SPACING.small, paddingVertical: SPACING.x_small, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Button
-                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.lightBlack }}
+                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.white }}
                                 style={{ flexShrink: 1, borderRadius: 10, borderWidth: 0 }}
-                                buttonColor="#FFF"
+                                buttonColor={COLORS.grey}
                                 mode="outlined"
                                 rippleColor='rgba(0,0,0,.1)'
                                 onPress={closeModal}
@@ -230,6 +232,7 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment }) => {
                                 onPress={onDeletePress}
                                 loading={isSaving}
                                 disabled={isSaving || !data.password || !data.confirmDelete}
+                                theme={{ colors: { surfaceDisabled: COLORS.hoveredLightGrey }}}
                             >
                                 Delete
                             </Button>

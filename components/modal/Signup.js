@@ -22,7 +22,7 @@ import {
 import HoverableInput from '../HoverableInput'
 import { stripEmptyParams, getParam } from '../../utils'
 import { TouchableRipple, Button, HelperText } from 'react-native-paper'
-import { TabView } from 'react-native-tab-view'
+import { LinearGradient } from 'expo-linear-gradient'
 
 const window = Dimensions.get('window')
 
@@ -83,13 +83,8 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY1.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
-        }
-    })
-    const modalHeaderTextStyles2 = useAnimatedStyle(() => {
-        return {
-            fontFamily: FONTS.medium,
-            fontSize: FONT_SIZES.large,
-            opacity: interpolate(scrollY2.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: COLORS.lightBlack
         }
     })
 
@@ -105,7 +100,7 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#FFF',
+            backgroundColor: COLORS.lightBlack,
             borderRadius: 24,
             width: normalize(500),
             maxWidth: '90%',
@@ -121,13 +116,13 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
             closeModal()
             navigate({
                 pathname: '/establishment-signup',
-                search: new URLSearchParams(stripEmptyParams(params)).toString() 
+                search: new URLSearchParams(stripEmptyParams(params)).toString()
             })
         } else if (profileType === 'lady') {
             closeModal()
             navigate({
                 pathname: '/lady-signup',
-                search: new URLSearchParams(stripEmptyParams(params)).toString() 
+                search: new URLSearchParams(stripEmptyParams(params)).toString()
             })
         }
     }
@@ -162,258 +157,108 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
                         <Animated.Text style={modalHeaderTextStyles1}>Sign up</Animated.Text>
                     </View>
                     <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                         </HoverableView>
                     </View>
                 </View>
                 <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles1]} />
 
-                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small, paddingHorizontal: SPACING.small }}>
-                    <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large }}>
-                        Sign up
-                    </Text>
+                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1, backgroundColor: COLORS.lightBlack }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
+                    <LinearGradient colors={[
+                        COLORS.darkRedBackground,//'#4b010140',//COLORS.darkRedBackground,
+                        COLORS.lightBlack,
+                    ]}
+                        style={{ position: 'absolute', width: '100%', height: 200 }}
+                    />
 
-                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, paddingTop: SPACING.x_small, marginBottom: SPACING.x_small }}>
-                        How would you like to Sign up?
-                    </Text>
+                    <View style={{ paddingHorizontal: SPACING.small }}>
 
-                    <View style={{ flexDirection: 'row' }}>
-                        <TouchableRipple style={{
-                            flex: 1,
-                            marginRight: SPACING.xx_small,
-                            flexDirection: 'column',
-                            borderRadius: 5,
-                            borderColor: profileType === 'lady' ? COLORS.red : COLORS.placeholder,
-                            backgroundColor: profileType === 'lady' ? 'rgba(220, 46, 46, .10)' : 'transparent',
-                            borderWidth: 1,
-                            height: 350
-                        }}
-                            onPress={() => setProfileType('lady')}
-                            rippleColor="rgba(220, 46, 46, .10)"
-                        >
-                            <ImageBackground source={{ uri: require('../../assets/lady.jpg') }}
-                                style={{ flex: 1, padding: SPACING.x_small }}
-                                imageStyle={{ opacity: profileType === 'lady' ? 1 : 0.7 }}
-                                resizeMode='cover'>
-                                <View>
-                                    <Entypo name="mask" size={28} color="white" />
-                                </View>
-                                <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginTop: SPACING.x_small }}>
-                                    As Independent Lady
-                                </Text>
-                            </ImageBackground>
-                        </TouchableRipple>
-
-                        <TouchableRipple style={{
-                            flex: 1,
-                            marginLeft: SPACING.xx_small,
-                            flexDirection: 'column',
-                            borderRadius: 5,
-                            borderColor: profileType === 'member' ? COLORS.red : COLORS.placeholder,
-                            backgroundColor: profileType === 'member' ? 'rgba(220, 46, 46, .10)' : 'transparent',
-                            borderWidth: 1
-                        }}
-                            onPress={() => setProfileType('member')}
-                            rippleColor="rgba(220, 46, 46, .10)"
-                        >
-                            <ImageBackground source={{ uri: require('../../assets/establishment.jpg') }}
-                               style={{ flex: 1, padding: SPACING.x_small }}
-                                imageStyle={{ opacity: profileType === 'member' ? 1 : 0.7 }}
-                                resizeMode='cover'>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <MaterialCommunityIcons name="guy-fawkes-mask" size={28} color="white" />
-                                </View>
-                                <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginTop: SPACING.x_small }}>
-                                    As Establishment
-                                </Text>
-                            </ImageBackground>
-
-                        </TouchableRipple>
-                    </View>
-
-                    <Button
-                        disabled={!profileType}
-                        labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}
-                        style={{ marginTop: SPACING.medium, borderRadius: 10 }}
-                        buttonColor={COLORS.red}
-                        rippleColor="rgba(220, 46, 46, .16)"
-                        mode="contained"
-                        onPress={onContinuePress}
-                    >
-                        Continue
-                    </Button>
-
-                    <Text style={{ alignSelf: 'center', marginTop: SPACING.small, fontSize: FONTS.medium, fontStyle: FONTS.medium, color: COLORS.lightBlack }}>
-                        Already have an Account?
-                        <Text onPress={onLoginPress} style={{ marginLeft: SPACING.xxx_small, color: 'blue' }}>Log in</Text>
-                    </Text>
-                </Animated.ScrollView>
-            </>
-        )
-    }
-
-    const renderMemberSignUp = () => {
-        return (
-            <>
-                <View style={styles.modal__header}>
-                    <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0 }}>
-                        <HoverableView style={{ marginLeft: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                            <Ionicons onPress={() => setIndex(0)} name="arrow-back" size={normalize(25)} color="black" />
-                        </HoverableView>
-                    </View>
-                    <View style={{ flexShrink: 1, flexGrow: 0 }}>
-                        <Animated.Text style={modalHeaderTextStyles2}>Sign up</Animated.Text>
-                    </View>
-                    <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
-                        </HoverableView>
-                    </View>
-                </View>
-                <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles2]} />
-
-                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler2} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small, paddingHorizontal: SPACING.small}}>
-                    <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large }}>
-                        Member sign up
-                    </Text>
-
-                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, paddingTop: SPACING.small, marginBottom: SPACING.xx_small }}>
-                        Who are you?
-                    </Text>
-
-                    <View style={{ flexDirection: 'row' }}>
-                        <TouchableRipple style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: SPACING.x_small, marginRight: SPACING.x_small, borderRadius: 10 }}
-                            onPress={() => setData({ ...data, gender: 'man' })}
-                            rippleColor="rgba(220, 46, 46, .10)"
-                        >
-                            <Image
-                                resizeMode="contain"
-                                source={require('../../assets/images/man.png')}
-                                style={[
-                                    {
-                                        width: normalize(45),
-                                        height: normalize(45),
-                                    },
-                                    data.gender === 'man' ? {} : { tintColor: COLORS.placeholder }
-                                ]}
-                            />
-                        </TouchableRipple>
-                        <TouchableRipple style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: SPACING.x_small, marginLeft: SPACING.x_small, borderRadius: 10 }}
-                            onPress={() => setData({ ...data, gender: 'woman' })}
-                            rippleColor="rgba(220, 46, 46, .10)"
-                        >
-                            <Image
-                                resizeMode="contain"
-                                source={require('../../assets/images/woman.png')}
-                                style={[
-                                    {
-                                        width: normalize(45),
-                                        height: normalize(45),
-                                    },
-                                    data.gender === 'woman' ? {} : { tintColor: COLORS.placeholder }
-                                ]}
-                            />
-                        </TouchableRipple>
-                    </View>
-                    {showErrorMessages && !data.gender && <HelperText type="error" visible>
-                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.error }}>
-                            Select Your Gender
+                        <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, color: COLORS.white }}>
+                            Sign up
                         </Text>
-                    </HelperText>}
 
-                    <HoverableInput
-                        placeholder="Enter your name"
-                        label="Name"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        containerStyle={{ marginTop: SPACING.xx_small }}
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        text={data.name}
-                        setText={(text) => setData({ ...data, ['name']: text })}
-                        leftIconName="badge-account-outline"
-                        errorMessage={showErrorMessages && !data.name ? 'Enter your name' : undefined}
-                    />
+                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, paddingTop: SPACING.x_small, marginBottom: SPACING.x_small, color: COLORS.white }}>
+                            How would you like to Sign up?
+                        </Text>
 
-                    <HoverableInput
-                        placeholder="Enter your email"
-                        label="Email"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        containerStyle={{ marginTop: SPACING.xxx_small }}
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        text={data.email}
-                        setText={(text) => setData({ ...data, ['email']: text })}
-                        leftIconName="email-outline"
-                        errorMessage={showErrorMessages && !data.email ? 'Enter your email' : undefined}
-                    />
+                        <View style={{ flexDirection: 'row' }}>
+                            <TouchableRipple style={{
+                                flex: 1,
+                                marginRight: SPACING.xx_small,
+                                flexDirection: 'column',
+                                borderRadius: 5,
+                                borderColor: profileType === 'lady' ? COLORS.red : 'rgba(255, 255,255, .1)',
+                                backgroundColor: profileType === 'lady' ? 'rgba(220, 46, 46, .10)' : 'transparent',
+                                borderWidth: 1,
+                                height: 350,
+                                overflow: 'hidden'
+                            }}
+                                onPress={() => setProfileType('lady')}
+                                rippleColor="rgba(220, 46, 46, .10)"
+                            >
+                                <ImageBackground source={{ uri: require('../../assets/lady.jpg') }}
+                                    style={{ flex: 1, padding: SPACING.x_small }}
+                                    imageStyle={{ opacity: profileType === 'lady' ? 1 : 0.7 }}
+                                    resizeMode='cover'>
+                                    <View>
+                                        <Entypo name="mask" size={28} color="white" />
+                                    </View>
+                                    <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginTop: SPACING.x_small }}>
+                                        As Independent Lady
+                                    </Text>
+                                </ImageBackground>
+                            </TouchableRipple>
 
-                    <HoverableInput
-                        placeholder="Password (8 or more characters)"
-                        label="Password"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        containerStyle={{ marginTop: SPACING.xxx_small }}
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        text={data.password}
-                        setText={(text) => setData({ ...data, ['password']: text.replaceAll(' ', '') })}
-                        leftIconName='lock-outline'
-                        rightIconName={data.secureTextEntry ? 'eye-off' : 'eye'}
-                        onRightIconPress={updateSecureTextEntry}
-                        errorMessage={showErrorMessages && (!data.password || data.password.length < 8) ? 'Password must be at least 8 characters long' : undefined}
-                        secureTextEntry={data.secureTextEntry}
-                    />
+                            <TouchableRipple style={{
+                                flex: 1,
+                                marginLeft: SPACING.xx_small,
+                                flexDirection: 'column',
+                                borderRadius: 5,
+                                borderColor: profileType === 'member' ? COLORS.red : 'rgba(255, 255,255, .1)',
+                                backgroundColor: profileType === 'member' ? 'rgba(220, 46, 46, .10)' : 'transparent',
+                                borderWidth: 1,
+                                overflow: 'hidden'
+                            }}
+                                onPress={() => setProfileType('member')}
+                                rippleColor="rgba(220, 46, 46, .10)"
+                            >
+                                <ImageBackground source={{ uri: require('../../assets/establishment.jpg') }}
+                                    style={{ flex: 1, padding: SPACING.x_small }}
+                                    imageStyle={{ opacity: profileType === 'member' ? 1 : 0.7 }}
+                                    resizeMode='cover'>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <MaterialCommunityIcons name="guy-fawkes-mask" size={28} color="white" />
+                                    </View>
+                                    <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginTop: SPACING.x_small }}>
+                                        As Establishment
+                                    </Text>
+                                </ImageBackground>
 
-                    <HoverableInput
-                        placeholder="Confirm your password"
-                        label="Confirm password"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        containerStyle={{ marginTop: SPACING.xxx_small }}
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        text={data.confirmPassword}
-                        setText={(text) => setData({ ...data, ['confirmPassword']: text.replaceAll(' ', '') })}
-                        leftIconName="lock-outline"
-                        rightIconName={data.confirmSecureTextEntry ? 'eye-off' : 'eye'}
-                        onRightIconPress={updateConfirmSecureTextEntry}
-                        errorMessage={showErrorMessages && (!data.confirmPassword || data.confirmPassword.length < 8) ? 'Password must be at least 8 characters long' : showErrorMessages && data.password !== data.confirmPassword ? 'Provided passwords do not match.' : undefined}
-                        secureTextEntry={data.confirmSecureTextEntry}
-                    />
+                            </TouchableRipple>
+                        </View>
 
-                    <Button
-                        labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}
-                        style={{ marginTop: SPACING.medium, borderRadius: 10 }}
-                        buttonColor={COLORS.red}
-                        rippleColor="rgba(220, 46, 46, .16)"
-                        mode="contained"
-                        onPress={onSignUpPress}
-                    >
-                        Sign up
-                    </Button>
+                        <Button
+                            disabled={!profileType}
+                            labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}
+                            style={{ marginTop: SPACING.medium, borderRadius: 10 }}
+                            buttonColor={COLORS.red}
+                            rippleColor="rgba(220, 46, 46, .16)"
+                            mode="contained"
+                            onPress={onContinuePress}
+                            theme={{ colors: { surfaceDisabled: COLORS.hoveredLightGrey } }}
+                        >
+                            Continue
+                        </Button>
+
+                        <Text style={{ alignSelf: 'center', marginTop: SPACING.small, fontSize: FONTS.medium, fontStyle: FONTS.medium, color: COLORS.placeholder }}>
+                            Already have an Account?
+                            <Text onPress={onLoginPress} style={{ marginLeft: SPACING.xxx_small, color: COLORS.linkColor }}>Log in</Text>
+                        </Text>
+                    </View>
                 </Animated.ScrollView>
             </>
         )
-    }
-
-    const renderScene = ({ route }) => {
-        switch (route.key) {
-            case '1':
-                return renderSignUpPage()
-            case '2':
-                return renderMemberSignUp()
-        }
     }
 
     return (
@@ -427,13 +272,6 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
             >
                 <TouchableWithoutFeedback>
                     <Animated.View style={modalContainerStyles}>
-                        {/* <TabView
-                            renderTabBar={props => null}
-                            swipeEnabled={false}
-                            navigationState={{ index, routes }}
-                            renderScene={renderScene}
-                            onIndexChange={setIndex}
-                        /> */}
                         {renderSignUpPage()}
                     </Animated.View>
                 </TouchableWithoutFeedback>

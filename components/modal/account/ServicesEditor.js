@@ -40,7 +40,7 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
     const [changedServices, setChangedServices] = useState(services)
     const [isChanged, setIsChanged] = useState(false)
 
-    const [searchBorderColor, setSearchBorderColor] = useState(COLORS.placeholder)
+    const [searchBorderColor, setSearchBorderColor] = useState('grey')
     const [search, setSearch] = useState('')
 
     const filteredServicesRef = useRef([...SERVICES])
@@ -74,6 +74,8 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: COLORS.grey
         }
     })
 
@@ -142,7 +144,7 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#FFF',
+            backgroundColor: COLORS.grey,
             borderRadius: 24,
             width: normalize(500),
             maxWidth: '90%',
@@ -170,34 +172,34 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
                                 <Animated.Text style={modalHeaderTextStyles}>Edit Services</Animated.Text>
                             </View>
                             <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                                 </HoverableView>
                             </View>
                         </View>
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginHorizontal: SPACING.small }}>
+                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginHorizontal: SPACING.small, color: COLORS.white }}>
                                 Edit Services
                             </Text>
 
-                            <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor='#FFF' backgroundColor='#FFF' hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
-                                <Ionicons name="search" size={normalize(20)} color="black" />
+                            <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor={COLORS.darkRedBackground2} backgroundColor={COLORS.darkRedBorderColor2} hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
+                                <Ionicons name="search" size={normalize(20)} color="white" />
                                 <TextInput
                                     style={styles.citySearch}
                                     onChangeText={onSearch}
                                     value={search}
                                     placeholder="Search services"
                                     placeholderTextColor="grey"
-                                    onBlur={() => setSearchBorderColor(COLORS.placeholder)}
+                                    onBlur={() => setSearchBorderColor('grey')}
                                     onFocus={() => setSearchBorderColor(COLORS.red)}
                                 />
-                                <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(20)} color="black" />
+                                <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(20)} color="white" />
                             </HoverableView>
 
                             {(filteredServicesRef.current.some(filteredService => SERVICES.includes(filteredService)) || !search) && <View style={styles.section}>
-                                <Text style={{ textAlign: 'left', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }}>Sexual services</Text>
+                                <Text style={{ textAlign: 'left', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>Sexual services</Text>
                             </View>}
 
                             {filteredServicesRef.current.map(service => {
@@ -220,7 +222,7 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
                                             text={service}
                                             iconStyle={{ borderRadius: 3 }}
                                             innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                            textStyle={{ color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
+                                            textStyle={{ color: COLORS.placeholder, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
                                             textContainerStyle={{ flexShrink: 1 }}
                                         />
                                     </TouchableRipple>
@@ -228,7 +230,7 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
                             })}
 
                             {(filteredMassageServicesRef.current.some(filteredService => MASSAGE_SERVICES.includes(filteredService)) || !search) && <View style={styles.section}>
-                                <Text style={{ textAlign: 'left', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }}>Massage services</Text>
+                                <Text style={{ textAlign: 'left', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>Massage services</Text>
                             </View>}
 
                             {filteredMassageServicesRef.current.map(service => {
@@ -251,7 +253,7 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
                                             text={service}
                                             iconStyle={{ borderRadius: 3 }}
                                             innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                            textStyle={{ color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
+                                            textStyle={{ color: COLORS.placeholder, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
                                             textContainerStyle={{ flexShrink: 1 }}
                                         />
                                     </TouchableRipple>
@@ -261,9 +263,9 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
 
                         <View style={{ borderTopWidth: 1, borderTopColor: COLORS.placeholder, paddingHorizontal: SPACING.small, paddingVertical: SPACING.x_small, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Button
-                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.lightBlack }}
+                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.white }}
                                 style={{ flexShrink: 1, borderRadius: 10, borderWidth: 0 }}
-                                buttonColor="#FFF"
+                                buttonColor={COLORS.grey}
                                 mode="outlined"
                                 rippleColor='rgba(0,0,0,.1)'
                                 onPress={closeModal}
@@ -274,11 +276,12 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
                             <Button
                                 labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: '#FFF' }}
                                 style={{ flexShrink: 1, borderRadius: 10 }}
-                                buttonColor={COLORS.lightBlack}
+                                buttonColor={COLORS.red}
                                 mode="contained"
                                 onPress={onSavePress}
                                 loading={isSaving}
                                 disabled={isSaving || !isChanged || changedServices.length === 0}
+                                theme={{ colors: { surfaceDisabled: COLORS.hoveredLightGrey }}}
                             >
                                 Save
                             </Button>
@@ -335,11 +338,11 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.regular,
         fontSize: FONT_SIZES.medium,
         outlineStyle: 'none',
-        color: '#000'
+        color: COLORS.white,
     },
     section: {
         paddingVertical: SPACING.xx_small,
         paddingHorizontal: SPACING.small,
-        backgroundColor: COLORS.hoveredWhite
+        backgroundColor: COLORS.darkRedBackground
     },
 })

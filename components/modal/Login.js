@@ -26,6 +26,7 @@ import { TabView } from 'react-native-tab-view'
 import { fetchUser } from '../../redux/actions'
 import { connect } from 'react-redux'
 import * as Linking from 'expo-linking'
+import { LinearGradient } from 'expo-linear-gradient'
 
 import Toast from '../Toast'
 
@@ -39,7 +40,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
     const location = useLocation()
-  
+
     let from = location.state?.from?.pathname || "/account"
 
     const params = useMemo(() => ({
@@ -93,6 +94,8 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY1.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            backgroundColor: COLORS.lightBlack,
+            color: COLORS.white
         }
     })
     const modalHeaderTextStyles2 = useAnimatedStyle(() => {
@@ -100,6 +103,8 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY2.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            backgroundColor: COLORS.lightBlack,
+            color: COLORS.white
         }
     })
 
@@ -114,14 +119,14 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#FFF',
             borderRadius: 24,
             width: normalize(500),
             maxWidth: '90%',
             height: normalize(500),
             maxHeight: '80%',
             overflow: 'hidden',
-            transform: [{ translateY: translateY.value }]
+            transform: [{ translateY: translateY.value }],
+            backgroundColor: COLORS.lightBlack
         }
     })
 
@@ -182,7 +187,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 type: 'success',
                 text: 'Successfully logged in.'
             })
-        } catch(error) { 
+        } catch (error) {
             console.error(error)
             if (error.message?.includes('Invalid login credentials')) {
                 modalToastRef.current.show({
@@ -207,7 +212,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
             return
         }
 
-        if(resetPasswordButtonIsLoading) {
+        if (resetPasswordButtonIsLoading) {
             return
         }
 
@@ -234,7 +239,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 text: 'Instructions to reset your password have been sent to your Email address.'
             })
             closeModal()
-        } catch(e) {
+        } catch (e) {
             console.error(e)
             modalToastRef.current.show({
                 type: 'error',
@@ -251,78 +256,76 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 <View style={styles.modal__header}>
                     <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0 }}></View>
                     <View style={{ flexShrink: 1, flexGrow: 0 }}>
-                        <Animated.Text style={modalHeaderTextStyles1}>Sign up</Animated.Text>
+                        <Animated.Text style={modalHeaderTextStyles1}>Log in</Animated.Text>
                     </View>
                     <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                         </HoverableView>
                     </View>
                 </View>
                 <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles1]} />
 
-                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small, paddingHorizontal: SPACING.small }}>
-                    <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.medium }}>
-                        Log in
-                    </Text>
-
-                    <HoverableInput
-                        placeholder="Enter your email"
-                        label="Email"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        text={data.email}
-                        setText={(text) => setData({ ...data, ['email']: text })}
-                        leftIconName="email-outline"
-                        errorMessage={showErrorMessages && !data.email ? 'Enter your Email' : undefined}
-                        onSubmitEditing={onLoginPress}
+                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1, backgroundColor: COLORS.lightBlack, }} contentContainerStyle={{ paddingBottom: SPACING.small, }}>
+                    <LinearGradient colors={[
+                        COLORS.darkRedBackground,//'#4b010140',//COLORS.darkRedBackground,
+                        COLORS.lightBlack,
+                    ]}
+                        style={{ position: 'absolute', width: '100%', height: 200 }}
                     />
 
-                    <HoverableInput
-                        containerStyle={{ marginTop: SPACING.xxx_small }}
-                        placeholder="Enter your password"
-                        label="Password"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        text={data.password}
-                        setText={(text) => setData({ ...data, ['password']: text })}
-                        leftIconName="lock-outline"
-                        rightIconName={data.secureTextEntry ? 'eye-off' : 'eye'}
-                        onRightIconPress={updateSecureTextEntry}
-                        secureTextEntry={data.secureTextEntry}
-                        errorMessage={showErrorMessages && !data.password ? 'Enter your Password' : undefined}
-                        onSubmitEditing={onLoginPress}
-                    />
+                    <View style={{ paddingHorizontal: SPACING.small }}>
+                        <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.medium, color: COLORS.white }}>
+                            Log in
+                        </Text>
 
-                    <Text onPress={onForgotPasswordPress} style={{ alignSelf: 'flex-end', marginTop: SPACING.small, fontSize: FONTS.medium, fontStyle: FONTS.medium, color: 'blue' }}>
-                        Forgot Password?
-                    </Text>
+                        <HoverableInput
+                            placeholder="Enter your email"
+                            label="Email"
+                            placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
+                            text={data.email}
+                            setText={(text) => setData({ ...data, ['email']: text })}
+                            leftIconName="email-outline"
+                            errorMessage={showErrorMessages && !data.email ? 'Enter your Email' : undefined}
+                            onSubmitEditing={onLoginPress}
+                        />
 
-                    <Button
-                        labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}
-                        style={{ marginTop: SPACING.medium, borderRadius: 10 }}
-                        buttonColor={COLORS.red}
-                        rippleColor="rgba(220, 46, 46, .16)"
-                        mode="contained"
-                        onPress={onLoginPress}
-                        loading={buttonIsLoading}
-                        disabled={buttonIsLoading}
-                    >
-                        Log in
-                    </Button>
+                        <HoverableInput
+                            containerStyle={{ marginTop: SPACING.xxx_small }}
+                            placeholder="Enter your password"
+                            label="Password"
+                            text={data.password}
+                            setText={(text) => setData({ ...data, ['password']: text })}
+                            leftIconName="lock-outline"
+                            rightIconName={data.secureTextEntry ? 'eye-off' : 'eye'}
+                            onRightIconPress={updateSecureTextEntry}
+                            secureTextEntry={data.secureTextEntry}
+                            errorMessage={showErrorMessages && !data.password ? 'Enter your Password' : undefined}
+                            onSubmitEditing={onLoginPress}
+                        />
 
-                    <Text style={{ alignSelf: 'center', marginTop: SPACING.small, fontSize: FONTS.medium, fontStyle: FONTS.medium, color: COLORS.lightBlack }}>
-                        Don't have an Account?
-                        <Text onPress={onSignUpPress} style={{ marginLeft: SPACING.xxx_small, color: 'blue' }}>Sign up</Text>
-                    </Text>
+                        <Text onPress={onForgotPasswordPress} style={{ alignSelf: 'flex-end', marginTop: SPACING.small, fontSize: FONTS.medium, fontStyle: FONTS.medium, color: COLORS.linkColor }}>
+                            Forgot Password?
+                        </Text>
+
+                        <Button
+                            labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}
+                            style={{ marginTop: SPACING.medium, borderRadius: 10 }}
+                            buttonColor={COLORS.red}
+                            rippleColor="rgba(220, 46, 46, .16)"
+                            mode="contained"
+                            onPress={onLoginPress}
+                            loading={buttonIsLoading}
+                            disabled={buttonIsLoading}
+                        >
+                            Log in
+                        </Button>
+
+                        <Text style={{ alignSelf: 'center', marginTop: SPACING.small, fontSize: FONTS.medium, fontStyle: FONTS.medium, color: COLORS.placeholder }}>
+                            Don't have an Account?
+                            <Text onPress={onSignUpPress} style={{ marginLeft: SPACING.xxx_small, color: COLORS.linkColor }}>Sign up</Text>
+                        </Text>
+                    </View>
                 </Animated.ScrollView>
             </>
         )
@@ -333,63 +336,66 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
             <>
                 <View style={styles.modal__header}>
                     <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0 }}>
-                        <HoverableView style={{ marginLeft: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                            <Ionicons onPress={() => setIndex(0)} name="arrow-back" size={normalize(25)} color="black" />
+                        <HoverableView style={{ marginLeft: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                            <Ionicons onPress={() => setIndex(0)} name="arrow-back" size={normalize(25)} color="white" />
                         </HoverableView>
                     </View>
                     <View style={{ flexShrink: 1, flexGrow: 0 }}>
                         <Animated.Text style={modalHeaderTextStyles2}>Sign up</Animated.Text>
                     </View>
                     <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                         </HoverableView>
                     </View>
                 </View>
                 <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles2]} />
 
-                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler2} style={{ zIndex: 1, paddingBottom: SPACING.small }} contentContainerStyle={{ paddingBottom: SPACING.small, paddingHorizontal: SPACING.small }}>
-                    <Image
-                        resizeMode="contain"
-                        source={require('../../assets/images/padlock-icon.png')}
-                        style={{ width: '18%', height: '18%', alignSelf: 'center', marginTop: SPACING.xxxx_large, }}
+                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler2} style={{ zIndex: 1, paddingBottom: SPACING.small }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
+                    <LinearGradient colors={[
+                        COLORS.darkRedBackground,//'#4b010140',//COLORS.darkRedBackground,
+                        COLORS.lightBlack,
+                    ]}
+                        style={{ position: 'absolute', width: '100%', height: 200 }}
                     />
 
-                    <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.large, textAlign: 'center' }}>
-                        Forgot your password?
-                    </Text>
-                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, paddingTop: SPACING.small, textAlign: 'center', marginBottom: SPACING.medium }}>
-                        Enter your email and we will send you the instructions to reset your password.
-                    </Text>
+                    <View style={{ paddingHorizontal: SPACING.small }}>
+                        <Image
+                            resizeMode="contain"
+                            source={require('../../assets/images/padlock-icon.png')}
+                            style={{ width: '18%', height: '18%', alignSelf: 'center', marginTop: SPACING.xxxx_large, }}
+                        />
 
-                    <HoverableInput
-                        placeholder="Enter your email"
-                        label="Email"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        text={data.emailForReset}
-                        setText={(text) => setData({ ...data, ['emailForReset']: text })}
-                        leftIconName="email-outline"
-                        errorMessage={showErrorMessages && !data.emailForReset ? 'Enter Your Email' : undefined}
-                        onSubmitEditing={onResetPasswordPress}
-                    />
+                        <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.large, textAlign: 'center', color: COLORS.white }}>
+                            Forgot your password?
+                        </Text>
+                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, paddingTop: SPACING.small, textAlign: 'center', marginBottom: SPACING.medium, color: COLORS.placeholder }}>
+                            Enter your email and we will send you the instructions to reset your password.
+                        </Text>
 
-                    <Button
-                        labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}
-                        style={{ marginTop: SPACING.medium, marginBottom: SPACING.xx_large, borderRadius: 10 }}
-                        buttonColor={COLORS.red}
-                        rippleColor="rgba(220, 46, 46, .16)"
-                        mode="contained"
-                        onPress={onResetPasswordPress}
-                        loading={resetPasswordButtonIsLoading}
-                        disabled={resetPasswordButtonIsLoading}
-                    >
-                        Reset password
-                    </Button>
+                        <HoverableInput
+                            placeholder="Enter your email"
+                            label="Email"
+                            text={data.emailForReset}
+                            setText={(text) => setData({ ...data, ['emailForReset']: text })}
+                            leftIconName="email-outline"
+                            errorMessage={showErrorMessages && !data.emailForReset ? 'Enter Your Email' : undefined}
+                            onSubmitEditing={onResetPasswordPress}
+                        />
+
+                        <Button
+                            labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}
+                            style={{ marginTop: SPACING.medium, marginBottom: SPACING.xx_large, borderRadius: 10 }}
+                            buttonColor={COLORS.red}
+                            rippleColor="rgba(220, 46, 46, .16)"
+                            mode="contained"
+                            onPress={onResetPasswordPress}
+                            loading={resetPasswordButtonIsLoading}
+                            disabled={resetPasswordButtonIsLoading}
+                        >
+                            Reset password
+                        </Button>
+                    </View>
                 </Animated.ScrollView>
             </>
         )
@@ -416,6 +422,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
             >
                 <TouchableWithoutFeedback>
                     <Animated.View style={modalContainerStyles}>
+
                         <TabView
                             renderTabBar={props => null}
                             swipeEnabled={false}
@@ -428,7 +435,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 </TouchableWithoutFeedback>
             </TouchableOpacity>
 
-            <Toast ref={modalToastRef}/>
+            <Toast ref={modalToastRef} />
         </Modal>
     )
 }

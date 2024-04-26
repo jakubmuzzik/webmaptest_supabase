@@ -17,6 +17,8 @@ import { AntDesign, Ionicons } from '@expo/vector-icons'
 import uuid from 'react-native-uuid'
 import { IN_REVIEW } from '../../../labels'
 
+import { LinearGradient } from 'expo-linear-gradient'
+
 const EstablishmentPhotos = forwardRef((props, ref) => {
     const { i, offsetX = 0, toastRef } = props
 
@@ -43,8 +45,8 @@ const EstablishmentPhotos = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         validate,
         data: JSON.parse(JSON.stringify({
-            images: data.images.filter(image => image).map((image, index) => ({...image, index})),
-            videos: data.videos.filter(video => video).map((video, index) => ({...video, index})),
+            images: data.images.filter(image => image).map((image, index) => ({ ...image, index })),
+            videos: data.videos.filter(video => video).map((video, index) => ({ ...video, index })),
         }))
     }))
 
@@ -136,7 +138,7 @@ const EstablishmentPhotos = forwardRef((props, ref) => {
                 const blurhash = await encodeImageToBlurhash(thumbnail)
 
                 setData(d => {
-                    d.videos[index] = {thumbnail, video: result.assets[0].uri, id: uuid.v4(), blurhash, status: IN_REVIEW}
+                    d.videos[index] = { thumbnail, video: result.assets[0].uri, id: uuid.v4(), blurhash, status: IN_REVIEW }
                     if (d.videos.length < MAX_VIDEOS) {
                         d.videos.push(null)
                     }
@@ -181,6 +183,8 @@ const EstablishmentPhotos = forwardRef((props, ref) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: '#261718'
         }
     })
 
@@ -190,161 +194,171 @@ const EstablishmentPhotos = forwardRef((props, ref) => {
                 <Animated.Text style={modalHeaderTextStyles}>{`${i + 1}. Photos & Videos`}</Animated.Text>
             </View>
             <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
-            <Animated.ScrollView 
-                scrollEventThrottle={1} 
-                onScroll={scrollHandler} 
-                style={{ flex: 1 }} 
-                contentContainerStyle={{ paddingBottom: SPACING.small, paddingTop: SPACING.xxxxx_large }}
+            <Animated.ScrollView
+                scrollEventThrottle={1}
+                onScroll={scrollHandler}
+                style={{ flex: 1 }}
+                contentContainerStyle={{ paddingBottom: SPACING.small }}
                 onContentSizeChange={(contentWidth) => setContentWidth(contentWidth)}
             >
-                <Text style={styles.pageHeaderText}>
-                    {`${i + 1}. Photos & Videos`}
-                </Text>
+                <LinearGradient colors={[
+                    '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                   '#261718',
+                ]}
+                    style={{ position: 'absolute', width: '100%', height: 300 }}
+                />
 
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large }}>
-                    Add cover photo
-                </Text>
+                <View style={{ paddingTop: SPACING.xxxxx_large }}>
 
-                <Text style={{ color: COLORS.grey, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large }}>
-                    This photos will be prominently displayed on your profile page
-                </Text>
-
-                <View style={{ marginTop: SPACING.x_small, flexDirection: 'row', marginHorizontal: SPACING.x_large }}>
-                    {data.images[0] ?
-                        <React.Fragment>
-                            <Image
-                                style={{
-                                    flex: 1,
-                                    borderRadius: 10,
-                                    aspectRatio: 16 / 9,
-                                    borderWidth: 1,
-                                    borderColor: 'rgba(28,27,31,0.16)'
-                                }}
-                                source={{ uri: data.images[0].image }}
-                                resizeMode="cover"
-                            />
-                            <IconButton
-                                style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
-                                icon="delete-outline"
-                                iconColor='white'
-                                size={normalize(20)}
-                                onPress={() => onDeleteImagePress(0)}
-                            />
-                        </React.Fragment> :
-                        <TouchableRipple
-                            onPress={() => onSelectImagePress(0)}
-                            style={{ backgroundColor: 'rgba(28,27,31,0.16)', alignItems: 'center', justifyContent: 'center', flex: 1, borderRadius: 10, aspectRatio: 16 / 9 }}
-                        >
-                            <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "black"} />
-                        </TouchableRipple>
-                    }
-                </View>
-                {showErrors && <HelperText type="error" visible>
-                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.error, paddingHorizontal: SPACING.x_large }}>
-                        Add your cover photo.
+                    <Text style={styles.pageHeaderText}>
+                        {`${i + 1}. Photos & Videos`}
                     </Text>
-                </HelperText>}
 
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, marginTop: SPACING.medium }}>
-                    Add additional photos
-                </Text>
-                <Text style={{ color: COLORS.grey, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large, marginBottom: SPACING.x_small }}>
-                    Visitors can explore these photos by clicking the 'View All' button on your profile
-                </Text>
+                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, color: COLORS.white }}>
+                        Add cover photo
+                    </Text>
 
-                <View style={{ flexDirection: 'row', marginLeft: SPACING.x_large, marginRight: SPACING.x_large - SPACING.xxx_small, flexWrap: 'wrap' }}>
-                    {data.images.slice(1).map((image, index) =>
-                        <View key={image ? image.id : Math.random()} style={{ width: ((contentWidth - (SPACING.x_large * 2) - (SPACING.xxx_small * 2)) / 3), marginRight: SPACING.xxx_small, marginBottom: SPACING.xxx_small }}>
-                            {image ?
-                                <ImageBackground
-                                    source={{ uri: image.image }}
-                                    style={{ flex: 1 }}
-                                    imageStyle={{ opacity: 0.7, borderRadius: 10, borderColor: 'rgba(28,27,31,0.16)', borderWidth: 1, overflow: 'hidden' }}
-                                    resizeMode='cover'
-                                >
-                                    <BlurView intensity={50} style={{ borderRadius: 10, borderColor: 'rgba(28,27,31,0.16)', borderWidth: 1, overflow: 'hidden' }}>
+                    <Text style={{ color: COLORS.grey, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large }}>
+                        This photos will be prominently displayed on your profile page
+                    </Text>
+
+                    <View style={{ marginTop: SPACING.x_small, flexDirection: 'row', marginHorizontal: SPACING.x_large }}>
+                        {data.images[0] ?
+                            <React.Fragment>
+                                <Image
+                                    style={{
+                                        flex: 1,
+                                        borderRadius: 10,
+                                        aspectRatio: 16 / 9,
+                                        borderWidth: 1,
+                                        borderColor: 'rgba(28,27,31,0.16)'
+                                    }}
+                                    source={{ uri: data.images[0].image }}
+                                    resizeMode="cover"
+                                />
+                                <IconButton
+                                    style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
+                                    icon="delete-outline"
+                                    iconColor='white'
+                                    size={normalize(20)}
+                                    onPress={() => onDeleteImagePress(0)}
+                                />
+                            </React.Fragment> :
+                            <TouchableRipple
+                                onPress={() => onSelectImagePress(0)}
+                                style={{ backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', flex: 1, borderRadius: 10, aspectRatio: 16 / 9 }}
+                            >
+                                <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "white"} />
+                            </TouchableRipple>
+                        }
+                    </View>
+                    {showErrors && <HelperText type="error" visible>
+                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.error, paddingHorizontal: SPACING.x_large }}>
+                            Add your cover photo.
+                        </Text>
+                    </HelperText>}
+
+                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, marginTop: SPACING.medium, color: COLORS.white }}>
+                        Add additional photos
+                    </Text>
+                    <Text style={{ color: COLORS.placeholder, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large, marginBottom: SPACING.x_small }}>
+                        Visitors can explore these photos by clicking the 'View All' button on your profile
+                    </Text>
+
+                    <View style={{ flexDirection: 'row', marginLeft: SPACING.x_large, marginRight: SPACING.x_large - SPACING.xxx_small, flexWrap: 'wrap' }}>
+                        {data.images.slice(1).map((image, index) =>
+                            <View key={image ? image.id : Math.random()} style={{ width: ((contentWidth - (SPACING.x_large * 2) - (SPACING.xxx_small * 2)) / 3), marginRight: SPACING.xxx_small, marginBottom: SPACING.xxx_small }}>
+                                {image ?
+                                    <ImageBackground
+                                        source={{ uri: image.image }}
+                                        style={{ flex: 1 }}
+                                        imageStyle={{ opacity: 0.7, borderRadius: 10, borderColor: 'rgba(28,27,31,0.16)', borderWidth: 1, overflow: 'hidden' }}
+                                        resizeMode='cover'
+                                    >
+                                        <BlurView intensity={50} style={{ borderRadius: 10, borderColor: 'rgba(28,27,31,0.16)', borderWidth: 1, overflow: 'hidden' }}>
+                                            <Image
+                                                style={{
+                                                    flex: 1,
+                                                    aspectRatio: 1 / 1,
+                                                }}
+                                                source={{ uri: image.image }}
+                                                resizeMode="contain"
+                                            />
+                                            <IconButton
+                                                style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
+                                                icon="delete-outline"
+                                                iconColor='white'
+                                                size={normalize(20)}
+                                                onPress={() => onDeleteImagePress(index + 1)}
+                                            />
+                                        </BlurView>
+                                    </ImageBackground> :
+                                    <TouchableRipple
+                                        onPress={() => onSelectImagePress(index + 1)}
+                                        style={{ backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', flex: 1, borderRadius: 10, aspectRatio: 1 / 1 }}
+                                    >
+                                        <>
+                                            <AntDesign name="plus" size={normalize(30)} color="white" />
+                                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.white }}>
+                                                Add more
+                                            </Text>
+                                            {/* <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small }}>
+                                                Max file size: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>{MAX_PHOTO_SIZE_MB}MB</Text>
+                                            </Text> */}
+                                        </>
+                                    </TouchableRipple>
+                                }
+                            </View>)}
+                    </View>
+
+                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, marginTop: SPACING.medium - SPACING.xxx_small, color: COLORS.white }}>
+                        Add videos
+                    </Text>
+                    <Text style={{ color: COLORS.placeholder, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large, marginBottom: SPACING.x_small }}>
+                        Visitors can explore these videos by clicking the 'View All' button on your profile
+                    </Text>
+
+                    <View style={{ flexDirection: 'row', marginLeft: SPACING.x_large, marginRight: SPACING.x_large - SPACING.xxx_small, flexWrap: 'wrap' }}>
+                        {data.videos.map((video, index) =>
+                            <View key={video ? video.id : Math.random()} style={{ width: ((contentWidth - (SPACING.x_large * 2) - (SPACING.xxx_small * 2)) / 3), marginRight: SPACING.xxx_small, marginBottom: SPACING.xxx_small }}>
+                                {video ?
+                                    <React.Fragment>
                                         <Image
                                             style={{
                                                 flex: 1,
+                                                borderRadius: 10,
                                                 aspectRatio: 1 / 1,
+                                                borderWidth: 1,
+                                                borderColor: 'rgba(28,27,31,0.16)'
                                             }}
-                                            source={{ uri: image.image }}
-                                            resizeMode="contain"
+                                            source={{ uri: video.thumbnail }}
+                                            resizeMode="cover"
                                         />
                                         <IconButton
                                             style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
                                             icon="delete-outline"
                                             iconColor='white'
                                             size={normalize(20)}
-                                            onPress={() => onDeleteImagePress(index + 1)}
+                                            onPress={() => onDeleteVideoPress(index)}
                                         />
-                                    </BlurView>
-                                </ImageBackground> :
-                                <TouchableRipple
-                                    onPress={() => onSelectImagePress(index + 1)}
-                                    style={{ backgroundColor: 'rgba(28,27,31,0.16)', alignItems: 'center', justifyContent: 'center', flex: 1, borderRadius: 10, aspectRatio: 1 / 1 }}
-                                >
-                                    <>
-                                        <AntDesign name="plus" size={normalize(30)} color="black" />
-                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>
-                                            Add more
-                                        </Text>
-                                        {/* <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small }}>
-                                                Max file size: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>{MAX_PHOTO_SIZE_MB}MB</Text>
-                                            </Text> */}
-                                    </>
-                                </TouchableRipple>
-                            }
-                        </View>)}
-                </View>
-
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, marginTop: SPACING.medium - SPACING.xxx_small, }}>
-                    Add videos
-                </Text>
-                <Text style={{ color: COLORS.grey, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large, marginBottom: SPACING.x_small }}>
-                    Visitors can explore these videos by clicking the 'View All' button on your profile
-                </Text>
-
-                <View style={{ flexDirection: 'row', marginLeft: SPACING.x_large, marginRight: SPACING.x_large - SPACING.xxx_small, flexWrap: 'wrap' }}>
-                    {data.videos.map((video, index) =>
-                        <View key={video ? video.id : Math.random()} style={{ width: ((contentWidth - (SPACING.x_large * 2) - (SPACING.xxx_small * 2)) / 3), marginRight: SPACING.xxx_small, marginBottom: SPACING.xxx_small }}>
-                            {video ?
-                                <React.Fragment>
-                                    <Image
-                                        style={{
-                                            flex: 1,
-                                            borderRadius: 10,
-                                            aspectRatio: 1 / 1,
-                                            borderWidth: 1,
-                                            borderColor: 'rgba(28,27,31,0.16)'
-                                        }}
-                                        source={{ uri: video.thumbnail }}
-                                        resizeMode="cover"
-                                    />
-                                    <IconButton
-                                        style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
-                                        icon="delete-outline"
-                                        iconColor='white'
-                                        size={normalize(20)}
-                                        onPress={() => onDeleteVideoPress(index)}
-                                    />
-                                </React.Fragment> :
-                                <TouchableRipple
-                                    onPress={() => onSelectVideoPress(index)}
-                                    style={{ backgroundColor: 'rgba(28,27,31,0.16)', alignItems: 'center', justifyContent: 'center', flex: 1, borderRadius: 10, aspectRatio: 1 / 1 }}
-                                >
-                                    <>
-                                        <AntDesign name="videocamera" size={normalize(30)} color="black" />
-                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>
-                                            Add video
-                                        </Text>
-                                        {/* <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small }}>
+                                    </React.Fragment> :
+                                    <TouchableRipple
+                                        onPress={() => onSelectVideoPress(index)}
+                                        style={{ backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', flex: 1, borderRadius: 10, aspectRatio: 1 / 1 }}
+                                    >
+                                        <>
+                                            <AntDesign name="videocamera" size={normalize(30)} color="white" />
+                                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.white }}>
+                                                Add video
+                                            </Text>
+                                            {/* <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small }}>
                                                 Max file size: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>{MAX_VIDEO_SIZE_MB}MB</Text>
                                             </Text> */}
-                                    </>
-                                </TouchableRipple>
-                            }
-                        </View>)}
+                                        </>
+                                    </TouchableRipple>
+                                }
+                            </View>)}
+                    </View>
                 </View>
             </Animated.ScrollView>
         </>
@@ -355,7 +369,7 @@ export default memo(EstablishmentPhotos)
 
 const styles = StyleSheet.create({
     pageHeaderText: {
-        //color: '#FFF', 
+        color: '#FFF',
         fontFamily: FONTS.bold,
         fontSize: FONT_SIZES.h3,
         marginHorizontal: SPACING.x_large,
@@ -380,7 +394,7 @@ const styles = StyleSheet.create({
         right: 0,
         left: 0,
         height: normalize(55),
-        backgroundColor: '#FFF',
+        backgroundColor: COLORS.white,
         zIndex: 2,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,

@@ -62,6 +62,8 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: COLORS.grey
         }
     })
 
@@ -118,7 +120,7 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#FFF',
+            backgroundColor: COLORS.grey,
             borderRadius: 24,
             width: normalize(800),
             maxWidth: '90%',
@@ -146,15 +148,15 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
                                 <Animated.Text style={modalHeaderTextStyles}>Edit About</Animated.Text>
                             </View>
                             <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                                 </HoverableView>
                             </View>
                         </View>
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small }}>
+                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small, color: COLORS.white }}>
                                 Edit About
                             </Text>
 
@@ -165,13 +167,7 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
                                     numberOfLines={10}
                                     maxLength={1000}
                                     label="Description"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ marginTop: SPACING.xxx_small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                    placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
                                     text={changedAbout}
                                     setText={(text) => setChangedAbout(text)}
                                     errorMessage={showErrorMessage && !changedAbout ? 'Desribe yourself' : undefined}
@@ -186,9 +182,9 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
 
                         <View style={{ borderTopWidth: 1, borderTopColor: COLORS.placeholder, paddingHorizontal: SPACING.small, paddingVertical: SPACING.x_small, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Button
-                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.lightBlack }}
+                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.white }}
                                 style={{ flexShrink: 1, borderRadius: 10, borderWidth: 0 }}
-                                buttonColor="#FFF"
+                                buttonColor={COLORS.grey}
                                 mode="outlined"
                                 rippleColor='rgba(0,0,0,.1)'
                                 onPress={closeModal}
@@ -199,11 +195,12 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
                             <Button
                                 labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: '#FFF' }}
                                 style={{ flexShrink: 1, borderRadius: 10 }}
-                                buttonColor={COLORS.lightBlack}
+                                buttonColor={COLORS.red}
                                 mode="contained"
                                 onPress={onSavePress}
                                 loading={isSaving}
                                 disabled={isSaving || about === changedAbout}
+                                theme={{ colors: { surfaceDisabled: COLORS.hoveredLightGrey }}}
                             >
                                 Save
                             </Button>

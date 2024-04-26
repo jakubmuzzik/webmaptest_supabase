@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: SPACING.page_horizontal,
-        backgroundColor: '#1b0404a3',//COLORS.darkRedBackground,
+        backgroundColor: '#1b0404a3',//'#1b0404bf',//'#1b0404a3',//COLORS.darkRedBackground,
         height: normalize(70)
     },
     headerLarge: {
@@ -570,7 +570,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: SPACING.page_horizontal,
         paddingVertical: SPACING.x_small,
-        backgroundColor:  '#1b0404a3',// 'rgb(44 26 26 / 64%)',//'rgb(44 26 26 / 64%)',//COLORS.darkRedBackground,
+        backgroundColor:  '#1b0404a3',//'#1b0404bf',//'#1b0404a3',// 'rgb(44 26 26 / 64%)',//'rgb(44 26 26 / 64%)',//COLORS.darkRedBackground,
         height: normalize(70)
     },
     headerLeftSmall: {

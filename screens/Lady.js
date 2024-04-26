@@ -944,10 +944,10 @@ const Lady = ({ toastRef }) => {
     return (
         <>
             <LinearGradient colors={[
-                COLORS.darkRedBackground,
+                COLORS.darkRedBackground,//'#4b010140',//COLORS.darkRedBackground,
                 COLORS.lightBlack,
             ]}
-                style={{ position: 'absolute', width: '100%', height: Dimensions.get('window').height - normalize(400) }}
+                style={{ position: 'absolute', width: '100%', height: Dimensions.get('window').height - normalize(600) }}
             />
 
             <View style={{ alignSelf: 'center', maxWidth: '100%', width: 800 + SPACING.xxx_small, padding: SPACING.large }}>
@@ -985,7 +985,7 @@ const styles = StyleSheet.create({
         //padding: SPACING.small,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: COLORS.darkRedBorderColor2,
+        borderColor: '#3f0000',
         //backgroundColor: COLORS.darkRedBackground,
         backgroundColor: 'transparent',
         overflow: 'hidden'

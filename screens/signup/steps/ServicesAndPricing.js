@@ -16,6 +16,8 @@ import { HelperText, SegmentedButtons, TouchableRipple, Button, IconButton } fro
 
 import ServicesPicker from '../../../components/modal/ServicesPicker'
 
+import { LinearGradient } from 'expo-linear-gradient'
+
 const HOURS = ['0.5 hour', '1 hour', '1.5 hour', '2 hours', '2.5 hour', '3 hours', '3.5 hour', '4 hours', '4.5 hour', '5 hours', '5.5 hour', '6 hours', '6.5 hour', '7 hours', '7.5 hour', '8 hours', '8.5 hour', '9 hours', '9.5 hour', '10 hours', '10.5 hour', '11 hours', '11.5 hour', '12 hours', '12.5 hour', '13 hours', '13.5 hour', '14 hours', '14.5 hour', '15 hours', '15.5 hour', '16 hours', '16.5 hour', '17 hours', '17.5 hour', '18 hours', '18.5 hour', '19 hours', '19.5 hour', '20 hours', '20.5 hour', '21 hours', '21.5 hour', '22 hours', '22.5 hour', '23 hours', '23.5 hour', '24 hours']
 
 const ServicesAndPricing = forwardRef((props, ref) => {
@@ -109,6 +111,8 @@ const ServicesAndPricing = forwardRef((props, ref) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: '#261718'
         }
     })
 
@@ -118,218 +122,230 @@ const ServicesAndPricing = forwardRef((props, ref) => {
                 <Animated.Text style={modalHeaderTextStyles}>{`${i + 1}. Services & Pricing`}</Animated.Text>
             </View>
             <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
-            <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small, paddingTop: SPACING.xxxxx_large }}>
-                <Text style={styles.pageHeaderText}>
-                    {`${i + 1}. Services & Pricing`}
-                </Text>
-
-                <Text style={{ marginBottom: SPACING.xx_small, marginHorizontal: SPACING.x_large, color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginRight: SPACING.xx_small }}>
-                    Available for:
-                </Text>
-
-                <SegmentedButtons
-                    style={{ marginHorizontal: SPACING.x_large }}
-                    onValueChange={() => null}
-                    theme={{ roundness: 1.5 }}
-                    buttons={[
-                        {
-                            style: { borderColor: COLORS.placeholder, backgroundColor: data.incall && data.outcall ? COLORS.red : 'transparent', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 },
-                            value: data.incall && data.outcall,
-                            label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: data.incall && data.outcall ? '#FFF' : '#000' }}>Both</Text>,
-                            onPress: () => setData(data => ({ ...data, outcall: true, incall: true })),
-                            rippleColor: "rgba(220, 46, 46, .10)"
-                        },
-                        {
-                            style: { borderColor: COLORS.placeholder, backgroundColor: data.outcall && !data.incall ? COLORS.red : 'transparent' },
-                            value: data.outcall && !data.incall,
-                            label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: data.outcall && !data.incall ? '#FFF' : '#000' }}>Outcall</Text>,
-                            checkedColor: '#FFF',
-                            onPress: () => setData(data => ({ ...data, outcall: true, incall: false })),
-                            rippleColor: "rgba(220, 46, 46, .10)"
-                        },
-                        {
-                            style: { borderColor: COLORS.placeholder, backgroundColor: data.incall && !data.outcall ? COLORS.red : 'transparent', borderTopRightRadius: 10, borderBottomRightRadius: 10 },
-                            value: data.incall && !data.outcall,
-                            label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: data.incall && !data.outcall ? '#FFF' : '#000' }}>Incall</Text>,
-                            checkedColor: '#FFF',
-                            onPress: () => setData(data => ({ ...data, incall: true, outcall: false })),
-                            rippleColor: "rgba(220, 46, 46, .10)"
-                        }
-                    ]}
+            <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
+                <LinearGradient colors={[
+                    '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                    '#261718',
+                ]}
+                    style={{ position: 'absolute', width: '100%', height: 300 }}
                 />
 
-                <Text style={{ color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, marginBottom: SPACING.xx_small, marginTop: SPACING.medium }}>
-                    Services <Text style={{ fontSize: FONT_SIZES.medium }}>({data.services.length})</Text>
-                </Text>
-                {data.services.length === 0 && showErrors && <HelperText type="error" visible style={{ marginHorizontal: SPACING.x_large, padding: 0, marginBottom: SPACING.xx_small }}>
-                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.error }}>
-                        Add your services.
+                <View style={{ paddingTop: SPACING.xxxxx_large }}>
+
+                    <Text style={styles.pageHeaderText}>
+                        {`${i + 1}. Services & Pricing`}
                     </Text>
-                </HelperText>}
 
+                    <Text style={{ marginBottom: SPACING.xx_small, marginHorizontal: SPACING.x_large, color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginRight: SPACING.xx_small }}>
+                        Available for:
+                    </Text>
 
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: SPACING.x_large }}>
-                    {data.services.map((service) => (
-                        <HoverableView key={service} style={{ flexDirection: 'row', overflow: 'hidden', borderRadius: 20, borderWidth: 2, borderColor: COLORS.red, marginRight: SPACING.xxx_small, marginBottom: SPACING.xx_small, }} hoveredBackgroundColor='rgba(220, 46, 46, .10)' /*backgroundColor={COLORS.red}*/>
-                            <TouchableRipple
-                                onPress={() => onMultiPicklistChange(service, 'services')}
-                                style={styles.chip}
-                            >
-                                <>
-                                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, marginRight: SPACING.xx_small, }}>{service}</Text>
-                                    <Ionicons onPress={() => onMultiPicklistChange(service, 'services')} name="close" size={normalize(18)} color="black" />
-                                </>
-                            </TouchableRipple>
-                        </HoverableView>
-                    ))}
-                </View>
+                    <SegmentedButtons
+                        style={{ marginHorizontal: SPACING.x_large }}
+                        onValueChange={() => null}
+                        theme={{ roundness: 1.5 }}
+                        buttons={[
+                            {
+                                style: { borderColor: COLORS.darkRedBorderColor, backgroundColor: data.incall && data.outcall ? COLORS.red : 'transparent', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 },
+                                value: data.incall && data.outcall,
+                                label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>Both</Text>,
+                                onPress: () => setData(data => ({ ...data, outcall: true, incall: true })),
+                                rippleColor: "rgba(220, 46, 46, .10)"
+                            },
+                            {
+                                style: { borderColor: COLORS.darkRedBorderColor, backgroundColor: data.outcall && !data.incall ? COLORS.red : 'transparent' },
+                                value: data.outcall && !data.incall,
+                                label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>Outcall</Text>,
+                                checkedColor: '#FFF',
+                                onPress: () => setData(data => ({ ...data, outcall: true, incall: false })),
+                                rippleColor: "rgba(220, 46, 46, .10)"
+                            },
+                            {
+                                style: { borderColor: COLORS.darkRedBorderColor, backgroundColor: data.incall && !data.outcall ? COLORS.red : 'transparent', borderTopRightRadius: 10, borderBottomRightRadius: 10 },
+                                value: data.incall && !data.outcall,
+                                label: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>Incall</Text>,
+                                checkedColor: '#FFF',
+                                onPress: () => setData(data => ({ ...data, incall: true, outcall: false })),
+                                rippleColor: "rgba(220, 46, 46, .10)"
+                            }
+                        ]}
+                    />
 
-                <View style={{ flexDirection: 'row', marginHorizontal: SPACING.x_large }}>
-                    <Button
-                        labelStyle={{ fontSize: normalize(20), color: '#000' }}
-                        //style={{ borderRadius: 10, borderColor: '#000', borderWidth: 2 }}
-                        contentStyle={{ height: 35 }}
-                        rippleColor="rgba(0, 0, 0, .1)"
-                        icon="plus"
-                        mode="outlined"
-                        onPress={onAddServicePress}
-                    >
-                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}>
-                            Add service
+                    <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, marginBottom: SPACING.xx_small, marginTop: SPACING.medium }}>
+                        Services <Text style={{ fontSize: FONT_SIZES.medium }}>({data.services.length})</Text>
+                    </Text>
+                    {data.services.length === 0 && showErrors && <HelperText type="error" visible style={{ marginHorizontal: SPACING.x_large, padding: 0, marginBottom: SPACING.xx_small }}>
+                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.error }}>
+                            Add your services.
                         </Text>
-                    </Button>
-                </View>
+                    </HelperText>}
 
-                <View style={{ flexDirection: 'row', marginHorizontal: SPACING.x_large, marginBottom: SPACING.x_small, marginBottom: SPACING.xx_small, marginTop: SPACING.medium, alignItems: 'center' }}>
-                    <Text style={{ color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginRight: SPACING.xx_small }}>
-                        Pricing
-                    </Text>
 
-                    <DropdownSelect
-                        ref={currencyDropdownRef}
-                        offsetX={offsetX + (contentWidth * i)}
-                        text={data.currency}
-                        values={CURRENCIES}
-                        setText={(text) => onValueChange(text, 'currency')}
-                    >
-                        <TouchableOpacity
-                            onPress={() => currencyDropdownRef.current?.onDropdownPress()}
-                            style={{ marginLeft: SPACING.xxx_small, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: SPACING.x_large }}>
+                        {data.services.map((service) => (
+                            <HoverableView key={service} style={{ flexDirection: 'row', overflow: 'hidden', borderRadius: 20, borderWidth: 2, borderColor: COLORS.red, marginRight: SPACING.xxx_small, marginBottom: SPACING.xx_small, }} hoveredBackgroundColor='rgba(220, 46, 46, .10)' /*backgroundColor={COLORS.red}*/>
+                                <TouchableRipple
+                                    onPress={() => onMultiPicklistChange(service, 'services')}
+                                    style={styles.chip}
+                                >
+                                    <>
+                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, marginRight: SPACING.xx_small, color: COLORS.white }}>{service}</Text>
+                                        <Ionicons onPress={() => onMultiPicklistChange(service, 'services')} name="close" size={normalize(18)} color="white" />
+                                    </>
+                                </TouchableRipple>
+                            </HoverableView>
+                        ))}
+                    </View>
+
+                    <View style={{ flexDirection: 'row', marginHorizontal: SPACING.x_large }}>
+                        <Button
+                            labelStyle={{ fontSize: normalize(20), color: COLORS.white }}
+                            style={{ backgroundColor: COLORS.darkRedBackground, borderColor: COLORS.red }}
+                            contentStyle={{ height: 35 }}
+                            rippleColor="rgba(0, 0, 0, .1)"
+                            icon="plus"
+                            mode="outlined"
+                            onPress={onAddServicePress}
                         >
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#000' }}>
-                                {data.currency}
+                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}>
+                                Add service
                             </Text>
-                            <MaterialCommunityIcons style={{ marginLeft: 4, }} name="chevron-down" size={normalize(20)} color="black" />
-                        </TouchableOpacity>
-                    </DropdownSelect>
-                </View>
-                {/* {data.prices.length === 0 && showErrors && <HelperText type="error" visible style={{ marginHorizontal: SPACING.x_large, padding: 0 }}>
+                        </Button>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', marginHorizontal: SPACING.x_large, marginBottom: SPACING.x_small, marginBottom: SPACING.xx_small, marginTop: SPACING.medium, alignItems: 'center' }}>
+                        <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginRight: SPACING.xx_small }}>
+                            Pricing
+                        </Text>
+
+                        <DropdownSelect
+                            ref={currencyDropdownRef}
+                            offsetX={offsetX + (contentWidth * i)}
+                            text={data.currency}
+                            values={CURRENCIES}
+                            setText={(text) => onValueChange(text, 'currency')}
+                        >
+                            <TouchableOpacity
+                                onPress={() => currencyDropdownRef.current?.onDropdownPress()}
+                                style={{ marginLeft: SPACING.xxx_small, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+                            >
+                                <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: COLORS.white }}>
+                                    {data.currency}
+                                </Text>
+                                <MaterialCommunityIcons style={{ marginLeft: 4, }} name="chevron-down" size={normalize(20)} color="white" />
+                            </TouchableOpacity>
+                        </DropdownSelect>
+                    </View>
+                    {/* {data.prices.length === 0 && showErrors && <HelperText type="error" visible style={{ marginHorizontal: SPACING.x_large, padding: 0 }}>
                     <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.error }}>
                         Define your pricing
                     </Text>
                 </HelperText>} */}
 
-                {data.prices.length > 0 && <View style={[styles.table, { marginHorizontal: SPACING.x_large, marginBottom: SPACING.xx_small }]}>
-                    <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                        <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
-                            <Text style={styles.tableHeaderText}>Length</Text>
-                        </View>
-                        {data.prices.map(price => (
-                            <View key={price.length} style={styles.column}>
-                                <Text style={styles.tableHeaderValue}>{price.length + ((price['length'].toString()).includes('.') || price['length'] === 1 ? ' hour' : ' hours')}</Text>
+                    {data.prices.length > 0 && <View style={[styles.table, { marginHorizontal: SPACING.x_large, marginBottom: SPACING.xx_small }]}>
+                        <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
+                            <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground }]}>
+                                <Text style={styles.tableHeaderText}>Length</Text>
                             </View>
-                        ))}
-                    </View>
-                    {data.incall && <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                        <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
-                            <Text style={styles.tableHeaderText}>Incall</Text>
+                            {data.prices.map(price => (
+                                <View key={price.length} style={styles.column}>
+                                    <Text style={styles.tableHeaderValue}>{price.length + ((price['length'].toString()).includes('.') || price['length'] === 1 ? ' hour' : ' hours')}</Text>
+                                </View>
+                            ))}
                         </View>
-                        {data.prices.map((price, index) => (
-                            <View key={price.length} style={{ padding: 4 }}>
-                                <TextInput
-                                    style={[styles.column, {
-                                        fontFamily: FONTS.regular,
-                                        fontSize: FONT_SIZES.medium,
-                                        outlineStyle: 'none',
-                                        color: '#000',
-                                        height: styles.column.height - 8,
-                                        borderColor: '#000',
-                                        borderWidth: 1,
-                                        borderRadius: 5
-                                    }]}
-                                    onChangeText={(text) => onPriceChange(text, index, 'incall')}
-                                    value={price.incall}
-                                    placeholder='0'
-                                    placeholderTextColor="grey"
-                                    keyboardType='numeric'
-                                />
+                        {data.incall && <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
+                            <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground }]}>
+                                <Text style={styles.tableHeaderText}>Incall</Text>
                             </View>
-                        ))}
-                    </View>}
-                    {data.outcall && <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                        <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
-                            <Text style={styles.tableHeaderText}>Outcall</Text>
-                        </View>
-                        {data.prices.map((price, index) => (
-                            <View key={price.length} style={{ padding: 4 }}>
-                                <TextInput
-                                    style={[styles.column, {
-                                        fontFamily: FONTS.regular,
-                                        fontSize: FONT_SIZES.medium,
-                                        outlineStyle: 'none',
-                                        color: '#000',
-                                        height: styles.column.height - 8,
-                                        borderColor: '#000',
-                                        borderWidth: 1,
-                                        borderRadius: 5
-                                    }]}
-                                    onChangeText={(text) => onPriceChange(text, index, 'outcall')}
-                                    value={price.outcall}
-                                    placeholder='0'
-                                    placeholderTextColor="grey"
-                                    keyboardType='numeric'
-                                />
+                            {data.prices.map((price, index) => (
+                                <View key={price.length} style={{ padding: 4 }}>
+                                    <TextInput
+                                        style={[styles.column, {
+                                            fontFamily: FONTS.regular,
+                                            fontSize: FONT_SIZES.medium,
+                                            outlineStyle: 'none',
+                                            color: COLORS.white,
+                                            height: styles.column.height - 8,
+                                            borderColor: COLORS.darkRedBorderColor2,
+                                            borderWidth: 1,
+                                            borderRadius: 5,
+                                            backgroundColor: '#372b2b',
+                                        }]}
+                                        onChangeText={(text) => onPriceChange(text, index, 'incall')}
+                                        value={price.incall}
+                                        placeholder='0'
+                                        placeholderTextColor="grey"
+                                        keyboardType='numeric'
+                                    />
+                                </View>
+                            ))}
+                        </View>}
+                        {data.outcall && <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
+                            <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground }]}>
+                                <Text style={styles.tableHeaderText}>Outcall</Text>
                             </View>
-                        ))}
-                    </View>}
-                    <View style={{ flexBasis: 45, flexShrink: 0, flexGrow: 0 }}>
-                        <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
+                            {data.prices.map((price, index) => (
+                                <View key={price.length} style={{ padding: 4 }}>
+                                    <TextInput
+                                        style={[styles.column, {
+                                            fontFamily: FONTS.regular,
+                                            fontSize: FONT_SIZES.medium,
+                                            outlineStyle: 'none',
+                                            color: COLORS.white,
+                                            height: styles.column.height - 8,
+                                            borderColor: COLORS.darkRedBorderColor2,
+                                            borderWidth: 1,
+                                            borderRadius: 5,
+                                            backgroundColor: '#372b2b',
+                                        }]}
+                                        onChangeText={(text) => onPriceChange(text, index, 'outcall')}
+                                        value={price.outcall}
+                                        placeholder='0'
+                                        placeholderTextColor="grey"
+                                        keyboardType='numeric'
+                                    />
+                                </View>
+                            ))}
+                        </View>}
+                        <View style={{ flexBasis: 45, flexShrink: 0, flexGrow: 0 }}>
+                            <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground }]}>
 
-                        </View>
-                        {data.prices.map((price, index) => (
-                            <View key={price.length} style={{ alignItems: 'center', justifyContent: 'center', paddingRight: 4, height: normalize(45) }}>
-                                <IconButton
-                                    icon="delete-outline"
-                                    iconColor='black'
-                                    size={20}
-                                    onPress={() => onPriceDeletePress(index)}
-                                />
                             </View>
-                        ))}
-                    </View>
-                </View>}
+                            {data.prices.map((price, index) => (
+                                <View key={price.length} style={{ alignItems: 'center', justifyContent: 'center', paddingRight: 4, height: normalize(45) }}>
+                                    <IconButton
+                                        icon="delete-outline"
+                                        iconColor='white'
+                                        size={20}
+                                        onPress={() => onPriceDeletePress(index)}
+                                    />
+                                </View>
+                            ))}
+                        </View>
+                    </View>}
 
-                <View style={{ flexDirection: 'row', marginHorizontal: SPACING.x_large }}>
-                    <DropdownSelect
-                        ref={pricesDropdownPress}
-                        offsetX={offsetX + (contentWidth * i)}
-                        values={HOURS.filter(hour => !data.prices.some(price => price.length === Number(hour.substring(0, hour.indexOf('h') - 1))))}
-                        setText={onAddNewPrice}
-                    >
-                        <Button
-                            labelStyle={{ fontSize: normalize(20), color: '#000' }}
-                            //style={{ borderRadius: 10, borderColor: '#000', borderWidth: 2 }}
-                            contentStyle={{ height: 35 }}
-                            rippleColor="rgba(0, 0, 0, .1)"
-                            icon="plus"
-                            mode="outlined"
-                            onPress={onAddNewPricePress}
+                    <View style={{ flexDirection: 'row', marginHorizontal: SPACING.x_large }}>
+                        <DropdownSelect
+                            ref={pricesDropdownPress}
+                            offsetX={offsetX + (contentWidth * i)}
+                            values={HOURS.filter(hour => !data.prices.some(price => price.length === Number(hour.substring(0, hour.indexOf('h') - 1))))}
+                            setText={onAddNewPrice}
                         >
-                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}>
-                                Add price
-                            </Text>
-                        </Button>
-                    </DropdownSelect>
+                            <Button
+                                labelStyle={{ fontSize: normalize(20), color: COLORS.white }}
+                                style={{ backgroundColor: COLORS.darkRedBackground, borderColor: COLORS.red }}
+                                contentStyle={{ height: 35 }}
+                                rippleColor="rgba(0, 0, 0, .1)"
+                                icon="plus"
+                                mode="outlined"
+                                onPress={onAddNewPricePress}
+                            >
+                                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}>
+                                    Add price
+                                </Text>
+                            </Button>
+                        </DropdownSelect>
+                    </View>
                 </View>
             </Animated.ScrollView>
 
@@ -342,7 +358,7 @@ export default memo(ServicesAndPricing)
 
 const styles = StyleSheet.create({
     pageHeaderText: {
-        //color: '#FFF', 
+        color: '#FFF',
         fontFamily: FONTS.bold,
         fontSize: FONT_SIZES.h3,
         marginHorizontal: SPACING.x_large,
@@ -361,7 +377,7 @@ const styles = StyleSheet.create({
     },
     table: {
         borderWidth: 1,
-        borderColor: COLORS.lightGrey,
+        borderColor: COLORS.darkRedBackground,
         flexDirection: 'row',
         borderRadius: 10,
         overflow: 'hidden'
@@ -374,7 +390,7 @@ const styles = StyleSheet.create({
     tableHeaderValue: {
         fontFamily: FONTS.medium,
         fontSize: FONT_SIZES.medium,
-        color: '#000'
+        color: COLORS.white
     },
     column: {
         paddingHorizontal: SPACING.xx_small,
@@ -400,7 +416,7 @@ const styles = StyleSheet.create({
         right: 0,
         left: 0,
         height: normalize(55),
-        backgroundColor: '#FFF',
+        backgroundColor: COLORS.white,
         zIndex: 2,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,

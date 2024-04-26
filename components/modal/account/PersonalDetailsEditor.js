@@ -82,6 +82,8 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: COLORS.grey
         }
     })
 
@@ -210,7 +212,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#FFF',
+            backgroundColor: COLORS.grey,
             borderRadius: 24,
             width: normalize(800),
             maxWidth: '90%',
@@ -238,15 +240,15 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                 <Animated.Text style={modalHeaderTextStyles}>Edit Personal Details</Animated.Text>
                             </View>
                             <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                                 </HoverableView>
                             </View>
                         </View>
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }} onContentSizeChange={(contentWidth) => setContentWidth(contentWidth)}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small }}>
+                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small, color: COLORS.white }}>
                                 Edit Personal Details
                             </Text>
 
@@ -254,13 +256,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                 <HoverableInput
                                     placeholder="DD.MM.YYYY"
                                     label="Date of birth"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                    placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     text={getDateOfBirth()}
                                     setText={(text) => onBirthdateChange(text)}
                                     errorMessage={showErrorMessage && !changedPersonalDetails.date_of_birth ? 'Enter your date of birth' : showErrorMessage && changedPersonalDetails.date_of_birth.length !== 8 ? 'Enter a date in DD.MM.YYYY format.' : undefined}
@@ -270,13 +266,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     values={SEXUAL_ORIENTATION}
                                     placeholder="Select your sexuality"
                                     label="Sexuality"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                    placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     text={changedPersonalDetails.sexuality}
                                     setText={(text) => onValueChange(text, 'sexuality')}
                                     rightIconName='chevron-down'
@@ -292,13 +282,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     searchPlaceholder="Search nationality"
                                     placeholder="Select your nationality"
                                     label="Nationality"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                    placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     text={changedPersonalDetails.nationality}
                                     setText={(text) => onValueChange(text, 'nationality')}
                                     rightIconName='chevron-down'
@@ -312,13 +296,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     searchPlaceholder="Search language"
                                     placeholder="Select languages"
                                     label="Languages"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                    placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     text={changedPersonalDetails.languages.join(', ')}
                                     setText={(text) => onMultiPicklistChange(text, 'languages')}
                                     rightIconName='chevron-down'
@@ -330,12 +308,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                 <HoverableInput
                                     placeholder="Height in cm"
                                     label="Height (cm)"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
                                     text={changedPersonalDetails.height}
                                     setText={(text) => onValueChange(text.replace(/[^0-9]/g, ''), 'height')}
@@ -346,12 +319,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                 <HoverableInput
                                     placeholder="Weight in kg"
                                     label="Weight (kg)"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
                                     text={changedPersonalDetails.weight}
                                     setText={(text) => onValueChange(text.replace(/[^0-9]/g, ''), 'weight')}
@@ -366,12 +334,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     values={BODY_TYPES}
                                     placeholder="Select your body type"
                                     label="Body type"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
                                     text={changedPersonalDetails.body_type}
                                     setText={(text) => onValueChange(text, 'body_type')}
@@ -383,12 +346,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     values={PUBIC_HAIR_VALUES}
                                     placeholder="Search your pubic hair"
                                     label="Pubic hair"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
                                     text={changedPersonalDetails.pubic_hair}
                                     setText={(text) => onValueChange(text, 'pubic_hair')}
@@ -403,12 +361,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     values={BREAST_SIZES}
                                     placeholder="Select your breast size"
                                     label="Breast size"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
                                     text={changedPersonalDetails.breast_size}
                                     setText={(text) => onValueChange(text, 'breast_size')}
@@ -420,12 +373,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     values={BREAST_TYPES}
                                     placeholder="Search your breast type"
                                     label="Breast type"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
                                     text={changedPersonalDetails.breast_type}
                                     setText={(text) => onValueChange(text, 'breast_type')}
@@ -440,12 +388,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     values={HAIR_COLORS}
                                     placeholder="Select your hair color"
                                     label="Hair color"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
                                     text={changedPersonalDetails.hair_color}
                                     setText={(text) => onValueChange(text, 'hair_color')}
@@ -457,12 +400,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                                     values={EYE_COLORS}
                                     placeholder="Search your eye color"
                                     label="Eye color"
-                                    borderColor={COLORS.placeholder}
-                                    hoveredBorderColor={COLORS.red}
-                                    textColor='#000'
                                     containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.small * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.small }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                     placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
                                     text={changedPersonalDetails.eye_color}
                                     setText={(text) => onValueChange(text, 'eye_color')}
@@ -475,9 +413,9 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
 
                         <View style={{ borderTopWidth: 1, borderTopColor: COLORS.placeholder, paddingHorizontal: SPACING.small, paddingVertical: SPACING.x_small, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Button
-                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.lightBlack }}
+                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.white }}
                                 style={{ flexShrink: 1, borderRadius: 10, borderWidth: 0 }}
-                                buttonColor="#FFF"
+                                buttonColor={COLORS.grey}
                                 mode="outlined"
                                 rippleColor='rgba(0,0,0,.1)'
                                 onPress={closeModal}
@@ -488,11 +426,12 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
                             <Button
                                 labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: '#FFF' }}
                                 style={{ flexShrink: 1, borderRadius: 10 }}
-                                buttonColor={COLORS.lightBlack}
+                                buttonColor={COLORS.red}
                                 mode="contained"
                                 onPress={onSavePress}
                                 loading={isSaving}
                                 disabled={isSaving || !isChanged}
+                                theme={{ colors: { surfaceDisabled: COLORS.hoveredLightGrey }}}
                             >
                                 Save
                             </Button>

@@ -8,19 +8,17 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 
 const HoverableInput = ({ 
-    borderColor,
-    hoveredBorderColor, 
-    textColor="#FFF",
-    backgroundColor="transparent", 
-    hoveredBackgroundColor="transparent",
+    borderColor=COLORS.darkRedBackground2,
+    hoveredBorderColor=COLORS.red, 
+    backgroundColor='#372b2b',//COLORS.darkRedBackground, 
+    hoveredBackgroundColor=COLORS.darkRedBackground2,
     errorMessage, 
     mode="outlined", 
     placeholder,
     label, 
-    labelStyle={},
+    labelStyle={ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder },
     text, 
-    textStyle={},
-    placeholderStyle={},
+    textStyle={ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white },
     containerStyle={},
     setText,
     leftIconName,
@@ -47,26 +45,26 @@ const HoverableInput = ({
         >
             <TextInput
                 pointerEvents={pointerEventsDisabled ? 'none' : undefined}
-                label={<View style={{ marginHorizontal: 2, zIndex: 2 }}><Text style={labelStyle}>{label}</Text></View>}
+                label={<Text style={labelStyle}>{label}</Text>}
+                //placeholder color
+                theme={{ colors: { onSurfaceVariant: 'grey' }}}
                 placeholder={placeholder}
-                textColor={textColor}
-                outlineColor={isHovered ? hoveredBorderColor : borderColor}
+                //unfocused border color
+                outlineColor={(isHovered || text) ? hoveredBorderColor : borderColor}
+                //active border color
                 activeOutlineColor={errorMessage ? COLORS.error : isHovered || isFocused ? hoveredBorderColor: borderColor}
-                underlineColor="red"
-                activeUnderlineColor="red"
                 error={errorMessage}
                 mode={mode}
                 value={text}
                 onChangeText={text => setText(text)}
-                left={leftIconName && <TextInput.Icon pointerEvents={pointerEventsDisabled ? 'none' : undefined} style={{ alignSelf: 'center', height: height }} size={normalize(height ? height / 2 :  20)} icon={leftIconName} onPress={onLeftIconPress ?? undefined} />}
-                right={rightIconName && <TextInput.Icon pointerEvents={pointerEventsDisabled ? 'none' : undefined} size={normalize(20)} icon={rightIconName} onPress={onRightIconPress ?? undefined} />}
-                contentStyle={[
-                    text ? {...textStyle} : {...placeholderStyle}
-                ]}
-                outlineStyle={{ 
-                    backgroundColor: isHovered ? hoveredBackgroundColor: backgroundColor
-                }}
-                style={height ? {height: height, paddingTop: 0} : undefined}
+                left={leftIconName && <TextInput.Icon color={COLORS.placeholder} pointerEvents={pointerEventsDisabled ? 'none' : undefined} style={{ alignSelf: 'center', height: height }} size={normalize(height ? height / 2 :  20)} icon={leftIconName} onPress={onLeftIconPress ?? undefined} />}
+                right={rightIconName && <TextInput.Icon color={COLORS.placeholder} pointerEvents={pointerEventsDisabled ? 'none' : undefined} size={normalize(20)} icon={rightIconName} onPress={onRightIconPress ?? undefined} />}
+                //style of the text value
+                contentStyle={textStyle}
+                //background color of the input
+                outlineStyle={{ backgroundColor: (isHovered || isFocused || text) ? hoveredBackgroundColor: backgroundColor }}
+                //background color of label when focused
+                style={height ? { height: height, paddingTop: 0, backgroundColor: COLORS.grey} : { backgroundColor: COLORS.grey }}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 secureTextEntry={secureTextEntry}

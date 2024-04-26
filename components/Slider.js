@@ -11,8 +11,8 @@ const Slider = ({ range, minValue, absoluteMinValue = true, absoluteMaxValue = t
         setMaxInputValue(range[1])
     }, [range])
 
-    const [minBorderColor, setMinBorderColor] = useState(COLORS.placeholder)
-    const [maxBorderColor, setMaxBorderColor] = useState(COLORS.placeholder)
+    const [minBorderColor, setMinBorderColor] = useState('grey')
+    const [maxBorderColor, setMaxBorderColor] = useState('grey')
 
     const [minInputValue, setMinInputValue] = useState(minValue)
     const [maxInputValue, setMaxInputValue] = useState(maxValue)
@@ -36,7 +36,7 @@ const Slider = ({ range, minValue, absoluteMinValue = true, absoluteMaxValue = t
             }))
         }
 
-        setMinBorderColor(COLORS.placeholder)
+        setMinBorderColor('grey')
     }, [minInputValue])
 
     const onMaxSliderBlur = useCallback(() => {
@@ -58,13 +58,13 @@ const Slider = ({ range, minValue, absoluteMinValue = true, absoluteMaxValue = t
             }))
         }
 
-        setMaxBorderColor(COLORS.placeholder)
+        setMaxBorderColor('grey')
     }, [maxInputValue])
 
     return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: SPACING.small }}>
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginRight: SPACING.small }}>
+                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginRight: SPACING.small, color: COLORS.white }}>
                     {minValue + (absoluteMinValue ? '' : '-')}
                 </Text>
                 <RangeSlider
@@ -91,15 +91,15 @@ const Slider = ({ range, minValue, absoluteMinValue = true, absoluteMaxValue = t
                     step={1}
                     animateTransitions
                 />
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginLeft: SPACING.small }}>
+                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginLeft: SPACING.small, color: COLORS.white }}>
                     {maxValue + (absoluteMaxValue ? '' : '+')}
                 </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: SPACING.small, marginTop: SPACING.small }}>
                 <HoverableView hoveredBorderColor={COLORS.red} borderColor={minBorderColor} style={{ flex: 1, flexDirection: 'column', borderWidth: 1, borderRadius: 10, paddingHorizontal: SPACING.xx_small, paddingVertical: SPACING.xxx_small }}>
-                    <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small }}>Minimum</Text>
+                    <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small, color: COLORS.white }}>Minimum</Text>
                     <TextInput
-                        style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, outlineStyle: 'none' }}
+                        style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, outlineStyle: 'none', color: COLORS.white }}
                         onChangeText={(value) => setMinInputValue(value.replace(/[^0-9]/g, ''))}
                         value={minInputValue === minValue && !absoluteMinValue ? minValue + '-' : minInputValue}
                         onBlur={onMinSliderBlur}
@@ -108,13 +108,13 @@ const Slider = ({ range, minValue, absoluteMinValue = true, absoluteMaxValue = t
                         maxLength={3}
                     />
                 </HoverableView>
-                <Text style={{ marginHorizontal: SPACING.medium, fontFamily: FONTS.medium, fontSize: FONTS.h1 }}>
+                <Text style={{ marginHorizontal: SPACING.medium, fontFamily: FONTS.medium, fontSize: FONTS.h1, color: COLORS.white }}>
                     -
                 </Text>
                 <HoverableView hoveredBorderColor={COLORS.red} borderColor={maxBorderColor} style={{ flex: 1, flexDirection: 'column', borderWidth: 1, borderRadius: 10, paddingHorizontal: SPACING.xx_small, paddingVertical: SPACING.xxx_small }}>
-                    <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small }}>Maximum</Text>
+                    <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small, color: COLORS.white }}>Maximum</Text>
                     <TextInput
-                        style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, outlineStyle: 'none' }}
+                        style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, outlineStyle: 'none', color: COLORS.white }}
                         onChangeText={(value) => setMaxInputValue(value.replace(/[^0-9]/g, ''))}
                         value={maxInputValue === maxValue && !absoluteMaxValue ? maxValue + '+' : maxInputValue}
                         onBlur={onMaxSliderBlur}

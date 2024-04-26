@@ -208,7 +208,7 @@ const Categories = ({ cities = [], updateCurrentLadiesCount, updateCurrentEstabl
     return (
         <View style={{
             flex: 1, 
-            backgroundColor: '#1b0404a3', 
+            backgroundColor: '#1b0404a3',//'#1b0404bf',//'#1b0404a3', 
             borderTopWidth: 1, 
             borderColor: COLORS.lightGrey, 
             flexDirection: 'row'

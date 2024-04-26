@@ -47,6 +47,8 @@ import Slider from '../Slider'
 import DropdownSelect from '../DropdownSelect'
 import { connect } from 'react-redux'
 
+import { LinearGradient } from 'expo-linear-gradient'
+
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 
 const window = Dimensions.get('window')
@@ -113,12 +115,13 @@ const Filters = forwardRef((props, ref) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white
         }
     })
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#FFF',
+            backgroundColor: '#261718',
             borderRadius: 24,
             width: isEstablishmentPage ? normalize(450) : normalize(750),
             maxWidth: '90%',
@@ -175,7 +178,7 @@ const Filters = forwardRef((props, ref) => {
 
     const renderLadiesFilters = () => (
         <>
-            <View style={[styles.filterSection, { marginTop: 0, marginHorizontal: 0 }]}>
+            <View style={[styles.filterSection, { marginTop: 0, paddingBottom: 0, marginHorizontal: 0, borderBottomWidth: 0, }]}>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                     <View style={{ flexGrow: 1, flexShrink: 1, minWidth: 220, marginHorizontal: SPACING.small, marginTop: SPACING.small }}>
                         <Text style={[styles.filterHeader, { marginBottom: SPACING.xxx_small }]}>City</Text>
@@ -183,12 +186,6 @@ const Filters = forwardRef((props, ref) => {
                         <DropdownSelect
                             containerRef={containerRef}
                             values={['Anywhere', ...cities]}
-                            borderColor={COLORS.placeholder}
-                            hoveredBorderColor={COLORS.red}
-                            textColor='#000'
-                            textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                            labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                            placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                             text={filters.city ?? 'Anywhere'}
                             setText={(text) => setFilters(filters => ({ ...filters, city: text === 'Anywhere' ? undefined : text}))}
                             rightIconName='chevron-down'
@@ -203,12 +200,6 @@ const Filters = forwardRef((props, ref) => {
                         <DropdownSelect
                             containerRef={containerRef}
                             values={['Anything', 'Outcall', 'Incall']}
-                            borderColor={COLORS.placeholder}
-                            hoveredBorderColor={COLORS.red}
-                            textColor='#000'
-                            textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                            labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                            placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                             text={!filters.incall && !filters.outcall ? 'Anything' : filters.incall ? 'Incall' : 'Outcall'}
                             setText={(text) => setFilters(filters => ({ ...filters, outcall: text === 'Outcall', incall: text === 'Incall' }))}
                             rightIconName='chevron-down'
@@ -216,7 +207,14 @@ const Filters = forwardRef((props, ref) => {
                             leftIconColor={COLORS.red}
                         />
                     </View>
-                   
+
+                </View>
+                <View style={{ paddingHorizontal: SPACING.small }}>
+                    <View style={{
+                        marginTop: SPACING.small,
+                        borderBottomWidth: 0.5,
+                        borderColor: 'grey'
+                    }} />
                 </View>
             </View>
 
@@ -234,11 +232,11 @@ const Filters = forwardRef((props, ref) => {
                         const selected = filters.services.includes(service)
                         return (
                             <Chip key={service}
-                                style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : 'transparent' }}
+                                style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : COLORS.darkRedBackground }}
                                 mode="outlined"
                                 rippleColor="rgba(220, 46, 46, .10)"
                                 selectedColor={selected ? 'green' : '#000'}
-                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
+                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: '#FFF' }}
                                 onPress={() => onMultiPicklistPress(service, 'services')}
                             >
                                 {service}
@@ -253,21 +251,21 @@ const Filters = forwardRef((props, ref) => {
 
                 <View style={{ marginHorizontal: SPACING.small, flexDirection: 'row', flexWrap: 'wrap', marginBottom: SPACING.x_small }}>
                     <View style={{ flex: 1, flexDirection: 'column', minWidth: 300, marginBottom: SPACING.small }}>
-                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small }}>
+                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small, color: COLORS.white }}>
                             Height (cm)
                         </Text>
                         <Slider range={filters.heightRange} minValue={MIN_HEIGHT} absoluteMinValue={false} maxValue={MAX_HEIGHT} absoluteMaxValue={false} filterName="heightRange" setFilters={setFilters} />
                     </View>
 
                     <View style={{ flex: 1, flexDirection: 'column', minWidth: 300, marginBottom: SPACING.small }}>
-                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small }}>
+                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small, color: COLORS.white }}>
                             Weight (kg)
                         </Text>
                         <Slider range={filters.weightRange} minValue={MIN_WEIGHT} absoluteMinValue={false} maxValue={MAX_WEIGHT} absoluteMaxValue={false} filterName="weightRange" setFilters={setFilters} />
                     </View>
                 </View>
 
-                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small }}>
+                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small, color: COLORS.white }}>
                     Body Type
                 </Text>
 
@@ -276,9 +274,9 @@ const Filters = forwardRef((props, ref) => {
                         const selected = filters.body_type.includes(body_type)
                         return (
                             <Chip key={body_type}
-                                style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
+                                style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : COLORS.darkRedBackground }}
                                 mode="outlined"
-                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
+                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}
                                 onPress={() => onMultiPicklistPress(body_type, 'body_type')}
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
@@ -288,7 +286,7 @@ const Filters = forwardRef((props, ref) => {
                     })}
                 </ScrollView>
 
-                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small }}>
+                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small, color: COLORS.white }}>
                     Hair Color
                 </Text>
 
@@ -297,9 +295,9 @@ const Filters = forwardRef((props, ref) => {
                         const selected = filters.hair_color.includes(hair_color)
                         return (
                             <Chip key={hair_color}
-                                style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
+                                style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : COLORS.darkRedBackground }}
                                 mode="outlined"
-                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
+                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}
                                 onPress={() => onMultiPicklistPress(hair_color, 'hair_color')}
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
@@ -309,7 +307,7 @@ const Filters = forwardRef((props, ref) => {
                     })}
                 </ScrollView>
 
-                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small }}>
+                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small, color: COLORS.white }}>
                     Eye Color
                 </Text>
 
@@ -318,9 +316,9 @@ const Filters = forwardRef((props, ref) => {
                         const selected = filters.eye_color.includes(eye_color)
                         return (
                             <Chip key={eye_color}
-                                style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : 'transparent' }}
+                                style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : COLORS.darkRedBackground }}
                                 mode="outlined"
-                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
+                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}
                                 onPress={() => onMultiPicklistPress(eye_color, 'eye_color')}
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
@@ -330,7 +328,7 @@ const Filters = forwardRef((props, ref) => {
                     })}
                 </ScrollView>
 
-                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small }}>
+                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small, color: COLORS.white  }}>
                     Pubic Hair
                 </Text>
 
@@ -339,9 +337,9 @@ const Filters = forwardRef((props, ref) => {
                         const selected = filters.pubic_hair.includes(pubic_hair)
                         return (
                             <Chip key={pubic_hair}
-                                style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
+                                style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : COLORS.darkRedBackground }}
                                 mode="outlined"
-                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
+                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}
                                 onPress={() => onMultiPicklistPress(pubic_hair, 'pubic_hair')}
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
@@ -351,7 +349,7 @@ const Filters = forwardRef((props, ref) => {
                     })}
                 </ScrollView>
 
-                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small }}>
+                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small, color: COLORS.white  }}>
                     Breast Size
                 </Text>
 
@@ -360,9 +358,9 @@ const Filters = forwardRef((props, ref) => {
                         const selected = filters.breast_size.includes(breast_size)
                         return (
                             <Chip key={breast_size}
-                                style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
+                                style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : COLORS.darkRedBackground }}
                                 mode="outlined"
-                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
+                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}
                                 onPress={() => onMultiPicklistPress(breast_size, 'breast_size')}
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
@@ -372,7 +370,7 @@ const Filters = forwardRef((props, ref) => {
                     })}
                 </ScrollView>
 
-                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small }}>
+                <Text style={{ marginHorizontal: SPACING.small, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginBottom: SPACING.x_small, color: COLORS.white  }}>
                     Breast Type
                 </Text>
 
@@ -381,9 +379,9 @@ const Filters = forwardRef((props, ref) => {
                         const selected = filters.breast_type.includes(breast_type)
                         return (
                             <Chip key={breast_type}
-                                style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
+                                style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : COLORS.darkRedBackground }}
                                 mode="outlined"
-                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
+                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}
                                 onPress={() => onMultiPicklistPress(breast_type, 'breast_type')}
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
@@ -406,7 +404,7 @@ const Filters = forwardRef((props, ref) => {
                                                 <Chip key={orientation}
                                                     style={{ backgroundColor: selected ? COLORS.red : 'transparent' }}
                                                     mode="outlined"
-                                                    textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
+                                                    textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}
                                                     onPress={() => onMultiPicklistPress(orientation, 'sexualOrientation')}
                                                 >
                                                     {orientation}
@@ -426,7 +424,7 @@ const Filters = forwardRef((props, ref) => {
                                         <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }}>
                                             Verified
                                         </Text>
-                                        <Text style={{ color: COLORS.grey, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2 }}>
+                                        <Text style={{ color: COLORS.lightBlack, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2 }}>
                                             Profiles that underwent identity verification process
                                         </Text>
                                     </View>
@@ -436,10 +434,10 @@ const Filters = forwardRef((props, ref) => {
                                 </View> */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <View style={{ flex: 1, flexDirection: 'column', marginRight: SPACING.small }}>
-                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }}>
+                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white  }}>
                             Independent
                         </Text>
-                        <Text style={{ color: COLORS.grey, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2 }}>
+                        <Text style={{ color: COLORS.placeholder, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2 }}>
                             Not affiliated with agencies
                         </Text>
                     </View>
@@ -464,12 +462,12 @@ const Filters = forwardRef((props, ref) => {
                                     disableBuiltInState
                                     isChecked={selected}
                                     size={normalize(21)}
-                                    fillColor={COLORS.red}
-                                    unfillColor="#FFFFFF"
+                                    fillColor={selected ? COLORS.red : COLORS.darkRedBackground}
+                                    unfillColor={COLORS.darkRedBackground2}
                                     text={nationality}
                                     iconStyle={{ borderRadius: 3 }}
                                     innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
+                                    textStyle={{ color: selected ? COLORS.white : COLORS.placeholder, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
                                     textContainerStyle={{ flexShrink: 1 }}
                                     onPress={() => onMultiPicklistPress(nationality, 'nationality')}
                                 />
@@ -479,7 +477,7 @@ const Filters = forwardRef((props, ref) => {
                 </View>
                 <Text
                     onPress={() => setShowMoreNationalities(v => !v)}
-                    style={{ width: 'fit-content', textDecorationLine: 'underline', fontFamily: FONTS.medium, marginTop: SPACING.xx_small, marginHorizontal: SPACING.small, fontSize: FONT_SIZES.large }}>
+                    style={{ color: COLORS.white, width: 'fit-content', textDecorationLine: 'underline', fontFamily: FONTS.medium, marginTop: SPACING.xx_small, marginHorizontal: SPACING.small, fontSize: FONT_SIZES.large }}>
                     {showMoreNationalities ? 'Show less' : 'Show more'}
                 </Text>
             </View>
@@ -495,12 +493,12 @@ const Filters = forwardRef((props, ref) => {
                                 disableBuiltInState
                                 isChecked={filters.speaks.includes(speaks)}
                                 size={normalize(21)}
-                                fillColor={COLORS.red}
-                                unfillColor="#FFFFFF"
+                                fillColor={filters.speaks.includes(speaks) ? COLORS.red : COLORS.darkRedBackground}
+                                unfillColor={COLORS.darkRedBackground2}
                                 text={speaks}
                                 iconStyle={{ borderColor: COLORS.red, borderRadius: 3 }}
                                 innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
+                                textStyle={{ color: filters.speaks.includes(speaks) ? COLORS.white : COLORS.placeholder, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
                                 textContainerStyle={{ flexShrink: 1 }}
                                 onPress={() => onMultiPicklistPress(speaks, 'speaks')}
                             />
@@ -509,7 +507,7 @@ const Filters = forwardRef((props, ref) => {
                 </View>
                 <Text
                     onPress={() => setShowMoreLanguages(v => !v)}
-                    style={{ width: 'fit-content', textDecorationLine: 'underline', fontFamily: FONTS.medium, marginTop: SPACING.xx_small, marginHorizontal: SPACING.small, fontSize: FONT_SIZES.large }}>
+                    style={{ color: COLORS.white, width: 'fit-content', textDecorationLine: 'underline', fontFamily: FONTS.medium, marginTop: SPACING.xx_small, marginHorizontal: SPACING.small, fontSize: FONT_SIZES.large }}>
                     {showMoreLanguages ? 'Show less' : 'Show more'}
                 </Text>
             </View>
@@ -524,12 +522,6 @@ const Filters = forwardRef((props, ref) => {
                 <DropdownSelect
                     containerRef={containerRef}
                     values={['Anywhere', ...cities]}
-                    borderColor={COLORS.placeholder}
-                    hoveredBorderColor={COLORS.red}
-                    textColor='#000'
-                    textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                    labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                    placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                     text={filters.city ?? 'Anywhere'}
                     setText={(text) => setFilters(filters => ({ ...filters, city: text === 'Anywhere' ? undefined : text }))}
                     rightIconName='chevron-down'
@@ -546,9 +538,9 @@ const Filters = forwardRef((props, ref) => {
                         const selected = filters.establishment_type.includes(establishment_type)
                         return (
                             <Chip key={establishment_type}
-                                style={{ backgroundColor: selected ? COLORS.red : 'transparent', marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small }}
+                                style={{ marginRight: SPACING.xx_small, marginBottom: SPACING.xx_small, backgroundColor: selected ? COLORS.red : COLORS.darkRedBackground }}
                                 mode="outlined"
-                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: selected ? '#FFF' : '#000' }}
+                                textStyle={{ fontFamily: selected ? FONTS.bold : FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}
                                 onPress={() => onMultiPicklistPress(establishment_type, 'establishment_type')}
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
@@ -580,23 +572,32 @@ const Filters = forwardRef((props, ref) => {
                                 <Animated.Text style={modalHeaderTextStyles}>Filters</Animated.Text>
                             </View>
                             <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                                 </HoverableView>
                             </View>
                         </View>
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
-                        <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small, marginTop: SPACING.xxxxx_large - SPACING.small - SPACING.small }}>
-                            {!isEstablishmentPage && renderLadiesFilters()}
-                            {isEstablishmentPage && renderEstablishmentsFilters()}
+                        <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
+                            <LinearGradient colors={[
+                                '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                                '#261718',
+                            ]}
+                                style={{ position: 'absolute', width: '100%', height: 300 }}
+                            />
+
+                            <View style={{ marginTop: SPACING.xxxxx_large - SPACING.small - SPACING.small }}>
+                                {!isEstablishmentPage && renderLadiesFilters()}
+                                {isEstablishmentPage && renderEstablishmentsFilters()}
+                            </View>
                         </Animated.ScrollView>
 
-                        <View style={{ borderTopWidth: 1, borderTopColor: COLORS.placeholder, paddingHorizontal: SPACING.small, paddingVertical: SPACING.x_small, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <View style={{ borderTopWidth: .5, borderTopColor: 'grey', paddingHorizontal: SPACING.small, paddingVertical: SPACING.x_small, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Button
-                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.lightBlack }}
+                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.white }}
                                 style={{ flexShrink: 1, borderRadius: 10, borderWidth: 0 }}
-                                buttonColor="#FFF"
+                                buttonColor={COLORS.grey}
                                 mode="outlined"
                                 rippleColor='rgba(0,0,0,.1)'
                                 onPress={onClearFiltersPress}
@@ -607,7 +608,7 @@ const Filters = forwardRef((props, ref) => {
                             <Button
                                 labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: '#FFF' }}
                                 style={{ flexShrink: 1, borderRadius: 10 }}
-                                buttonColor={COLORS.lightBlack}
+                                buttonColor={COLORS.red}
                                 mode="contained"
                                 onPress={onApplyFiltersPress}
                             >
@@ -634,7 +635,7 @@ const styles = StyleSheet.create({
         right: 0,
         left: 0,
         height: normalize(55),
-        //backgroundColor: '#FFF',
+        backgroundColor: '#221718',
         zIndex: 3,
         display: 'flex',
         flexDirection: 'row',
@@ -656,12 +657,13 @@ const styles = StyleSheet.create({
     filterHeader: {
         fontFamily: FONTS.bold,
         fontSize: FONT_SIZES.x_large,
-        marginBottom: SPACING.x_small
+        marginBottom: SPACING.x_small,
+        color: COLORS.white
     },
     filterSection: {
         marginHorizontal: SPACING.small,
         paddingVertical: SPACING.small,
         borderBottomWidth: 0.5,
-        borderColor: COLORS.placeholder
+        borderColor: 'grey'
     }
 })

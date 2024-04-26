@@ -84,6 +84,8 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY1.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            backgroundColor: COLORS.grey,
+            color: COLORS.white
         }
     })
     const modalHeaderTextStyles2 = useAnimatedStyle(() => {
@@ -91,6 +93,8 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY2.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            backgroundColor: COLORS.grey,
+            color: COLORS.white
         }
     })
 
@@ -212,7 +216,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#FFF',
+            backgroundColor: COLORS.grey,
             borderRadius: 24,
             width: normalize(500),
             maxWidth: '90%',
@@ -232,24 +236,24 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                         <Animated.Text style={modalHeaderTextStyles1}>Address</Animated.Text>
                     </View>
                     <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                         </HoverableView>
                     </View>
                 </View>
                 <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles1]} />
 
                 <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                    <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginHorizontal: SPACING.small, marginBottom: SPACING.small }}>
+                    <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginHorizontal: SPACING.small, marginBottom: SPACING.small, color: COLORS.white }}>
                         Address
                     </Text>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: SPACING.small }}>
                         <View style={{ flex: 1, flexDirection: 'column', marginRight: SPACING.small }}>
-                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }}>
+                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>
                                 Show your specific location
                             </Text>
-                            <Text style={{ color: COLORS.grey, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2 }}>
+                            <Text style={{ color: COLORS.placeholder, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2 }}>
                                 If not selected, only city will be visible on your profile
                             </Text>
                         </View>
@@ -270,12 +274,6 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                             pointerEventsDisabled
                             placeholder="Search address"
                             label="Search address"
-                            borderColor={COLORS.placeholder}
-                            hoveredBorderColor={COLORS.red}
-                            textColor='#000'
-                            textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                            labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                            placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                             text={changedAddress.title}
                             leftIconName='map-marker-outline'
                         />
@@ -290,28 +288,28 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
             <>
                 <View style={styles.modal__header}>
                     <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0 }}>
-                        <HoverableView style={{ marginLeft: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                            <Ionicons onPress={() => setIndex(0)} name="arrow-back" size={normalize(25)} color="black" />
+                        <HoverableView style={{ marginLeft: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                            <Ionicons onPress={() => setIndex(0)} name="arrow-back" size={normalize(25)} color="white" />
                         </HoverableView>
                     </View>
                     <View style={{ flexShrink: 1, flexGrow: 0 }}>
                         <Animated.Text style={modalHeaderTextStyles2}>Edit Address</Animated.Text>
                     </View>
                     <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                        <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground2} backgroundColor={'#372b2b'}>
+                            <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                         </HoverableView>
                     </View>
                 </View>
                 <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles2]} />
 
                 <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler2} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                    <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginHorizontal: SPACING.small }}>
+                    <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginHorizontal: SPACING.small, color: COLORS.white }}>
                         Edit Address
                     </Text>
 
-                    <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor='#FFF' backgroundColor='#FFF' hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
-                        <Ionicons name="search" size={normalize(20)} color="black" />
+                    <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor={COLORS.darkRedBackground2} backgroundColor={COLORS.darkRedBorderColor2} hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
+                        <Ionicons name="search" size={normalize(20)} color="white" />
                         <TextInput
                             ref={searchInputRef}
                             style={styles.citySearch}
@@ -322,7 +320,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                             onBlur={() => setSearchBorderColor(COLORS.placeholder)}
                             onFocus={() => setSearchBorderColor(COLORS.red)}
                         />
-                        <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(20)} color="black" />
+                        <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(20)} color="white" />
                     </HoverableView>
 
                     {!search && !isSearching && results.length === 0 && <TouchableRipple
@@ -331,8 +329,8 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                         rippleColor="rgba(220, 46, 46, .10)"
                     >
                         <>
-                            <Ionicons name="navigate-circle-outline" size={normalize(24)} color="black" />
-                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, marginLeft: SPACING.xxx_small }}>
+                            <Ionicons name="navigate-circle-outline" size={normalize(24)} color="white" />
+                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, marginLeft: SPACING.xxx_small, color: COLORS.white }}>
                                 Use my current location
                             </Text>
                         </>
@@ -360,7 +358,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                                     text={a.title}
                                     //iconStyle={{ borderRadius: 3 }}
                                     //innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                    textStyle={{ color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
+                                    textStyle={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
                                     textContainerStyle={{ flexShrink: 1 }}
                                 />
                             </TouchableRipple>
@@ -402,9 +400,9 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
 
                         <View style={{ borderTopWidth: 1, borderTopColor: COLORS.placeholder, paddingHorizontal: SPACING.small, paddingVertical: SPACING.x_small, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Button
-                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.lightBlack }}
+                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.white }}
                                 style={{ flexShrink: 1, borderRadius: 10, borderWidth: 0 }}
-                                buttonColor="#FFF"
+                                buttonColor={COLORS.grey}
                                 mode="outlined"
                                 rippleColor='rgba(0,0,0,.1)'
                                 onPress={closeModal}
@@ -415,11 +413,12 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                             <Button
                                 labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: '#FFF' }}
                                 style={{ flexShrink: 1, borderRadius: 10 }}
-                                buttonColor={COLORS.lightBlack}
+                                buttonColor={COLORS.red}
                                 mode="contained"
                                 onPress={onSavePress}
                                 loading={isSaving}
                                 disabled={isSaving || (address.id === changedAddress.id && address.hidden_address === changedAddress.hidden_address)}
+                                theme={{ colors: { surfaceDisabled: COLORS.hoveredLightGrey }}}
                             >
                                 Save
                             </Button>
@@ -476,7 +475,7 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.regular,
         fontSize: FONT_SIZES.medium,
         outlineStyle: 'none',
-        color: '#000'
+        color: COLORS.white,
     },
     section: {
         paddingVertical: SPACING.xx_small,

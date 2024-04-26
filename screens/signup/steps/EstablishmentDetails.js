@@ -17,6 +17,7 @@ import {
     ESTABLISHMENT_TYPES
 } from '../../../labels'
 
+import { LinearGradient } from 'expo-linear-gradient'
 
 const EstablishmentDetails = forwardRef((props, ref) => {
     const { i, contentWidth, offsetX = 0 } = props
@@ -72,6 +73,8 @@ const EstablishmentDetails = forwardRef((props, ref) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: '#261718'
         }
     })
 
@@ -81,153 +84,132 @@ const EstablishmentDetails = forwardRef((props, ref) => {
                 <Animated.Text style={modalHeaderTextStyles}>{`${i + 1}. Establishment Details`}</Animated.Text>
             </View>
             <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
-            <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small, paddingTop: SPACING.xxxxx_large }}>
-                <Text style={styles.pageHeaderText}>
-                    {`${i + 1}. Establishment Details`}
-                </Text>
+            <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
+                <LinearGradient colors={[
+                    '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                    '#261718',
+                ]}
+                    style={{ position: 'absolute', width: '100%', height: 300 }}
+                />
 
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginLeft: SPACING.x_large }}>
-                    <HoverableInput
-                        placeholder="Agency xxx"
-                        label="Establishment Name"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.x_large * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.x_large, }}
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.name}
-                        setText={(text) => onValueChange(text, 'name')}
-                        //leftIconName="badge-account-outline"
-                        errorMessage={showErrors && !data.name ? 'Enter your Name' : undefined}
-                    />
+                <View style={{ paddingTop: SPACING.xxxxx_large }}>
 
-                    <DropdownSelect
-                        values={ESTABLISHMENT_TYPES}
-                        offsetX={contentWidth * i}
-                        placeholder="Select establishment type"
-                        label="Establishment type"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.x_large * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.x_large }}
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.establishment_type}
-                        setText={(text) => onValueChange(text, 'establishment_type')}
-                        rightIconName='chevron-down'
-                        errorMessage={showErrors && !data.establishment_type ? 'Select the establishment type' : undefined}
-                    />
-                </View>
+                    <Text style={styles.pageHeaderText}>
+                        {`${i + 1}. Establishment Details`}
+                    </Text>
 
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start', marginLeft: SPACING.x_large }}>
-                    <HoverableInput
-                        placeholder="www.website.com"
-                        label="Website"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.x_large * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.x_large }}
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.website}
-                        setText={(text) => onValueChange(text, 'website')}
-                    />
-
-                    <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.x_large * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.x_large }}>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginLeft: SPACING.x_large }}>
                         <HoverableInput
-                            placeholder="+420 777 666 777"
-                            label="Phone number"
-                            borderColor={COLORS.placeholder}
-                            hoveredBorderColor={COLORS.red}
-                            textColor='#000'
-
-                            textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                            labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                            placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                            text={data.phone}
-                            setText={(text) => onValueChange(text, 'phone')}
-                            errorMessage={showErrors && !data.phone ? 'Enter your phone' : undefined}
+                            placeholder="Agency xxx"
+                            label="Establishment Name"
+                            containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.x_large * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.x_large, }}
+                            text={data.name}
+                            setText={(text) => onValueChange(text, 'name')}
+                            //leftIconName="badge-account-outline"
+                            errorMessage={showErrors && !data.name ? 'Enter your Name' : undefined}
                         />
 
-                        <View style={{ flexDirection: 'row', marginTop: SPACING.xx_small }}>
-                            <BouncyCheckbox
-                                style={{ marginRight: SPACING.xx_small }}
-                                disableBuiltInState
-                                isChecked={data.whatsapp}
-                                size={normalize(19)}
-                                fillColor={data.whatsapp ? 'green' : COLORS.placeholder}
-                                unfillColor="#FFFFFF"
-                                iconStyle={{ borderRadius: 3 }}
-                                innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                onPress={() => setData(data => ({ ...data, whatsapp: !data.whatsapp }))}
-                                textComponent={
-                                    <View style={{ padding: 5, width: 28, height: 28, backgroundColor: '#108a0c', borderRadius: '50%', marginLeft: SPACING.xxx_small, alignItems: 'center', justifyContent: 'center' }}>
-                                        <FontAwesome5 name="whatsapp" size={18} color="white" />
-                                    </View>
-                                }
+                        <DropdownSelect
+                            values={ESTABLISHMENT_TYPES}
+                            offsetX={contentWidth * i}
+                            placeholder="Select establishment type"
+                            label="Establishment type"
+                            containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.x_large * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.x_large }}
+                            text={data.establishment_type}
+                            setText={(text) => onValueChange(text, 'establishment_type')}
+                            rightIconName='chevron-down'
+                            errorMessage={showErrors && !data.establishment_type ? 'Select the establishment type' : undefined}
+                        />
+                    </View>
+
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start', marginLeft: SPACING.x_large }}>
+                        <HoverableInput
+                            placeholder="www.website.com"
+                            label="Website"
+                            containerStyle={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.x_large * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.x_large }}
+                            text={data.website}
+                            setText={(text) => onValueChange(text, 'website')}
+                        />
+
+                        <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: (contentWidth / 2) - SPACING.x_large * 2, minWidth: 220, marginTop: SPACING.xxx_small, marginRight: SPACING.x_large }}>
+                            <HoverableInput
+                                placeholder="+420 777 666 777"
+                                label="Phone number"
+                                text={data.phone}
+                                setText={(text) => onValueChange(text, 'phone')}
+                                errorMessage={showErrors && !data.phone ? 'Enter your phone' : undefined}
                             />
-                            <BouncyCheckbox
-                                style={{ marginRight: SPACING.xx_small }}
-                                disableBuiltInState
-                                isChecked={data.viber}
-                                size={normalize(19)}
-                                fillColor={data.viber ? 'green' : COLORS.placeholder}
-                                unfillColor="#FFFFFF"
-                                iconStyle={{ borderRadius: 3 }}
-                                innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                onPress={() => setData(data => ({ ...data, viber: !data.viber }))}
-                                textComponent={
-                                    <View style={{ padding: 5, width: 28, height: 28, backgroundColor: '#7d3daf', borderRadius: '50%', marginLeft: SPACING.xxx_small, alignItems: 'center', justifyContent: 'center' }}>
-                                        <FontAwesome5 name="viber" size={18} color="white" />
-                                    </View>
-                                }
-                            />
-                            <BouncyCheckbox
-                                disableBuiltInState
-                                isChecked={data.telegram}
-                                size={normalize(19)}
-                                fillColor={data.telegram ? 'green' : COLORS.placeholder}
-                                unfillColor="#FFFFFF"
-                                iconStyle={{ borderRadius: 3 }}
-                                innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                onPress={() => setData(data => ({ ...data, telegram: !data.telegram }))}
-                                textComponent={
-                                    <View style={{ padding: 5, width: 28, height: 28, backgroundColor: '#38a5e4', borderRadius: 30, alignItems: 'center', marginLeft: SPACING.xxx_small, justifyContent: 'center' }}>
-                                        <EvilIcons name="sc-telegram" size={22} color="white" />
-                                    </View>
-                                }
-                            />
+
+                            <View style={{ flexDirection: 'row', marginTop: SPACING.xx_small }}>
+                                <BouncyCheckbox
+                                    style={{ marginRight: SPACING.xx_small }}
+                                    disableBuiltInState
+                                    isChecked={data.whatsapp}
+                                    size={normalize(19)}
+                                    fillColor={data.whatsapp ? 'green' : COLORS.placeholder}
+                                    unfillColor="#FFFFFF"
+                                    iconStyle={{ borderRadius: 3 }}
+                                    innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
+                                    onPress={() => setData(data => ({ ...data, whatsapp: !data.whatsapp }))}
+                                    textComponent={
+                                        <View style={{ padding: 5, width: 28, height: 28, backgroundColor: '#108a0c', borderRadius: '50%', marginLeft: SPACING.xxx_small, alignItems: 'center', justifyContent: 'center' }}>
+                                            <FontAwesome5 name="whatsapp" size={18} color="white" />
+                                        </View>
+                                    }
+                                />
+                                <BouncyCheckbox
+                                    style={{ marginRight: SPACING.xx_small }}
+                                    disableBuiltInState
+                                    isChecked={data.viber}
+                                    size={normalize(19)}
+                                    fillColor={data.viber ? 'green' : COLORS.placeholder}
+                                    unfillColor="#FFFFFF"
+                                    iconStyle={{ borderRadius: 3 }}
+                                    innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
+                                    onPress={() => setData(data => ({ ...data, viber: !data.viber }))}
+                                    textComponent={
+                                        <View style={{ padding: 5, width: 28, height: 28, backgroundColor: '#7d3daf', borderRadius: '50%', marginLeft: SPACING.xxx_small, alignItems: 'center', justifyContent: 'center' }}>
+                                            <FontAwesome5 name="viber" size={18} color="white" />
+                                        </View>
+                                    }
+                                />
+                                <BouncyCheckbox
+                                    disableBuiltInState
+                                    isChecked={data.telegram}
+                                    size={normalize(19)}
+                                    fillColor={data.telegram ? 'green' : COLORS.placeholder}
+                                    unfillColor="#FFFFFF"
+                                    iconStyle={{ borderRadius: 3 }}
+                                    innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
+                                    onPress={() => setData(data => ({ ...data, telegram: !data.telegram }))}
+                                    textComponent={
+                                        <View style={{ padding: 5, width: 28, height: 28, backgroundColor: '#38a5e4', borderRadius: 30, alignItems: 'center', marginLeft: SPACING.xxx_small, justifyContent: 'center' }}>
+                                            <EvilIcons name="sc-telegram" size={22} color="white" />
+                                        </View>
+                                    }
+                                />
+                            </View>
                         </View>
                     </View>
-                </View>
 
-                <View style={{ marginHorizontal: SPACING.x_large }}>
-                    <HoverableInput
-                        placeholder="Describe your establishment"
-                        multiline
-                        numberOfLines={5}
-                        maxLength={1000}
-                        label="Description"
-                        borderColor={COLORS.placeholder}
-                        hoveredBorderColor={COLORS.red}
-                        textColor='#000'
-                        containerStyle={{ marginTop: SPACING.xxx_small }}
-                        textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                        labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                        placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder }}
-                        text={data.description}
-                        setText={(text) => onValueChange(text, 'description')}
-                        errorMessage={showErrors && !data.description ? 'Desribe yourself' : undefined}
-                    />
-                </View>
-                <View style={{ marginHorizontal: SPACING.x_large, marginTop: 3 }}>
-                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: 'grey' }}>
-                        {`${data.description.length}/1000`}
-                    </Text>
+                    <View style={{ marginHorizontal: SPACING.x_large }}>
+                        <HoverableInput
+                            placeholder="Describe your establishment"
+                            multiline
+                            numberOfLines={5}
+                            maxLength={1000}
+                            label="Description"
+                            containerStyle={{ marginTop: SPACING.xxx_small }}
+                            text={data.description}
+                            setText={(text) => onValueChange(text, 'description')}
+                            errorMessage={showErrors && !data.description ? 'Desribe yourself' : undefined}
+                        />
+                    </View>
+                    <View style={{ marginHorizontal: SPACING.x_large, marginTop: 3 }}>
+                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: 'grey' }}>
+                            {`${data.description.length}/1000`}
+                        </Text>
+                    </View>
                 </View>
             </Animated.ScrollView>
         </>
@@ -238,7 +220,7 @@ export default memo(EstablishmentDetails)
 
 const styles = StyleSheet.create({
     pageHeaderText: {
-        //color: '#FFF', 
+        color: '#FFF',
         fontFamily: FONTS.bold,
         fontSize: FONT_SIZES.h3,
         marginHorizontal: SPACING.x_large,
@@ -263,7 +245,7 @@ const styles = StyleSheet.create({
         right: 0,
         left: 0,
         height: normalize(55),
-        backgroundColor: '#FFF',
+        backgroundColor: COLORS.white,
         zIndex: 2,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,

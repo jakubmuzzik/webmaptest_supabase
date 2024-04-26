@@ -17,6 +17,8 @@ import { BlurView } from 'expo-blur'
 import uuid from 'react-native-uuid'
 import { IN_REVIEW } from '../../../labels'
 
+import { LinearGradient } from 'expo-linear-gradient'
+
 const UploadPhotos = forwardRef((props, ref) => {
     const { i, toastRef } = props
 
@@ -43,8 +45,8 @@ const UploadPhotos = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         validate,
         data: JSON.parse(JSON.stringify({
-            images: data.images.filter(image => image).map((image, index) => ({...image, index})),
-            videos: data.videos.filter(video => video).map((video, index) => ({...video, index})),
+            images: data.images.filter(image => image).map((image, index) => ({ ...image, index })),
+            videos: data.videos.filter(video => video).map((video, index) => ({ ...video, index })),
         }))
     }))
 
@@ -117,7 +119,7 @@ const UploadPhotos = forwardRef((props, ref) => {
                     toastRef.current.show({
                         type: 'error',
                         headerText: 'File Size Error',
-                        text:`Maximum file size allowed is ${MAX_VIDEO_SIZE_MB}MB.`
+                        text: `Maximum file size allowed is ${MAX_VIDEO_SIZE_MB}MB.`
                     })
                     return
                 }
@@ -127,7 +129,7 @@ const UploadPhotos = forwardRef((props, ref) => {
                     toastRef.current.show({
                         type: 'error',
                         headerText: 'Invalid File Type',
-                        text:`Please upload a supported file type.`
+                        text: `Please upload a supported file type.`
                     })
                     return
                 }
@@ -136,7 +138,7 @@ const UploadPhotos = forwardRef((props, ref) => {
                 const blurhash = await encodeImageToBlurhash(thumbnail)
 
                 setData(d => {
-                    d.videos[index] = {thumbnail, video: result.assets[0].uri, id: uuid.v4(), status: IN_REVIEW, blurhash}
+                    d.videos[index] = { thumbnail, video: result.assets[0].uri, id: uuid.v4(), status: IN_REVIEW, blurhash }
                     if (d.videos.length < MAX_VIDEOS) {
                         d.videos.push(null)
                     }
@@ -159,7 +161,7 @@ const UploadPhotos = forwardRef((props, ref) => {
             } else {
                 d.images[index] = null
             }
-            
+
             return { ...d }
         })
     }
@@ -171,7 +173,7 @@ const UploadPhotos = forwardRef((props, ref) => {
             if (d.videos[d.videos.length - 1]) {
                 d.videos.push(null)
             }
-            
+
             return { ...d }
         })
     }
@@ -181,6 +183,8 @@ const UploadPhotos = forwardRef((props, ref) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: '#261718'
         }
     })
 
@@ -190,263 +194,44 @@ const UploadPhotos = forwardRef((props, ref) => {
                 <Animated.Text style={modalHeaderTextStyles}>{`${i + 1}. Photos & Videos`}</Animated.Text>
             </View>
             <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
-            <Animated.ScrollView 
-                scrollEventThrottle={1} 
-                onScroll={scrollHandler} 
-                style={{ flex: 1 }} 
-                contentContainerStyle={{ paddingBottom: SPACING.small, paddingTop: SPACING.xxxxx_large }}
+            <Animated.ScrollView
+                scrollEventThrottle={1}
+                onScroll={scrollHandler}
+                style={{ flex: 1 }}
+                contentContainerStyle={{ paddingBottom: SPACING.small }}
                 onContentSizeChange={(contentWidth) => setContentWidth(contentWidth)}
             >
-                <Text style={styles.pageHeaderText}>
-                    {`${i + 1}. Photos & Videos`}
-                </Text>
+                <LinearGradient colors={[
+                    '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                   '#261718',
+                ]}
+                    style={{ position: 'absolute', width: '100%', height: 300 }}
+                />
 
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large }}>
-                    Add at least 5 cover photos
-                </Text>
-                <Text style={{ color: COLORS.grey, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large }}>
-                    These photos will be prominently displayed on your profile page
-                </Text>
+                <View style={{ paddingTop: SPACING.xxxxx_large }}>
 
-                <View style={{ marginTop: SPACING.x_small, flexDirection: 'row', marginHorizontal: SPACING.x_large }}>
-                    <View style={{ width: '50%', flexShrink: 1, marginRight: SPACING.xxx_small, }}>
-                        {data.images[0] ?
-                            <>
-                                <Image
-                                    style={{
-                                        aspectRatio: 3 / 4,
-                                        width: 'auto',
-                                        borderRadius: 10
-                                    }}
-                                    source={{ uri: data.images[0].image }}
-                                    resizeMode="cover"
-                                />
-                                <IconButton
-                                    style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
-                                    icon="delete-outline"
-                                    iconColor='white'
-                                    size={normalize(20)}
-                                    onPress={() => onDeleteImagePress(0)}
-                                />
-                            </> :
-
-                            <TouchableRipple
-                                onPress={() => onSelectImagePress(0)}
-                                style={{ backgroundColor: 'rgba(28,27,31,0.16)', alignItems: 'center', justifyContent: 'center', width: 'auto', aspectRatio: 3 / 4, borderRadius: 10 }}
-                            >
-                                <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "black"} />
-                            </TouchableRipple>
-                        }
-                    </View>
-                    <View style={{ flexDirection: 'column', width: '50%', flexShrink: 1 }}>
-                        <View style={{ flexDirection: 'row', marginBottom: SPACING.xxx_small, flexGrow: 1 }}>
-
-                            <View style={{ flex: 1, marginRight: SPACING.xxx_small }}>
-                                {data.images[1] ?
-                                    <>
-                                        <Image
-                                            style={{
-                                                flex: 1,
-                                                aspectRatio: 3 / 4,
-                                                borderRadius: 10
-                                            }}
-                                            source={{ uri: data.images[1].image }}
-                                            resizeMode="cover"
-                                        />
-                                        <IconButton
-                                            style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
-                                            icon="delete-outline"
-                                            iconColor='white'
-                                            size={normalize(20)}
-                                            onPress={() => onDeleteImagePress(1)}
-                                        />
-                                    </> :
-
-                                    <TouchableRipple
-                                        onPress={() => onSelectImagePress(1)}
-                                        style={{ backgroundColor: 'rgba(28,27,31,0.16)', alignItems: 'center', justifyContent: 'center', aspectRatio: 3 / 4, flex: 1, borderRadius: 10 }}
-                                    >
-                                        <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "black"} />
-                                    </TouchableRipple>
-
-                                }
-                            </View>
-
-
-                            <View style={{ flex: 1 }}>
-                                {data.images[2] ?
-                                    <>
-                                        <Image
-                                            style={{
-                                                flex: 1,
-                                                borderRadius: 10,
-                                                aspectRatio: 3 / 4
-                                            }}
-                                            source={{ uri: data.images[2].image }}
-                                            resizeMode="cover"
-                                        />
-                                        <IconButton
-                                            style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
-                                            icon="delete-outline"
-                                            iconColor='white'
-                                            size={normalize(20)}
-                                            onPress={() => onDeleteImagePress(2)}
-                                        />
-                                    </> :
-
-                                    <TouchableRipple
-                                        onPress={() => onSelectImagePress(2)}
-                                        style={{ backgroundColor: 'rgba(28,27,31,0.16)', alignItems: 'center', justifyContent: 'center', aspectRatio: 3 / 4, borderRadius: 10, flex: 1, }}
-                                    >
-                                        <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "black"} />
-                                    </TouchableRipple>
-
-                                }
-                            </View>
-                        </View>
-                        <View style={{ flexDirection: 'row', flexGrow: 1 }}>
-
-                            <View style={{ flex: 1, marginRight: SPACING.xxx_small }}>
-                                {data.images[3] ?
-                                    <>
-                                        <Image
-                                            style={{
-                                                flex: 1,
-                                                aspectRatio: 3 / 4,
-                                                borderRadius: 10
-                                            }}
-                                            source={{ uri: data.images[3].image }}
-                                            resizeMode="cover"
-                                        />
-                                        <IconButton
-                                            style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
-                                            icon="delete-outline"
-                                            iconColor='white'
-                                            size={normalize(20)}
-                                            onPress={() => onDeleteImagePress(3)}
-                                        />
-                                    </>
-                                    :
-                                    <TouchableRipple
-                                        onPress={() => onSelectImagePress(3)}
-                                        style={{ backgroundColor: 'rgba(28,27,31,0.16)', alignItems: 'center', justifyContent: 'center', aspectRatio: 3 / 4, flex: 1, borderRadius: 10 }}
-                                    >
-                                        <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "black"} />
-                                    </TouchableRipple>
-                                }
-                            </View>
-
-                            <View style={{ flex: 1 }}>
-                                {data.images[4] ?
-                                    <>
-                                        <Image
-                                            style={{
-                                                flex: 1,
-                                                borderRadius: 10,
-                                                aspectRatio: 3 / 4
-                                            }}
-                                            source={{ uri: data.images[4].image }}
-                                            resizeMode="cover"
-                                        />
-                                        <IconButton
-                                            style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
-                                            icon="delete-outline"
-                                            iconColor='white'
-                                            size={normalize(20)}
-                                            onPress={() => onDeleteImagePress(4)}
-                                        />
-                                    </> :
-                                    <TouchableRipple
-                                        onPress={() => onSelectImagePress(4)}
-                                        style={{ backgroundColor: 'rgba(28,27,31,0.16)', alignItems: 'center', justifyContent: 'center', aspectRatio: 3 / 4, borderRadius: 10, flex: 1, }}
-                                    >
-                                        <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "black"} />
-                                    </TouchableRipple>
-                                }
-                            </View>
-                        </View>
-                    </View>
-                </View>
-                {showErrors && <HelperText type="error" visible>
-                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.error, paddingHorizontal: SPACING.x_large }}>
-                        Add at least 5 cover photos.
+                    <Text style={styles.pageHeaderText}>
+                        {`${i + 1}. Photos & Videos`}
                     </Text>
-                </HelperText>}
 
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, marginTop: SPACING.medium }}>
-                    Add additional photos
-                </Text>
-                <Text style={{ color: COLORS.grey, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large, marginBottom: SPACING.x_small }}>
-                    Visitors can explore these photos by clicking the 'View All' button on your profile
-                </Text>
+                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, color: COLORS.white }}>
+                        Add at least 5 cover photos
+                    </Text>
+                    <Text style={{ color: COLORS.placeholder, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large }}>
+                        These photos will be prominently displayed on your profile page
+                    </Text>
 
-                <View style={{ flexDirection: 'row', marginLeft: SPACING.x_large, marginRight: SPACING.x_large - SPACING.xxx_small, flexWrap: 'wrap' }}>
-                    {data.images.slice(5).map((image, index) =>
-                        <View key={image ? image.id : Math.random()} style={{ width: ((contentWidth - (SPACING.x_large * 2) - (SPACING.xxx_small * 2)) / 3), marginRight: SPACING.xxx_small, marginBottom: SPACING.xxx_small }}>
-                            {image ?
-                                <ImageBackground
-                                    source={{ uri: image.image }}
-                                    style={{ flex: 1 }}
-                                    imageStyle={{ opacity: 0.7, borderRadius: 10, borderColor: 'rgba(28,27,31,0.16)', borderWidth: 1, overflow: 'hidden' }}
-                                    resizeMode='cover'
-                                >
-                                    <BlurView intensity={50} style={{ borderRadius: 10, borderColor: 'rgba(28,27,31,0.16)', borderWidth: 1, overflow: 'hidden' }}>
-                                        <Image
-                                            style={{
-                                                flex: 1,
-                                                aspectRatio: 1 / 1,
-                                            }}
-                                            source={{ uri: image.image }}
-                                            resizeMode="contain"
-                                        />
-                                        <IconButton
-                                            style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
-                                            icon="delete-outline"
-                                            iconColor='white'
-                                            size={normalize(20)}
-                                            onPress={() => onDeleteImagePress(index + 5)}
-                                        />
-                                    </BlurView>
-                                </ImageBackground> :
-                                <TouchableRipple
-                                    onPress={() => onSelectImagePress(index + 5)}
-                                    style={{ backgroundColor: 'rgba(28,27,31,0.16)', alignItems: 'center', justifyContent: 'center', flex: 1, borderRadius: 10, aspectRatio: 1 / 1 }}
-                                >
-                                    <>
-                                        <AntDesign name="plus" size={normalize(30)} color="black" />
-                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>
-                                            Add more
-                                        </Text>
-                                        {/* <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small }}>
-                                                Max file size: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>{MAX_PHOTO_SIZE_MB}MB</Text>
-                                            </Text> */}
-                                    </>
-                                </TouchableRipple>
-                            }
-                        </View>)}
-                </View>
-
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, marginTop: SPACING.medium - SPACING.xxx_small, }}>
-                    Add videos
-                </Text>
-                <Text style={{ color: COLORS.grey, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large, marginBottom: SPACING.x_small }}>
-                    Visitors can explore these videos by clicking the 'View All' button on your profile
-                </Text>
-
-                <View style={{ flexDirection: 'row', marginLeft: SPACING.x_large, marginRight: SPACING.x_large - SPACING.xxx_small, flexWrap: 'wrap' }}>
-                    {data.videos.map((video, index) =>
-                        <View key={video ? video.id : Math.random()} style={{ width: ((contentWidth - (SPACING.x_large * 2) - (SPACING.xxx_small * 2)) / 3), marginRight: SPACING.xxx_small, marginBottom: SPACING.xxx_small }}>
-                            {video ?
-                                <React.Fragment>
+                    <View style={{ marginTop: SPACING.x_small, flexDirection: 'row', marginHorizontal: SPACING.x_large }}>
+                        <View style={{ width: '50%', flexShrink: 1, marginRight: SPACING.xxx_small, }}>
+                            {data.images[0] ?
+                                <>
                                     <Image
                                         style={{
-                                            flex: 1,
-                                            borderRadius: 10,
-                                            aspectRatio: 1 / 1,
-                                            borderWidth: 1,
-                                            borderColor: 'rgba(28,27,31,0.16)'
+                                            aspectRatio: 3 / 4,
+                                            width: 'auto',
+                                            borderRadius: 10
                                         }}
-                                        source={{ uri: video.thumbnail }}
+                                        source={{ uri: data.images[0].image }}
                                         resizeMode="cover"
                                     />
                                     <IconButton
@@ -454,25 +239,254 @@ const UploadPhotos = forwardRef((props, ref) => {
                                         icon="delete-outline"
                                         iconColor='white'
                                         size={normalize(20)}
-                                        onPress={() => onDeleteVideoPress(index)}
+                                        onPress={() => onDeleteImagePress(0)}
                                     />
-                                </React.Fragment> :
+                                </> :
+
                                 <TouchableRipple
-                                    onPress={() => onSelectVideoPress(index)}
-                                    style={{ backgroundColor: 'rgba(28,27,31,0.16)', alignItems: 'center', justifyContent: 'center', flex: 1, borderRadius: 10, aspectRatio: 1 / 1 }}
+                                    onPress={() => onSelectImagePress(0)}
+                                    style={{ backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', width: 'auto', aspectRatio: 3 / 4, borderRadius: 10 }}
                                 >
-                                    <>
-                                        <AntDesign name="videocamera" size={normalize(30)} color="black" />
-                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>
-                                            Add video
-                                        </Text>
-                                        {/* <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small }}>
-                                                Max file size: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>{MAX_VIDEO_SIZE_MB}MB</Text>
-                                            </Text> */}
-                                    </>
+                                    <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "white"} />
                                 </TouchableRipple>
                             }
-                        </View>)}
+                        </View>
+                        <View style={{ flexDirection: 'column', width: '50%', flexShrink: 1 }}>
+                            <View style={{ flexDirection: 'row', marginBottom: SPACING.xxx_small, flexGrow: 1 }}>
+
+                                <View style={{ flex: 1, marginRight: SPACING.xxx_small }}>
+                                    {data.images[1] ?
+                                        <>
+                                            <Image
+                                                style={{
+                                                    flex: 1,
+                                                    aspectRatio: 3 / 4,
+                                                    borderRadius: 10
+                                                }}
+                                                source={{ uri: data.images[1].image }}
+                                                resizeMode="cover"
+                                            />
+                                            <IconButton
+                                                style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
+                                                icon="delete-outline"
+                                                iconColor='white'
+                                                size={normalize(20)}
+                                                onPress={() => onDeleteImagePress(1)}
+                                            />
+                                        </> :
+
+                                        <TouchableRipple
+                                            onPress={() => onSelectImagePress(1)}
+                                            style={{ backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', aspectRatio: 3 / 4, flex: 1, borderRadius: 10 }}
+                                        >
+                                            <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "white"} />
+                                        </TouchableRipple>
+
+                                    }
+                                </View>
+
+
+                                <View style={{ flex: 1 }}>
+                                    {data.images[2] ?
+                                        <>
+                                            <Image
+                                                style={{
+                                                    flex: 1,
+                                                    borderRadius: 10,
+                                                    aspectRatio: 3 / 4
+                                                }}
+                                                source={{ uri: data.images[2].image }}
+                                                resizeMode="cover"
+                                            />
+                                            <IconButton
+                                                style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
+                                                icon="delete-outline"
+                                                iconColor='white'
+                                                size={normalize(20)}
+                                                onPress={() => onDeleteImagePress(2)}
+                                            />
+                                        </> :
+
+                                        <TouchableRipple
+                                            onPress={() => onSelectImagePress(2)}
+                                            style={{ backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', aspectRatio: 3 / 4, borderRadius: 10, flex: 1, }}
+                                        >
+                                            <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "white"} />
+                                        </TouchableRipple>
+
+                                    }
+                                </View>
+                            </View>
+                            <View style={{ flexDirection: 'row', flexGrow: 1 }}>
+
+                                <View style={{ flex: 1, marginRight: SPACING.xxx_small }}>
+                                    {data.images[3] ?
+                                        <>
+                                            <Image
+                                                style={{
+                                                    flex: 1,
+                                                    aspectRatio: 3 / 4,
+                                                    borderRadius: 10
+                                                }}
+                                                source={{ uri: data.images[3].image }}
+                                                resizeMode="cover"
+                                            />
+                                            <IconButton
+                                                style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
+                                                icon="delete-outline"
+                                                iconColor='white'
+                                                size={normalize(20)}
+                                                onPress={() => onDeleteImagePress(3)}
+                                            />
+                                        </>
+                                        :
+                                        <TouchableRipple
+                                            onPress={() => onSelectImagePress(3)}
+                                            style={{ backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', aspectRatio: 3 / 4, flex: 1, borderRadius: 10 }}
+                                        >
+                                            <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "white"} />
+                                        </TouchableRipple>
+                                    }
+                                </View>
+
+                                <View style={{ flex: 1 }}>
+                                    {data.images[4] ?
+                                        <>
+                                            <Image
+                                                style={{
+                                                    flex: 1,
+                                                    borderRadius: 10,
+                                                    aspectRatio: 3 / 4
+                                                }}
+                                                source={{ uri: data.images[4].image }}
+                                                resizeMode="cover"
+                                            />
+                                            <IconButton
+                                                style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
+                                                icon="delete-outline"
+                                                iconColor='white'
+                                                size={normalize(20)}
+                                                onPress={() => onDeleteImagePress(4)}
+                                            />
+                                        </> :
+                                        <TouchableRipple
+                                            onPress={() => onSelectImagePress(4)}
+                                            style={{ backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', aspectRatio: 3 / 4, borderRadius: 10, flex: 1, }}
+                                        >
+                                            <Ionicons name="image-outline" size={normalize(30)} color={showErrors ? COLORS.error : "white"} />
+                                        </TouchableRipple>
+                                    }
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                    {showErrors && <HelperText type="error" visible>
+                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.error, paddingHorizontal: SPACING.x_large }}>
+                            Add at least 5 cover photos.
+                        </Text>
+                    </HelperText>}
+
+                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, marginTop: SPACING.medium, color: COLORS.white }}>
+                        Add additional photos
+                    </Text>
+                    <Text style={{ color: COLORS.placeholder, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large, marginBottom: SPACING.x_small }}>
+                        Visitors can explore these photos by clicking the 'View All' button on your profile
+                    </Text>
+
+                    <View style={{ flexDirection: 'row', marginLeft: SPACING.x_large, marginRight: SPACING.x_large - SPACING.xxx_small, flexWrap: 'wrap' }}>
+                        {data.images.slice(5).map((image, index) =>
+                            <View key={image ? image.id : Math.random()} style={{ width: ((contentWidth - (SPACING.x_large * 2) - (SPACING.xxx_small * 2)) / 3), marginRight: SPACING.xxx_small, marginBottom: SPACING.xxx_small }}>
+                                {image ?
+                                    <ImageBackground
+                                        source={{ uri: image.image }}
+                                        style={{ flex: 1 }}
+                                        imageStyle={{ opacity: 0.7, borderRadius: 10, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, overflow: 'hidden' }}
+                                        resizeMode='cover'
+                                    >
+                                        <BlurView intensity={50} style={{ borderRadius: 10, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, overflow: 'hidden' }}>
+                                            <Image
+                                                style={{
+                                                    flex: 1,
+                                                    aspectRatio: 1 / 1,
+                                                }}
+                                                source={{ uri: image.image }}
+                                                resizeMode="contain"
+                                            />
+                                            <IconButton
+                                                style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
+                                                icon="delete-outline"
+                                                iconColor='white'
+                                                size={normalize(20)}
+                                                onPress={() => onDeleteImagePress(index + 5)}
+                                            />
+                                        </BlurView>
+                                    </ImageBackground> :
+                                    <TouchableRipple
+                                        onPress={() => onSelectImagePress(index + 5)}
+                                        style={{ backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', flex: 1, borderRadius: 10, aspectRatio: 1 / 1 }}
+                                    >
+                                        <>
+                                            <AntDesign name="plus" size={normalize(30)} color="white" />
+                                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.white }}>
+                                                Add more
+                                            </Text>
+                                            {/* <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small }}>
+                                                Max file size: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>{MAX_PHOTO_SIZE_MB}MB</Text>
+                                            </Text> */}
+                                        </>
+                                    </TouchableRipple>
+                                }
+                            </View>)}
+                    </View>
+
+                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.x_large, marginHorizontal: SPACING.x_large, marginTop: SPACING.medium - SPACING.xxx_small, color: COLORS.white }}>
+                        Add videos
+                    </Text>
+                    <Text style={{ color: COLORS.placeholder, fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, marginTop: 2, marginHorizontal: SPACING.x_large, marginBottom: SPACING.x_small }}>
+                        Visitors can explore these videos by clicking the 'View All' button on your profile
+                    </Text>
+
+                    <View style={{ flexDirection: 'row', marginLeft: SPACING.x_large, marginRight: SPACING.x_large - SPACING.xxx_small, flexWrap: 'wrap' }}>
+                        {data.videos.map((video, index) =>
+                            <View key={video ? video.id : Math.random()} style={{ width: ((contentWidth - (SPACING.x_large * 2) - (SPACING.xxx_small * 2)) / 3), marginRight: SPACING.xxx_small, marginBottom: SPACING.xxx_small }}>
+                                {video ?
+                                    <React.Fragment>
+                                        <Image
+                                            style={{
+                                                flex: 1,
+                                                borderRadius: 10,
+                                                aspectRatio: 1 / 1,
+                                                borderWidth: 1,
+                                                borderColor: 'rgba(255,255,255,0.1)'
+                                            }}
+                                            source={{ uri: video.thumbnail }}
+                                            resizeMode="cover"
+                                        />
+                                        <IconButton
+                                            style={{ position: 'absolute', top: normalize(10) - SPACING.xxx_small, right: normalize(10) - SPACING.xxx_small, backgroundColor: COLORS.grey + 'B3' }}
+                                            icon="delete-outline"
+                                            iconColor='white'
+                                            size={normalize(20)}
+                                            onPress={() => onDeleteVideoPress(index)}
+                                        />
+                                    </React.Fragment> :
+                                    <TouchableRipple
+                                        onPress={() => onSelectVideoPress(index)}
+                                        style={{ backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center', flex: 1, borderRadius: 10, aspectRatio: 1 / 1 }}
+                                    >
+                                        <>
+                                            <AntDesign name="videocamera" size={normalize(30)} color="white" />
+                                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.white }}>
+                                                Add video
+                                            </Text>
+                                            {/* <Text style={{ fontFamily: FONTS.light, fontSize: FONT_SIZES.small }}>
+                                                Max file size: <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>{MAX_VIDEO_SIZE_MB}MB</Text>
+                                            </Text> */}
+                                        </>
+                                    </TouchableRipple>
+                                }
+                            </View>)}
+                    </View>
                 </View>
             </Animated.ScrollView>
         </>
@@ -483,7 +497,7 @@ export default memo(UploadPhotos)
 
 const styles = StyleSheet.create({
     pageHeaderText: {
-        //color: '#FFF', 
+        color: '#FFF',
         fontFamily: FONTS.bold,
         fontSize: FONT_SIZES.h3,
         marginHorizontal: SPACING.x_large,
@@ -508,7 +522,7 @@ const styles = StyleSheet.create({
         right: 0,
         left: 0,
         height: normalize(55),
-        backgroundColor: '#FFF',
+        backgroundColor: COLORS.white,
         zIndex: 2,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,

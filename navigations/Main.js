@@ -206,9 +206,9 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
 
             <Route path='/lady-signup' element={
                 <>
-                    <View style={{ position: 'fixed', zIndex: 1, width: '100%', flexDirection: 'column', backgroundColor: COLORS.lightBlack }}>
+                    <BlurView style={{ position: 'fixed', zIndex: 1, width: '100%', flexDirection: 'column' }}>
                         <Header />
-                    </View>
+                    </BlurView>
 
                     <View style={{ height: initialHeight, paddingTop: normalize(70) }}>
                         <LadySignup independent/>
@@ -220,9 +220,9 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
 
             <Route path='/establishment-signup' element={
                 <>
-                    <View style={{ position: 'fixed', zIndex: 1, width: '100%', flexDirection: 'column', backgroundColor: COLORS.lightBlack }}>
+                    <BlurView style={{ position: 'fixed', zIndex: 1, width: '100%', flexDirection: 'column'  }}>
                         <Header />
-                    </View>
+                    </BlurView>
 
                     <View style={{ height: initialHeight, paddingTop: normalize(70) }}>
                         <EstablishmentSignup />

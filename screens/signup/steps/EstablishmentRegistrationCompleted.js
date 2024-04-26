@@ -15,6 +15,8 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Button } from 'react-native-paper'
 import LottieView from 'lottie-react-native'
 
+import { LinearGradient } from 'expo-linear-gradient'
+
 const EstablishmentRegistrationCompleted = ({ visible, email }) => {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
@@ -34,6 +36,8 @@ const EstablishmentRegistrationCompleted = ({ visible, email }) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: '#261718'
         }
     })
 
@@ -54,57 +58,67 @@ const EstablishmentRegistrationCompleted = ({ visible, email }) => {
                 scrollEventThrottle={1}
                 onScroll={scrollHandler}
                 style={{ flex: 1 }}
-                contentContainerStyle={{ paddingBottom: SPACING.small, paddingTop: SPACING.xxxxx_large }}
+                contentContainerStyle={{ paddingBottom: SPACING.small }}
             >
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginHorizontal: SPACING.x_large, }}>
-                    <Text style={styles.pageHeaderText}>
-                        Registration completed
+                <LinearGradient colors={[
+                    '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                   '#261718',
+                ]}
+                    style={{ position: 'absolute', width: '100%', height: 300 }}
+                />
+
+                <View style={{ paddingTop: SPACING.xxxxx_large }}>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginHorizontal: SPACING.x_large, }}>
+                        <Text style={styles.pageHeaderText}>
+                            Registration completed
+                        </Text>
+                        <Image
+                            resizeMode='contain'
+                            source={require('../../../assets/completed.svg')}
+                            style={{ width: FONT_SIZES.h3, height: FONT_SIZES.h3, marginLeft: SPACING.xx_small }}
+                        />
+                    </View>
+
+                    {visible && <MotiView
+                        style={{ flex: 1 }}
+                        from={{
+                            transform: [{ scale: 0 }]
+                        }}
+                        animate={{
+                            transform: [{ scale: 1 }],
+                        }}
+                        transition={{
+                            delay: 50,
+                        }}
+                    >
+                        <LottieView
+                            style={{ width: 150, alignSelf: 'center' }}
+                            autoPlay
+                            loop
+                            source={require('../../../assets/verifying.json')}
+                        />
+                    </MotiView>}
+
+                    <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, marginHorizontal: SPACING.x_large, textAlign: 'center', marginBottom: SPACING.xx_small, color: COLORS.white }}>
+                        Your establishment has been submitted for review!
                     </Text>
-                    <Image
-                        resizeMode='contain'
-                        source={require('../../../assets/completed.svg')}
-                        style={{ width: FONT_SIZES.h3, height: FONT_SIZES.h3, marginLeft: SPACING.xx_small }}
-                    />
+
+                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginHorizontal: SPACING.x_large, textAlign: 'center', color: COLORS.placeholder }}>
+                        All profiles go through a review before they become visible. As soon as we will review it, you will receive a confirmation email.
+                    </Text>
+
+                    <Button
+                        labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}
+                        style={{ marginTop: SPACING.large, borderRadius: 10, width: 200, alignSelf: 'center' }}
+                        buttonColor={COLORS.red}
+                        rippleColor="rgba(220, 46, 46, .16)"
+                        mode="contained"
+                        onPress={onContinuePress}
+                    >
+                        Continue
+                    </Button>
                 </View>
-
-                {visible && <MotiView
-                    style={{ flex: 1 }}
-                    from={{
-                        transform: [{ scale: 0 }]
-                    }}
-                    animate={{
-                        transform: [{ scale: 1 }],
-                    }}
-                    transition={{
-                        delay: 50,
-                    }}
-                >
-                    <LottieView
-                        style={{ width: 150, alignSelf: 'center' }}
-                        autoPlay
-                        loop
-                        source={require('../../../assets/verifying.json')}
-                    />
-                </MotiView>}
-
-                <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, marginHorizontal: SPACING.x_large, textAlign: 'center', marginBottom: SPACING.xx_small }}>
-                    Your establishment has been submitted for review!
-                </Text>
-
-                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginHorizontal: SPACING.x_large, textAlign: 'center' }}>
-                    All profiles go through a review before they become visible. As soon as we will review it, you will receive a confirmation email.
-                </Text>
-
-                <Button
-                    labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: '#FFF' }}
-                    style={{ marginTop: SPACING.large, borderRadius: 10, width: 200, alignSelf: 'center' }}
-                    buttonColor={COLORS.red}
-                    rippleColor="rgba(220, 46, 46, .16)"
-                    mode="contained"
-                    onPress={onContinuePress}
-                >
-                    Continue
-                </Button>
             </Animated.ScrollView>
         </>
     )
@@ -114,10 +128,9 @@ export default memo(EstablishmentRegistrationCompleted)
 
 const styles = StyleSheet.create({
     pageHeaderText: {
-        //color: '#FFF', 
+        color: '#FFF',
         fontFamily: FONTS.bold,
         fontSize: FONT_SIZES.h3,
-        //marginBottom: SPACING.small,
         textAlign: 'center'
     },
     modal__header: {
@@ -139,7 +152,7 @@ const styles = StyleSheet.create({
         right: 0,
         left: 0,
         height: normalize(55),
-        backgroundColor: '#FFF',
+        backgroundColor: COLORS.white,
         zIndex: 2,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,

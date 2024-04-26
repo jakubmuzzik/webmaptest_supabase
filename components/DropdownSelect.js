@@ -17,23 +17,20 @@ const DropdownSelect = forwardRef((props, ref) => {
         multiselect = false,
         searchable = false,
         searchPlaceholder,
-        borderColor,
-        hoveredBorderColor,
-        textColor = "#FFF",
-        backgroundColor = "transparent",
-        hoveredBackgroundColor = "transparent",
+        borderColor=COLORS.darkRedBackground2,
+        hoveredBorderColor=COLORS.red, 
+        backgroundColor='#372b2b',//COLORS.darkRedBackground, 
+        hoveredBackgroundColor=COLORS.darkRedBackground2,
         errorMessage,
         mode = "outlined",
-        labelStyle = {},
+        labelStyle={ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.placeholder },
         text,
-        textStyle = {},
-        placeholderStyle = {},
+        textStyle={ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white },
         containerStyle = {},
         setText,
         leftIconName,
-        leftIconColor = '#49454f',
+        leftIconColor = COLORS.placeholder,
         rightIconName,
-        renderInput,
         children,
         offsetX = 0,
         containerRef
@@ -226,24 +223,19 @@ const DropdownSelect = forwardRef((props, ref) => {
             >
                 {children ? children : <TextInput
                     pointerEvents="none"
-                    label={<View style={{ marginHorizontal: 2, zIndex: 2 }}><Text style={labelStyle}>{label}</Text></View>}
+                    label={<Text style={labelStyle}>{label}</Text>}
                     placeholder={placeholder}
-                    textColor={textColor}
-                    outlineColor={isHovered ? hoveredBorderColor : borderColor}
+                    theme={{ colors: { onSurfaceVariant: COLORS.hoveredLightGrey }}}
+                    outlineColor={(isHovered || text) ? hoveredBorderColor : borderColor}
                     activeOutlineColor={errorMessage ? COLORS.error : isHovered || isFocused ? hoveredBorderColor : borderColor}
-                    underlineColor="red"
-                    activeUnderlineColor="red"
                     error={errorMessage}
                     mode={mode}
                     value={text}
                     left={leftIconName && <TextInput.Icon size={normalize(20)} color={leftIconColor} icon={leftIconName} pointerEvents="none" />}
-                    right={rightIconName && <TextInput.Icon size={normalize(20)} icon={rightIconName} pointerEvents="none" />}
-                    contentStyle={[
-                        text ? { ...textStyle } : { ...placeholderStyle }
-                    ]}
-                    outlineStyle={{
-                        backgroundColor: isHovered ? hoveredBackgroundColor : backgroundColor
-                    }}
+                    right={rightIconName && <TextInput.Icon size={normalize(20)} color={COLORS.placeholder} icon={rightIconName} pointerEvents="none" />}
+                    contentStyle={textStyle}
+                    outlineStyle={{ backgroundColor: (isHovered || isFocused || text) ? hoveredBackgroundColor: backgroundColor }}
+                    style={{ backgroundColor: COLORS.grey }}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                 />}

@@ -63,6 +63,8 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
+            color: COLORS.white,
+            backgroundColor: COLORS.grey
         }
     })
 
@@ -192,7 +194,7 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#FFF',
+            backgroundColor: COLORS.grey,
             borderRadius: 24,
             width: normalize(800),
             maxWidth: '90%',
@@ -220,21 +222,21 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
                                 <Animated.Text style={modalHeaderTextStyles}>Edit Working Hours</Animated.Text>
                             </View>
                             <View style={{ flexBasis: 50, flexGrow: 1, flexShrink: 0, alignItems: 'flex-end' }}>
-                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.hoveredHoveredWhite} backgroundColor={COLORS.hoveredWhite}>
-                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="black" />
+                                <HoverableView style={{ marginRight: SPACING.small, width: SPACING.x_large, height: SPACING.x_large, justifyContent: 'center', alignItems: 'center', borderRadius: 17.5 }} hoveredBackgroundColor={COLORS.darkRedBackground} backgroundColor={'#372b2b'}>
+                                    <Ionicons onPress={closeModal} name="close" size={normalize(25)} color="white" />
                                 </HoverableView>
                             </View>
                         </View>
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small }}>
+                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small, color: COLORS.white }}>
                                 Edit Working Hours
                             </Text>
 
                             <View style={[styles.table, { marginHorizontal: SPACING.small }]}>
                                 <View style={{ flexShrink: 1 }}>
-                                    <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
+                                    <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground }]}>
                                         <Text style={styles.tableHeaderText}>Day</Text>
                                     </View>
                                     <View style={[styles.column, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }]}>
@@ -330,7 +332,7 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
                                 </View>
 
                                 <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                                    <View style={[styles.column, { backgroundColor: COLORS.lightGrey }]}>
+                                    <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground }]}>
                                         <Text style={styles.tableHeaderText}>From</Text>
                                     </View>
                                     {changedWorkingHours.map((value, index) => (
@@ -340,11 +342,13 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
                                                     fontFamily: FONTS.regular,
                                                     fontSize: FONT_SIZES.medium,
                                                     outlineStyle: 'none',
-                                                    color: '#000',
+                                                    color: COLORS.white,
                                                     height: styles.column.height - 8,
-                                                    borderColor: changedWorkingHours[index].invalidFrom && changedWorkingHours[index].enabled ? COLORS.error : '#000',
+                                                    borderColor: changedWorkingHours[index].invalidFrom && changedWorkingHours[index].enabled ? COLORS.error : COLORS.darkRedBorderColor2,
                                                     borderWidth: 1,
-                                                    borderRadius: 5
+                                                    borderRadius: 5,
+                                                    backgroundColor: '#372b2b',
+                                                    cursor: value.enabled ? 'text' : 'default'
                                                 }]}
                                                 editable={changedWorkingHours[index].enabled}
                                                 onChangeText={(text) => onWorkingHourChange(text.replaceAll(' ', '').replace(/[^\d:]/g, ''), index, 'from')}
@@ -365,7 +369,7 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
                                 </View>
 
                                 <View style={{ flexBasis: 200, flexShrink: 1, flexGrow: 1 }}>
-                                    <View style={[styles.column, { backgroundColor: COLORS.lightGrey, flexShrink: 0 }]}>
+                                    <View style={[styles.column, { backgroundColor: COLORS.darkRedBackground, flexShrink: 0 }]}>
                                         <Text style={styles.tableHeaderText}>Until</Text>
                                     </View>
                                     {changedWorkingHours.map((value, index) => (
@@ -375,11 +379,13 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
                                                     fontFamily: FONTS.regular,
                                                     fontSize: FONT_SIZES.medium,
                                                     outlineStyle: 'none',
-                                                    color: '#000',
+                                                    color: COLORS.white,
                                                     height: styles.column.height - 8,
-                                                    borderColor: changedWorkingHours[index].invalidUntil && changedWorkingHours[index].enabled ? COLORS.error : '#000',
+                                                    borderColor: changedWorkingHours[index].invalidUntil && changedWorkingHours[index].enabled ? COLORS.error : COLORS.darkRedBorderColor2,
                                                     borderWidth: 1,
-                                                    borderRadius: 5
+                                                    borderRadius: 5,
+                                                    backgroundColor: '#372b2b',
+                                                    cursor: value.enabled ? 'text' : 'default'
                                                 }]}
                                                 editable={changedWorkingHours[index].enabled}
                                                 onChangeText={(text) => onWorkingHourChange(text.replaceAll(' ', '').replace(/[^\d:]/g, ''), index, 'until')}
@@ -403,9 +409,9 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
 
                         <View style={{ borderTopWidth: 1, borderTopColor: COLORS.placeholder, paddingHorizontal: SPACING.small, paddingVertical: SPACING.x_small, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Button
-                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.lightBlack }}
+                                labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.white }}
                                 style={{ flexShrink: 1, borderRadius: 10, borderWidth: 0 }}
-                                buttonColor="#FFF"
+                                buttonColor={COLORS.grey}
                                 mode="outlined"
                                 rippleColor='rgba(0,0,0,.1)'
                                 onPress={closeModal}
@@ -416,11 +422,12 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
                             <Button
                                 labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: '#FFF' }}
                                 style={{ flexShrink: 1, borderRadius: 10 }}
-                                buttonColor={COLORS.lightBlack}
+                                buttonColor={COLORS.red}
                                 mode="contained"
                                 onPress={onSavePress}
                                 loading={isSaving}
                                 disabled={isSaving || !isChanged || changedWorkingHours.some(w => w.enabled && (!w.from || !w.until))}
+                                theme={{ colors: { surfaceDisabled: COLORS.hoveredLightGrey }}}
                             >
                                 Save
                             </Button>
@@ -463,8 +470,8 @@ const styles = StyleSheet.create({
         shadowRadius: 5
     },
     table: {
-        borderWidth: 1,
-        borderColor: COLORS.lightGrey,
+        borderWidth: 2,
+        borderColor: COLORS.darkRedBackground,
         flexDirection: 'row',
         borderRadius: 10,
         overflow: 'hidden'
@@ -477,7 +484,7 @@ const styles = StyleSheet.create({
     tableHeaderValue: {
         fontFamily: FONTS.medium,
         fontSize: FONT_SIZES.medium,
-        color: '#000'
+        color: COLORS.white
     },
     column: {
         paddingHorizontal: SPACING.xx_small,

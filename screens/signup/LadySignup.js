@@ -23,7 +23,6 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import uuid from 'react-native-uuid'
 import { supabase } from '../../supabase/config'
 
-
 const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, updateCurrentUserInRedux, updateLadyInRedux, toastRef }) => {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
@@ -299,9 +298,17 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
                     type: 'timing',
                     duration: 400,
                 }}
-                style={{ width: normalize(800), maxWidth: '100%', alignSelf: 'center', flex: 1, backgroundColor: COLORS.lightBlack, alignItems: 'center', justifyContent: 'center', padding: SPACING.medium }}>
+                style={{ width: normalize(800), maxWidth: '100%', alignSelf: 'center', flex: 1, alignItems: 'center', justifyContent: 'center', padding: SPACING.medium }}>
                 <View
-                    style={{ flex: 1, maxWidth: '100%', backgroundColor: '#FFF', borderRadius: 20, overflow: 'hidden' }}
+                    style={{ 
+                        flex: 1, 
+                        maxWidth: '100%', 
+                        backgroundColor: '#261718',
+                        borderRadius: 15, 
+                        overflow: 'hidden', 
+                        borderWidth: 1, 
+                        borderColor: 'rgba(255, 255,255, .1)'//'rgba(220, 46, 46, .10)'//COLORS.darkGrey 
+                    }}
                     onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
                 >
                     {/* <View style={{ marginBottom: SPACING.small, marginTop: SPACING.large, marginHorizontal: SPACING.x_large, }}>
@@ -319,7 +326,7 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
 
                     {index !== routes.length - 1 && <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: SPACING.x_large, marginVertical: SPACING.small, }}>
                         {index === 0 ? <View /> : <Button
-                            labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: '#000' }}
+                            labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.white }}
                             style={{ flexShrink: 1, borderRadius: 10, borderWidth: 0 }}
                             rippleColor="rgba(0,0,0,.1)"
                             mode="outlined"
@@ -330,8 +337,8 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
 
                         <Button
                             labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: '#FFF' }}
-                            style={{ flexShrink: 1, borderRadius: 10 }}
-                            buttonColor={index === Object.keys(routes).length - 2 ? COLORS.red : COLORS.lightBlack}
+                            style={{ flexShrink: 1, borderRadius: 10, borderWidth: index === Object.keys(routes).length - 2 ? 0 : 1, borderColor: COLORS.red }}
+                            buttonColor={index === Object.keys(routes).length - 2 ? COLORS.red : COLORS.darkRedBackground}
                             rippleColor="rgba(220, 46, 46, .16)"
                             mode="contained"
                             onPress={onNextPress}
