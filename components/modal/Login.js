@@ -94,7 +94,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY1.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
-            backgroundColor: COLORS.lightBlack,
+            backgroundColor: '#261718',
             color: COLORS.white
         }
     })
@@ -103,7 +103,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
             fontFamily: FONTS.medium,
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY2.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
-            backgroundColor: COLORS.lightBlack,
+            backgroundColor: '#261718',
             color: COLORS.white
         }
     })
@@ -126,7 +126,8 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
             maxHeight: '80%',
             overflow: 'hidden',
             transform: [{ translateY: translateY.value }],
-            backgroundColor: COLORS.lightBlack
+            //backgroundColor: COLORS.lightBlack
+            backgroundColor: '#261718',
         }
     })
 
@@ -266,12 +267,18 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 </View>
                 <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles1]} />
 
-                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1, backgroundColor: COLORS.lightBlack, }} contentContainerStyle={{ paddingBottom: SPACING.small, }}>
-                    <LinearGradient colors={[
+                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1, backgroundColor: '#261718', }} contentContainerStyle={{ paddingBottom: SPACING.small, }}>
+                    {/* <LinearGradient colors={[
                         COLORS.darkRedBackground,//'#4b010140',//COLORS.darkRedBackground,
                         COLORS.lightBlack,
                     ]}
                         style={{ position: 'absolute', width: '100%', height: 200 }}
+                    /> */}
+                    <LinearGradient colors={[
+                        '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                        '#261718',
+                    ]}
+                        style={{ position: 'absolute', width: '100%', height: 300 }}
                     />
 
                     <View style={{ paddingHorizontal: SPACING.small }}>
@@ -352,11 +359,17 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles2]} />
 
                 <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler2} style={{ zIndex: 1, paddingBottom: SPACING.small }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                    <LinearGradient colors={[
+                    {/* <LinearGradient colors={[
                         COLORS.darkRedBackground,//'#4b010140',//COLORS.darkRedBackground,
                         COLORS.lightBlack,
                     ]}
                         style={{ position: 'absolute', width: '100%', height: 200 }}
+                    /> */}
+                     <LinearGradient colors={[
+                        '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                        '#261718',
+                    ]}
+                        style={{ position: 'absolute', width: '100%', height: 300 }}
                     />
 
                     <View style={{ paddingHorizontal: SPACING.small }}>

@@ -406,7 +406,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
     const renderRightHeader = () => {
         return (isSmallScreen || currentAuthUser.id) ? (
             <>
-                {isSmallScreen && <HoverableView style={{ ...styles.searchWrapper, borderColor: searchBorderColor, flexGrow: 1, flexShrink: 1 }} hoveredBackgroundColor={COLORS.lightGrey} backgroundColor={COLORS.grey}>
+                {isSmallScreen && <HoverableView style={{ ...styles.searchWrapper, borderColor: searchBorderColor, flexGrow: 1, flexShrink: 1 }} hoveredBackgroundColor={'#402b2b'} backgroundColor={'#372b2b'}>
                     <Ionicons name="search" size={normalize(20)} color="white" />
                     <TextInput
                         style={styles.search}
@@ -427,7 +427,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                         <MaterialIcons style={{ paddingLeft: SPACING.xxx_small }} name="keyboard-arrow-down" size={normalize(20)} color='#FFF' />
                     </TouchableOpacity>
                 </HoverableView>}
-                <HoverableView hoveredBackgroundColor={COLORS.hoveredLightGrey} backgroundColor={COLORS.lightGrey} style={{ marginLeft: SPACING.small, borderRadius: 20, justifyContent: 'center' }}>
+                <HoverableView hoveredBackgroundColor="#402b2b" backgroundColor='#372b2b' style={{ marginLeft: SPACING.small, borderRadius: 20, justifyContent: 'center' }}>
                     <TouchableOpacity ref={userDropdownRef} onPress={toggleUserDropdown} activeOpacity={0.8} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: SPACING.xxx_small, paddingHorizontal: SPACING.xx_small }}>
                         {/* {currentAuthUser.id && <Avatar.Text size={normalize(28)} label={currentAuthUser.user_metadata.name[0]} style={{ backgroundColor: COLORS.red, marginRight: SPACING.xxx_small }} labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }} />} */}
                         {currentAuthUser.id ? (
@@ -468,7 +468,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                         </HoverableView>
                     </View>
                 ) : (
-                    <HoverableView hoveredBackgroundColor={COLORS.hoveredLightGrey} backgroundColor={COLORS.lightGrey} style={{ borderRadius: 20, justifyContent: 'center' }}>
+                    <HoverableView hoveredBackgroundColor="#402b2b" backgroundColor='#372b2b' style={{ borderRadius: 20, justifyContent: 'center' }}>
                         <TouchableOpacity ref={userDropdownRef} onPress={toggleUserDropdown} activeOpacity={0.8} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: SPACING.xxx_small, paddingRight: SPACING.xx_small }}>
                             <Ionicons name="person-circle-outline" size={normalize(28)} color="white" />
                             <MaterialIcons style={{ paddingLeft: SPACING.xxx_small }} name="menu" size={normalize(20)} color="white" />
@@ -507,7 +507,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                         {renderLeftHeader()}
                     </View>
                     {!isSmallScreen && <View style={styles.headerMiddle}>
-                        <HoverableView style={{ ...styles.searchWrapper, borderColor: searchBorderColor }} hoveredBackgroundColor={COLORS.lightGrey} backgroundColor={COLORS.grey}>
+                        <HoverableView style={{ ...styles.searchWrapper, borderColor: searchBorderColor }} hoveredBackgroundColor={'#402b2b'} backgroundColor={'#372b2b'}>
                             <Ionicons name="search" size={normalize(20)} color="white" />
                             <TextInput
                                 style={styles.search}

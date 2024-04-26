@@ -344,9 +344,15 @@ const Establishment = ({ toastRef }) => {
 
     const renderAbout = () => (
         <View style={[styles.section, { marginTop: SPACING.xxx_large }]}>
-            <LinearGradient colors={[
+            {/* <LinearGradient colors={[
                 COLORS.darkRedBackground,
                 COLORS.darkRedBackground2,
+            ]}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
+            /> */}
+            <LinearGradient colors={[
+                '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                '#261718',
             ]}
                 style={{ position: 'absolute', width: '100%', height: '100%' }}
             />
@@ -406,9 +412,15 @@ const Establishment = ({ toastRef }) => {
 
         return (
             <View style={styles.section}>
-                <LinearGradient colors={[
+                {/* <LinearGradient colors={[
                     COLORS.darkRedBackground,
                     COLORS.darkRedBackground2,
+                ]}
+                    style={{ position: 'absolute', width: '100%', height: '100%' }}
+                /> */}
+                <LinearGradient colors={[
+                    '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                    '#261718',
                 ]}
                     style={{ position: 'absolute', width: '100%', height: '100%' }}
                 />
@@ -485,12 +497,19 @@ const Establishment = ({ toastRef }) => {
 
     const renderAddress = () => (
         <View style={styles.section}>
-            <LinearGradient colors={[
+            {/* <LinearGradient colors={[
                 COLORS.darkRedBackground,
                 COLORS.darkRedBackground2,
             ]}
                 style={{ position: 'absolute', width: '100%', height: '100%' }}
+            /> */}
+            <LinearGradient colors={[
+                '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                '#261718',
+            ]}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
             />
+
             <View style={{ padding: SPACING.small }}>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: SPACING.small }}>
                     <Text style={[styles.sectionHeaderText, { marginBottom: 0, marginRight: 5 }]}>
@@ -685,7 +704,7 @@ const Establishment = ({ toastRef }) => {
     return (
         <>
             <LinearGradient colors={[
-                 COLORS.darkRedBackground,//'#4b010140',//COLORS.darkRedBackground,
+                COLORS.darkRedBackground,//'#4b010140',//COLORS.darkRedBackground,
                 COLORS.lightBlack,
             ]}
                 style={{ position: 'absolute', width: '100%', height: Dimensions.get('window').height - normalize(600) }}

@@ -283,12 +283,12 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
                     type: 'timing',
                     duration: 400,
                 }}
-                style={{ width: normalize(800), maxWidth: '100%', alignSelf: 'center', flex: 1, backgroundColor: COLORS.lightBlack, alignItems: 'center', justifyContent: 'center', padding: SPACING.medium }}>
+                style={{ width: normalize(800), maxWidth: '100%', alignSelf: 'center', flex: 1, alignItems: 'center', justifyContent: 'center', padding: SPACING.medium }}>
                 <View
                     style={{ 
                         flex: 1, 
                         maxWidth: '100%', 
-                        backgroundColor: COLORS.lightBlack,
+                        backgroundColor: '#261718',
                         borderRadius: 15, 
                         overflow: 'hidden', 
                         borderWidth: 1, 

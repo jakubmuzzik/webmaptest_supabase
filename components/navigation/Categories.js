@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, useWindowDimensions, Dimensions } from 'react-native'
-import { AntDesign, Entypo, FontAwesome5, MaterialIcons, Ionicons } from '@expo/vector-icons'
+import { AntDesign, Entypo, FontAwesome5, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
 import { COLORS, FONT_SIZES, FONTS, SPACING, SMALL_SCREEN_THRESHOLD, LARGE_SCREEN_THRESHOLD } from '../../constants'
 import { LinearGradient } from 'expo-linear-gradient'
 import Animated, { withTiming, useSharedValue, useAnimatedStyle } from 'react-native-reanimated'
@@ -238,9 +238,23 @@ const Categories = ({ cities = [], updateCurrentLadiesCount, updateCurrentEstabl
                     </TouchableOpacity>
                 </HoverableView> */}
 
+                <HoverableView hoveredBackgroundColor={COLORS.lightGrey} style={{ justifyContent: 'center', alignItems: 'flex-end', borderWidth: 2, borderRadius: 12, borderColor: filtersCount > 0 ? COLORS.red : COLORS.hoveredLightGrey, marginRight: SPACING.xx_small }}>
+                    <TouchableOpacity onPress={onFiltersPress} style={{ paddingHorizontal: SPACING.xx_small, paddingVertical: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        {/* <FontAwesome5 name="sort-amount-down" size={ normalize(18)} color="white" /> */}
+                        <MaterialCommunityIcons name="sort" size={normalize(20)} color="white" />
+                        
+                        {!isSmallScreen && <Text style={{ marginLeft: SPACING.xx_small, fontFamily: FONTS.medium, letterSpacing: 1, fontSize: FONT_SIZES.medium, color: '#FFF' }}>
+                            Sort
+                        </Text>}
+                        {filtersCount > 0 && <View style={{ position: 'absolute', top: normalize(-9, true), right: normalize(-9, true), backgroundColor: COLORS.red, borderRadius: '50%', width: normalize(20), height: normalize(20), alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={{ color: '#FFF', fontFamily: FONTS.medium, fontSize: FONT_SIZES.small }}>{filtersCount}</Text>
+                        </View>}
+                    </TouchableOpacity>
+                </HoverableView>
+
                 <HoverableView hoveredBackgroundColor={COLORS.lightGrey} style={{ justifyContent: 'center', alignItems: 'flex-end', borderWidth: 2, borderRadius: 12, borderColor: filtersCount > 0 ? COLORS.red : COLORS.hoveredLightGrey, marginRight: SPACING.page_horizontal }}>
                     <TouchableOpacity onPress={onFiltersPress} style={{ paddingHorizontal: SPACING.xx_small, paddingVertical: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <Image
+                        {/* <Image
                             resizeMode="contain"
                             source={require('../../assets/icons/filter.svg')}
                             tintColor='#FFF'
@@ -248,7 +262,8 @@ const Categories = ({ cities = [], updateCurrentLadiesCount, updateCurrentEstabl
                                 width: normalize(18),
                                 height: normalize(18)
                             }}
-                        />
+                        /> */}
+                        <MaterialCommunityIcons name="filter-variant" size={normalize(20)} color="white" />
                         {!isSmallScreen && <Text style={{ marginLeft: SPACING.xx_small, fontFamily: FONTS.medium, letterSpacing: 1, fontSize: FONT_SIZES.medium, color: '#FFF' }}>
                             Filters
                         </Text>}

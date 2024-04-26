@@ -84,7 +84,7 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY1.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
             color: COLORS.white,
-            backgroundColor: COLORS.lightBlack
+            backgroundColor: '#261718'
         }
     })
 
@@ -100,7 +100,7 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: COLORS.lightBlack,
+            backgroundColor: '#261718',
             borderRadius: 24,
             width: normalize(500),
             maxWidth: '90%',
@@ -164,12 +164,18 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
                 </View>
                 <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles1]} />
 
-                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1, backgroundColor: COLORS.lightBlack }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                    <LinearGradient colors={[
+                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1, backgroundColor: '#261718' }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
+                    {/* <LinearGradient colors={[
                         COLORS.darkRedBackground,//'#4b010140',//COLORS.darkRedBackground,
                         COLORS.lightBlack,
                     ]}
                         style={{ position: 'absolute', width: '100%', height: 200 }}
+                    /> */}
+                    <LinearGradient colors={[
+                        '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                        '#261718',
+                    ]}
+                        style={{ position: 'absolute', width: '100%', height: 300 }}
                     />
 
                     <View style={{ paddingHorizontal: SPACING.small }}>
@@ -201,9 +207,10 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
                                     style={{ flex: 1, padding: SPACING.x_small }}
                                     imageStyle={{ opacity: profileType === 'lady' ? 1 : 0.7 }}
                                     resizeMode='cover'>
-                                    <View>
-                                        <Entypo name="mask" size={28} color="white" />
-                                    </View>
+                                    <Image 
+                                        source={require('../../assets/lady-linear-gradient.png')}
+                                        style={{ width: 40, height: 40, tintColor: COLORS.white }}
+                                    />
                                     <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginTop: SPACING.x_small }}>
                                         As Independent Lady
                                     </Text>
@@ -227,9 +234,10 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
                                     style={{ flex: 1, padding: SPACING.x_small }}
                                     imageStyle={{ opacity: profileType === 'member' ? 1 : 0.7 }}
                                     resizeMode='cover'>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <MaterialCommunityIcons name="guy-fawkes-mask" size={28} color="white" />
-                                    </View>
+                                    <Image
+                                        source={require('../../assets/ladies-linear-gradient.png')}
+                                        style={{ width: 40, height: 40, tintColor: COLORS.white }}
+                                    />
                                     <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, marginTop: SPACING.x_small }}>
                                         As Establishment
                                     </Text>

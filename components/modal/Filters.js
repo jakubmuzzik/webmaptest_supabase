@@ -597,7 +597,7 @@ const Filters = forwardRef((props, ref) => {
                             <Button
                                 labelStyle={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.large, color: COLORS.white }}
                                 style={{ flexShrink: 1, borderRadius: 10, borderWidth: 0 }}
-                                buttonColor={COLORS.grey}
+                                buttonColor='#261718'
                                 mode="outlined"
                                 rippleColor='rgba(0,0,0,.1)'
                                 onPress={onClearFiltersPress}

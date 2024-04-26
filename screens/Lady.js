@@ -553,9 +553,15 @@ const Lady = ({ toastRef }) => {
 
     const renderAbout = () => (
         <View style={[styles.section, { marginTop: SPACING.xxx_large }]}>
-            <LinearGradient colors={[
+            {/* <LinearGradient colors={[
                 COLORS.darkRedBackground,
                 COLORS.darkRedBackground2,
+            ]}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
+            /> */}
+            <LinearGradient colors={[
+                '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                '#261718',
             ]}
                 style={{ position: 'absolute', width: '100%', height: '100%' }}
             />
@@ -599,9 +605,15 @@ const Lady = ({ toastRef }) => {
 
     const renderPersonalDetails = () => (
         <View style={styles.section}>
-            <LinearGradient colors={[
+            {/* <LinearGradient colors={[
                 COLORS.darkRedBackground,
                 COLORS.darkRedBackground2,
+            ]}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
+            /> */}
+            <LinearGradient colors={[
+                '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                '#261718',
             ]}
                 style={{ position: 'absolute', width: '100%', height: '100%' }}
             />
@@ -681,9 +693,15 @@ const Lady = ({ toastRef }) => {
 
     const renderServices = () => (
         <View style={styles.section}>
-            <LinearGradient colors={[
+            {/* <LinearGradient colors={[
                 COLORS.darkRedBackground,
                 COLORS.darkRedBackground2,
+            ]}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
+            /> */}
+            <LinearGradient colors={[
+                '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                '#261718',
             ]}
                 style={{ position: 'absolute', width: '100%', height: '100%' }}
             />
@@ -735,9 +753,15 @@ const Lady = ({ toastRef }) => {
 
         return (
             <View style={styles.section}>
-                <LinearGradient colors={[
+                {/* <LinearGradient colors={[
                     COLORS.darkRedBackground,
                     COLORS.darkRedBackground2,
+                ]}
+                    style={{ position: 'absolute', width: '100%', height: '100%' }}
+                /> */}
+                <LinearGradient colors={[
+                    '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                    '#261718',
                 ]}
                     style={{ position: 'absolute', width: '100%', height: '100%' }}
                 />
@@ -819,9 +843,15 @@ const Lady = ({ toastRef }) => {
 
         return (
             <View style={styles.section}>
-                <LinearGradient colors={[
+                {/* <LinearGradient colors={[
                     COLORS.darkRedBackground,
                     COLORS.darkRedBackground2,
+                ]}
+                    style={{ position: 'absolute', width: '100%', height: '100%' }}
+                /> */}
+                <LinearGradient colors={[
+                    '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                    '#261718',
                 ]}
                     style={{ position: 'absolute', width: '100%', height: '100%' }}
                 />
@@ -875,9 +905,15 @@ const Lady = ({ toastRef }) => {
 
     const renderAddress = () => (
         <View style={styles.section}>
-            <LinearGradient colors={[
+            {/* <LinearGradient colors={[
                 COLORS.darkRedBackground,
                 COLORS.darkRedBackground2,
+            ]}
+                style={{ position: 'absolute', width: '100%', height: '100%' }}
+            /> */}
+            <LinearGradient colors={[
+                '#221718',//'#4b010140',//COLORS.darkRedBackground,
+                '#261718',
             ]}
                 style={{ position: 'absolute', width: '100%', height: '100%' }}
             />

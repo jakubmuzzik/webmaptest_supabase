@@ -146,9 +146,9 @@ const LoginInformation = forwardRef((props, ref) => {
             </View>
             <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
             <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-            <LinearGradient colors={[
+                <LinearGradient colors={[
                     '#221718',//'#4b010140',//COLORS.darkRedBackground,
-                   '#261718',
+                    '#261718',
                 ]}
                     style={{ position: 'absolute', width: '100%', height: 300 }}
                 />
