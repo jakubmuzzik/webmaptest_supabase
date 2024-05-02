@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Asset } from "expo-asset"
 import * as Font from 'expo-font'
 import { StyleSheet, View, StatusBar } from 'react-native'
 import { Provider } from 'react-redux'
@@ -22,6 +23,9 @@ export default function App() {
   const init = async () => {
     try {
       await Promise.all([
+        /*Asset.loadAsync([
+          require('./assets/th.png'),
+        ]),*/
         Font.loadAsync({
           'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'),
           'Poppins-Medium': require('./assets/fonts/Poppins-Medium.ttf'),

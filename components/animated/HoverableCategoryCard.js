@@ -19,8 +19,7 @@ const HoverableCategoryCard = ({ selected, imagePath, categoryName, contentWidth
                     transitionDuration: '150ms',
                     borderRadius: 10,
                     overflow: 'hidden',
-
-                    cursor: 'default'
+                    //cursor: 'default'
                 }}
                 activeOpacity={1}
                 onPress={() => onCategoryPress(categoryName)}
