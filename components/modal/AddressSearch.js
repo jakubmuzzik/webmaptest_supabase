@@ -49,7 +49,7 @@ const AddressSearch = ({ visible, setVisible, onSelect }) => {
         }
     }, [visible])
 
-    const [searchBorderColor, setSearchBorderColor] = useState(COLORS.placeholder)
+    const [searchBorderColor, setSearchBorderColor] = useState('grey')
     const [search, setSearch] = useState('')
     const [isSearching, setIsSearching] = useState(false)
     const [results, setResults] = useState([])
@@ -179,21 +179,21 @@ const AddressSearch = ({ visible, setVisible, onSelect }) => {
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginHorizontal: SPACING.small }}>Search address</Text>
+                            <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginHorizontal: SPACING.small }}>Search address</Text>
 
-                            <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor='#FFF' backgroundColor='#FFF' hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
-                                <Ionicons name="search" size={normalize(20)} color="black" />
+                            <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor={COLORS.darkRedBackground2} backgroundColor='#372b2b' hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
+                                <Ionicons name="search" size={normalize(20)} color="white" />
                                 <TextInput
                                     ref={searchInputRef}
                                     style={styles.citySearch}
                                     onChangeText={onSearch}
                                     value={search}
                                     placeholder="Enter your address"
-                                    placeholderTextColor="grey"
-                                    onBlur={() => setSearchBorderColor(COLORS.placeholder)}
+                                    placeholderTextColor={COLORS.placeholder}
+                                    onBlur={() => setSearchBorderColor('grey')}
                                     onFocus={() => setSearchBorderColor(COLORS.red)}
                                 />
-                                <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(20)} color="black" />
+                                <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(20)} color="white" />
                             </HoverableView>
 
                             {!search && !isSearching && results.length === 0 && <TouchableRipple
@@ -202,8 +202,8 @@ const AddressSearch = ({ visible, setVisible, onSelect }) => {
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
                                 <>
-                                    <Ionicons name="navigate-circle-outline" size={normalize(24)} color="black" />
-                                    <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, marginLeft: SPACING.xxx_small }}>
+                                    <Ionicons name="navigate-circle-outline" size={normalize(24)} color="white" />
+                                    <Text style={{ color: COLORS.white, fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, marginLeft: SPACING.xxx_small }}>
                                         Use my current location
                                     </Text>
                                 </>
@@ -216,10 +216,10 @@ const AddressSearch = ({ visible, setVisible, onSelect }) => {
                                     <TouchableRipple
                                         key={address.id}
                                         onPress={() => onAddressSelect(address)}
-                                        style={{ paddingVertical: SPACING.xx_small, marginHorizontal: SPACING.medium, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', overflow: 'hidden' }}
+                                        style={{ paddingVertical: SPACING.xx_small, paddingHorizontal: SPACING.medium, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', overflow: 'hidden' }}
                                         rippleColor="rgba(220, 46, 46, .10)"
                                     >
-                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}>
+                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}>
                                             {address.title}
                                         </Text>
                                     </TouchableRipple>
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.regular,
         fontSize: FONT_SIZES.medium,
         outlineStyle: 'none',
-        color: '#000'
+        color: '#FFF'
     },
     countrySection: {
         marginVertical: SPACING.xx_small,

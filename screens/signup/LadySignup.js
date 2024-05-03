@@ -38,9 +38,9 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
 
     const [routes] = useState(
         [
-            { key: 'login_information' },
-            { key: 'personal_details' },
-            { key: 'services_and_pricing' },
+            //{ key: 'login_information' },
+            //{ key: 'personal_details' },
+            //{ key: 'services_and_pricing' },
             { key: 'address_and_availability' },
             { key: 'photos_and_videos' },
             { key: 'registration_completed' }
@@ -303,7 +303,7 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
                     style={{ 
                         flex: 1, 
                         maxWidth: '100%', 
-                        backgroundColor: '#261718',
+                        backgroundColor: COLORS.grey,//'#261718',
                         borderRadius: 15, 
                         overflow: 'hidden', 
                         borderWidth: 1, 

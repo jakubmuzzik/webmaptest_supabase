@@ -121,7 +121,7 @@ const Filters = forwardRef((props, ref) => {
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#261718',
+            backgroundColor: COLORS.grey,//'#2c2323',//'#261718',
             borderRadius: 24,
             width: isEstablishmentPage ? normalize(450) : normalize(750),
             maxWidth: '90%',
@@ -390,7 +390,7 @@ const Filters = forwardRef((props, ref) => {
                         )
                     })}
                 </ScrollView>
-                <View style={{ borderBottomWidth: 1, borderColor: COLORS.placeholder, marginTop: SPACING.small, marginHorizontal: SPACING.small }}></View>
+                <View style={{ borderBottomWidth: 0.5, borderColor: 'grey', marginTop: SPACING.small, marginHorizontal: SPACING.small }}></View>
             </View>
 
             {/* <View style={[styles.filterSection, { marginHorizontal: 0, paddingBottom: 0, borderWidth: 0 }]}>
@@ -462,7 +462,7 @@ const Filters = forwardRef((props, ref) => {
                                     disableBuiltInState
                                     isChecked={selected}
                                     size={normalize(21)}
-                                    fillColor={selected ? COLORS.red : COLORS.darkRedBackground}
+                                    fillColor={COLORS.red}
                                     unfillColor={COLORS.darkRedBackground2}
                                     text={nationality}
                                     iconStyle={{ borderRadius: 3 }}
@@ -493,7 +493,7 @@ const Filters = forwardRef((props, ref) => {
                                 disableBuiltInState
                                 isChecked={filters.speaks.includes(speaks)}
                                 size={normalize(21)}
-                                fillColor={filters.speaks.includes(speaks) ? COLORS.red : COLORS.darkRedBackground}
+                                fillColor={COLORS.red}
                                 unfillColor={COLORS.darkRedBackground2}
                                 text={speaks}
                                 iconStyle={{ borderColor: COLORS.red, borderRadius: 3 }}
@@ -580,12 +580,12 @@ const Filters = forwardRef((props, ref) => {
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                            <LinearGradient colors={[
+                            {/* <LinearGradient colors={[
                                 '#221718',//'#4b010140',//COLORS.darkRedBackground,
                                 '#261718',
                             ]}
                                 style={{ position: 'absolute', width: '100%', height: 300 }}
-                            />
+                            /> */}
 
                             <View style={{ marginTop: SPACING.xxxxx_large - SPACING.small - SPACING.small }}>
                                 {!isEstablishmentPage && renderLadiesFilters()}
@@ -635,7 +635,7 @@ const styles = StyleSheet.create({
         right: 0,
         left: 0,
         height: normalize(55),
-        backgroundColor: '#221718',
+        backgroundColor: COLORS.grey,//'#2c2323',//'#221718',
         zIndex: 3,
         display: 'flex',
         flexDirection: 'row',

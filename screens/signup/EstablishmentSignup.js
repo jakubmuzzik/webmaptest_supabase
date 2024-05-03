@@ -288,7 +288,7 @@ const EstablishmentSignup = ({ toastRef, updateCurrentUserInRedux }) => {
                     style={{ 
                         flex: 1, 
                         maxWidth: '100%', 
-                        backgroundColor: '#261718',
+                        backgroundColor: COLORS.grey,//'#261718',
                         borderRadius: 15, 
                         overflow: 'hidden', 
                         borderWidth: 1, 

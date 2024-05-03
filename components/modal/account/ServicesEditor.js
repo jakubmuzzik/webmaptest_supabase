@@ -184,14 +184,14 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
                                 Edit Services
                             </Text>
 
-                            <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor={COLORS.darkRedBackground2} backgroundColor={COLORS.darkRedBorderColor2} hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
+                            <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor={COLORS.darkRedBackground2} backgroundColor='#372b2b' hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
                                 <Ionicons name="search" size={normalize(20)} color="white" />
                                 <TextInput
                                     style={styles.citySearch}
                                     onChangeText={onSearch}
                                     value={search}
                                     placeholder="Search services"
-                                    placeholderTextColor="grey"
+                                    placeholderTextColor={COLORS.placeholder}
                                     onBlur={() => setSearchBorderColor('grey')}
                                     onFocus={() => setSearchBorderColor(COLORS.red)}
                                 />
@@ -222,7 +222,7 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
                                             text={service}
                                             iconStyle={{ borderRadius: 3 }}
                                             innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                            textStyle={{ color: COLORS.placeholder, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
+                                            textStyle={{ color: selected ? COLORS.white : COLORS.placeholder, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
                                             textContainerStyle={{ flexShrink: 1 }}
                                         />
                                     </TouchableRipple>
@@ -253,7 +253,7 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
                                             text={service}
                                             iconStyle={{ borderRadius: 3 }}
                                             innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                            textStyle={{ color: COLORS.placeholder, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
+                                            textStyle={{ color: selected ? COLORS.white : COLORS.placeholder, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
                                             textContainerStyle={{ flexShrink: 1 }}
                                         />
                                     </TouchableRipple>

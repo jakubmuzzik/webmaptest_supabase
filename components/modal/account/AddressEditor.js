@@ -44,7 +44,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
 
     const [index, setIndex] = useState(0)
 
-    const [searchBorderColor, setSearchBorderColor] = useState(COLORS.placeholder)
+    const [searchBorderColor, setSearchBorderColor] = useState('grey')
     const [search, setSearch] = useState('')
     const [isSearching, setIsSearching] = useState(false)
     const [results, setResults] = useState([])
@@ -308,7 +308,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                         Edit Address
                     </Text>
 
-                    <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor={COLORS.darkRedBackground2} backgroundColor={COLORS.darkRedBorderColor2} hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
+                    <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor={COLORS.darkRedBackground2} backgroundColor='#372b2b' hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
                         <Ionicons name="search" size={normalize(20)} color="white" />
                         <TextInput
                             ref={searchInputRef}
@@ -316,8 +316,8 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                             onChangeText={onSearch}
                             value={search}
                             placeholder="Enter your address"
-                            placeholderTextColor="grey"
-                            onBlur={() => setSearchBorderColor(COLORS.placeholder)}
+                            placeholderTextColor={COLORS.placeholder}
+                            onBlur={() => setSearchBorderColor('grey')}
                             onFocus={() => setSearchBorderColor(COLORS.red)}
                         />
                         <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(20)} color="white" />
@@ -344,7 +344,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
                             <TouchableRipple
                                 key={a.id}
                                 onPress={() => onAddressSelect(a)}
-                                style={{ paddingVertical: SPACING.xx_small, marginHorizontal: SPACING.small, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', overflow: 'hidden' }}
+                                style={{ paddingVertical: SPACING.xx_small, paddingHorizontal: SPACING.small, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', overflow: 'hidden' }}
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
                                 <BouncyCheckbox

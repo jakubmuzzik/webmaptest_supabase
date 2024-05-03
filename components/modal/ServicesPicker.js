@@ -48,7 +48,7 @@ const ServicesPicker = ({ visible, setVisible, services, onSelect }) => {
         }
     }, [visible])
 
-    const [searchBorderColor, setSearchBorderColor] = useState(COLORS.placeholder)
+    const [searchBorderColor, setSearchBorderColor] = useState('grey')
     const [search, setSearch] = useState('')
 
     const filteredServicesRef = useRef([...SERVICES])
@@ -93,6 +93,7 @@ const ServicesPicker = ({ visible, setVisible, services, onSelect }) => {
             height: normalize(500),
             maxHeight: '80%',
             overflow: 'hidden',
+            color: COLORS.white,
             transform: [{ translateY: translateY.value }]
         }
     })
@@ -122,24 +123,24 @@ const ServicesPicker = ({ visible, setVisible, services, onSelect }) => {
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginHorizontal: SPACING.small }}>Select Services</Text>
+                            <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginHorizontal: SPACING.small }}>Select Services</Text>
 
-                            <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor='#FFF' backgroundColor='#FFF' hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
-                                <Ionicons name="search" size={normalize(20)} color="black" />
+                            <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.small }} hoveredBackgroundColor={COLORS.darkRedBackground2} backgroundColor='#372b2b' hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
+                                <Ionicons name="search" size={normalize(20)} color="white" />
                                 <TextInput
                                     style={styles.citySearch}
                                     onChangeText={onSearch}
                                     value={search}
                                     placeholder="Search services"
-                                    placeholderTextColor="grey"
-                                    onBlur={() => setSearchBorderColor(COLORS.placeholder)}
+                                    placeholderTextColor={COLORS.placeholder}
+                                    onBlur={() => setSearchBorderColor('grey')}
                                     onFocus={() => setSearchBorderColor(COLORS.red)}
                                 />
-                                <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(20)} color="black" />
+                                <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(20)} color="white" />
                             </HoverableView>
 
                             {(filteredServicesRef.current.some(filteredService => SERVICES.includes(filteredService)) || !search) && <View style={styles.section}>
-                                <Text style={{ textAlign: 'left', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }}>Sexual services</Text>
+                                <Text style={{ textAlign: 'left', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>Sexual services</Text>
                             </View>}
 
                             {filteredServicesRef.current.map(service => {
@@ -162,7 +163,7 @@ const ServicesPicker = ({ visible, setVisible, services, onSelect }) => {
                                             text={service}
                                             iconStyle={{ borderRadius: 3 }}
                                             innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                            textStyle={{ color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
+                                            textStyle={{ color: selected ? COLORS.white : COLORS.placeholder, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
                                             textContainerStyle={{ flexShrink: 1 }}
                                         />
                                     </TouchableRipple>
@@ -170,7 +171,7 @@ const ServicesPicker = ({ visible, setVisible, services, onSelect }) => {
                             })}
 
                             {(filteredMassageServicesRef.current.some(filteredService => MASSAGE_SERVICES.includes(filteredService)) || !search) && <View style={styles.section}>
-                                <Text style={{ textAlign: 'left', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }}>Massage services</Text>
+                                <Text style={{ textAlign: 'left', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.white }}>Massage services</Text>
                             </View>}
 
                             {filteredMassageServicesRef.current.map(service => {
@@ -193,7 +194,7 @@ const ServicesPicker = ({ visible, setVisible, services, onSelect }) => {
                                             text={service}
                                             iconStyle={{ borderRadius: 3 }}
                                             innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                            textStyle={{ color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
+                                            textStyle={{ color: selected ? COLORS.white : COLORS.placeholder, fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, textDecorationLine: "none" }}
                                             textContainerStyle={{ flexShrink: 1 }}
                                         />
                                     </TouchableRipple>
@@ -262,11 +263,11 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.regular,
         fontSize: FONT_SIZES.medium,
         outlineStyle: 'none',
-        color: '#000'
+        color: '#FFF'
     },
     section: {
         paddingVertical: SPACING.xx_small,
         paddingHorizontal: SPACING.small,
-        backgroundColor: COLORS.hoveredWhite
+        backgroundColor: 'rgba(173, 13, 13, 0.11)'//COLORS.grey
     },
 })

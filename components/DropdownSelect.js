@@ -144,18 +144,18 @@ const DropdownSelect = forwardRef((props, ref) => {
                             }]}
                         >
                             {searchable && (
-                                <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.xx_small }} hoveredBackgroundColor='#FFF' backgroundColor='#FFF' hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
-                                    <Ionicons name="search" size={normalize(17)} color="black" />
+                                <HoverableView style={{ ...styles.searchWrapper, borderRadius: 10, marginVertical: SPACING.xx_small, marginHorizontal: SPACING.xx_small }} hoveredBackgroundColor={COLORS.darkRedBackground2} backgroundColor='#372b2b' hoveredBorderColor={COLORS.red} borderColor={searchBorderColor} transitionDuration='0ms'>
+                                    <Ionicons name="search" size={normalize(17)} color="white" />
                                     <NativeTextInput
                                         style={styles.citySearch}
                                         onChangeText={onSearch}
                                         value={search}
                                         placeholder={searchPlaceholder}
-                                        placeholderTextColor="grey"
+                                        placeholderTextColor={COLORS.placeholder}
                                         onBlur={() => setSearchBorderColor(COLORS.placeholder)}
                                         onFocus={() => setSearchBorderColor(COLORS.red)}
                                     />
-                                    <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(17)} color="black" />
+                                    <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(17)} color="white" />
                                 </HoverableView>
                             )}
 
@@ -166,7 +166,8 @@ const DropdownSelect = forwardRef((props, ref) => {
                                         <TouchableRipple
                                             key={value}
                                             onPress={() => onValuePress(value)}
-                                            style={{ paddingVertical: SPACING.xx_small, paddingHorizontal: SPACING.medium, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}
+                                            style={{ backgroundColor: selected ? "rgba(220, 46, 46, .10)" : undefined, paddingVertical: SPACING.xx_small, paddingHorizontal: SPACING.medium, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}
+                                            rippleColor="rgba(220, 46, 46, .10)"
                                         >
                                             <BouncyCheckbox
                                                 pointerEvents="none"
@@ -178,7 +179,7 @@ const DropdownSelect = forwardRef((props, ref) => {
                                                 text={value}
                                                 iconStyle={{ borderRadius: 3 }}
                                                 innerIconStyle={{ borderWidth: 2, borderRadius: 3 }}
-                                                textStyle={{ color: '#000', fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, textDecorationLine: "none" }}
+                                                textStyle={{ color: '#FFF', fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, textDecorationLine: "none" }}
                                                 textContainerStyle={{ flexShrink: 1 }}
                                             />
                                         </TouchableRipple>
@@ -190,14 +191,14 @@ const DropdownSelect = forwardRef((props, ref) => {
                                             rippleColor="rgba(220, 46, 46, .10)"
                                         >
                                             <>
-                                                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}>
+                                                <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}>
                                                     {value}
                                                 </Text>
                                                 {
                                                     multiselect
                                                     && (
                                                         selected ? <MaterialIcons name="done" style={{ height: normalize(20), width: normalize(20) }} size={normalize(20)} color="green" />
-                                                            : <Ionicons name="add-outline" style={{ height: normalize(20), width: normalize(20) }} size={normalize(20)} color="black" />
+                                                            : <Ionicons name="add-outline" style={{ height: normalize(20), width: normalize(20) }} size={normalize(20)} color="white" />
                                                     )
                                                 }
                                             </>
@@ -261,13 +262,13 @@ const styles = StyleSheet.create({
     },
     dropdown: {
         position: 'absolute',
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.grey,
         //marginRight: SPACING.page_horizontal,
         borderRadius: 10,
         paddingVertical: SPACING.xxx_small,
         shadowColor: COLORS.lightBlack,
         borderWidth: 1,
-        borderColor: COLORS.lightBlack,
+        borderColor: COLORS.lightGrey,
         shadowOffset: {
             width: 0,
             height: 4,
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
     searchWrapper: {
         flexDirection: 'row',
         borderRadius: 20,
-        borderWidth: 2,
+        borderWidth: 1,
         alignItems: 'center',
         paddingHorizontal: SPACING.x_small,
         overflow: 'hidden'
@@ -292,6 +293,6 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.regular,
         fontSize: FONT_SIZES.medium,
         outlineStyle: 'none',
-        color: '#000'
+        color: '#FFF'
     },
 })

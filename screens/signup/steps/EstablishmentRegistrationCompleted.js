@@ -37,7 +37,7 @@ const EstablishmentRegistrationCompleted = ({ visible, email }) => {
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
             color: COLORS.white,
-            backgroundColor: '#261718'
+            backgroundColor: COLORS.grey//'#261718'
         }
     })
 
@@ -60,12 +60,12 @@ const EstablishmentRegistrationCompleted = ({ visible, email }) => {
                 style={{ flex: 1 }}
                 contentContainerStyle={{ paddingBottom: SPACING.small }}
             >
-                <LinearGradient colors={[
+                {/* <LinearGradient colors={[
                     '#221718',//'#4b010140',//COLORS.darkRedBackground,
                    '#261718',
                 ]}
                     style={{ position: 'absolute', width: '100%', height: 300 }}
-                />
+                /> */}
 
                 <View style={{ paddingTop: SPACING.xxxxx_large }}>
 

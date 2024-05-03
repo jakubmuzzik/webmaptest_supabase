@@ -207,26 +207,26 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                                 }}
                                 style={[styles.dropdown, { top: dropdownTop }]}
                             >
-                                <HoverableView hoveredBackgroundColor={COLORS.hoveredWhite} style={{ overflow: 'hidden' }}>
+                                <HoverableView hoveredBackgroundColor={COLORS.darkRedBackground} style={{ overflow: 'hidden' }}>
                                     <TouchableOpacity onPress={onAccountPress} style={{ maxWidth: 250, paddingVertical: SPACING.xx_small, paddingHorizontal: SPACING.xx_small, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
                                         activeOpacity={0.8}
                                     >
                                         <Avatar.Text size={normalize(38)} label={currentAuthUser.user_metadata.name[0]} style={{ backgroundColor: COLORS.red }} labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large }} />
                                         <View style={{ flexDirection: 'column', marginHorizontal: SPACING.xxx_small, flexShrink: 1, }}>
-                                            <Text numberOfLines={1} style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.lightGrey }}>
+                                            <Text numberOfLines={1} style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.small, color: COLORS.placeholder }}>
                                                 Account
                                             </Text>
-                                            <Text numberOfLines={1} style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium,  }}>
+                                            <Text numberOfLines={1} style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.medium, color: COLORS.white }}>
                                                 {currentAuthUser.user_metadata.name}
                                             </Text>
                                         </View>
-                                        <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+                                        <MaterialIcons name="keyboard-arrow-right" size={24} color="white" />
                                     </TouchableOpacity>
                                 </HoverableView>
                                 {isSmallScreen && (
                                     <>
-                                        <HoverableView style={{ flexDirection: 'row', padding: SPACING.xx_small }} hoveredBackgroundColor={COLORS.hoveredWhite}>
-                                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, opacity: 0.8 }}>
+                                        <HoverableView style={{ flexDirection: 'row', padding: SPACING.xx_small }} hoveredBackgroundColor={COLORS.darkRedBackground}>
+                                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, opacity: 0.8, color: COLORS.white }}>
                                                 Language:&nbsp;
                                             </Text>
                                             <Picker
@@ -245,11 +245,11 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                                         </HoverableView>
                                     </>
                                 )}
-                                <HoverableView hoveredBackgroundColor={COLORS.hoveredWhite}>
-                                    <TouchableOpacity onPress={onLogoutPress} style={{ padding: SPACING.xx_small, paddingTop: SPACING.x_small, borderTopWidth: 1, borderColor: COLORS.placeholder }}
+                                <HoverableView hoveredBackgroundColor={COLORS.darkRedBackground}>
+                                    <TouchableOpacity onPress={onLogoutPress} style={{ padding: SPACING.xx_small, paddingTop: SPACING.x_small, borderTopWidth: 0.5, borderColor: 'grey' }}
                                         activeOpacity={0.8}
                                     >
-                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}>
+                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white}}>
                                             Log out
                                         </Text>
                                     </TouchableOpacity>
@@ -282,7 +282,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                                 }}
                                 style={[styles.dropdown, { top: dropdownTop }]}
                             >
-                                <HoverableView hoveredBackgroundColor={COLORS.hoveredWhite} style={{ overflow: 'hidden' }}>
+                                <HoverableView hoveredBackgroundColor={COLORS.darkRedBackground} style={{ overflow: 'hidden' }}>
                                     <TouchableOpacity onPress={onSignUpPress} style={{ padding: SPACING.xx_small, margin: SPACING.xxx_small, backgroundColor: COLORS.red, borderRadius: 7, overflow: 'hidden' }}
                                         activeOpacity={0.8}
                                     >
@@ -291,11 +291,11 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                                         </Text>
                                     </TouchableOpacity>
                                 </HoverableView>
-                                <HoverableView hoveredBackgroundColor={COLORS.hoveredWhite}>
+                                <HoverableView hoveredBackgroundColor={COLORS.darkRedBackground}>
                                     <TouchableOpacity onPress={onLoginPress} style={{ padding: SPACING.xx_small }}
                                         activeOpacity={0.8}
                                     >
-                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}>
+                                        <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: COLORS.white }}>
                                             {labels.SIGN_IN}
                                         </Text>
                                     </TouchableOpacity>
@@ -305,8 +305,8 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                                     <>
                                         <View style={{ marginVertical: 2, borderBottomWidth: 1, borderColor: 'rgba(0,0,0,0.2)' }} />
     
-                                        <HoverableView style={{ flexDirection: 'row', padding: SPACING.xx_small }} hoveredBackgroundColor={COLORS.hoveredWhite}>
-                                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, opacity: 0.8 }}>
+                                        <HoverableView style={{ flexDirection: 'row', padding: SPACING.xx_small }} hoveredBackgroundColor={COLORS.darkRedBackground}>
+                                            <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, opacity: 0.8, color: COLORS.white }}>
                                                 Language:&nbsp;
                                             </Text>
                                             <Picker
@@ -317,7 +317,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                                                 })
                                                 }
                                                 fontFamily={FONTS.bold}
-                                                style={{ borderWidth: 0, fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, outlineStyle: 'none' }}
+                                                style={{ backgroundColor: COLORS.grey, color: COLORS.white, borderWidth: 0, fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, outlineStyle: 'none' }}
                                             >
                                                 <Picker.Item label="Čeština" value="cs" />
                                                 <Picker.Item label="English" value="en" />
@@ -364,7 +364,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                             }}
                             style={[styles.dropdown, { top: dropdownTop, right: languageDropdownRight, marginRight: 0, overflow: 'hidden' }]}
                         >
-                            <HoverableView hoveredBackgroundColor={COLORS.hoveredWhite}>
+                            <HoverableView hoveredBackgroundColor={COLORS.darkRedBackground}>
                                 <Link style={{ textDecoration: 'none' }} to={{ pathname: location.pathname, search: new URLSearchParams(stripEmptyParams({ ...params, language: 'cs', ...filterParams })).toString() }}>
                                     <View style={{ padding: SPACING.xx_small, flexDirection: 'row', alignItems: 'center' }}>
                                         <Image
@@ -376,11 +376,11 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                                                 marginRight: SPACING.xx_small,
                                             }}
                                         />
-                                        <Text style={{ fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium }}>Čeština</Text>
+                                        <Text style={{ fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, color: COLORS.white }}>Čeština</Text>
                                     </View>
                                 </Link>
                             </HoverableView>
-                            <HoverableView hoveredBackgroundColor={COLORS.hoveredWhite}>
+                            <HoverableView hoveredBackgroundColor={COLORS.darkRedBackground}>
                                 <Link style={{ textDecoration: 'none' }} to={{ pathname: location.pathname, search: new URLSearchParams(stripEmptyParams({ ...params, language: 'en', ...filterParams })).toString() }} >
                                     <View style={{ padding: SPACING.xx_small, flexDirection: 'row', alignItems: 'center' }}>
                                         <Image
@@ -392,7 +392,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
                                                 marginRight: SPACING.xx_small,
                                             }}
                                         />
-                                        <Text style={{ fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium }}>English</Text>
+                                        <Text style={{ fontFamily: FONTS.regular, fontSize: FONT_SIZES.medium, color: COLORS.white }}>English</Text>
                                     </View>
                                 </Link>
                             </HoverableView>
@@ -696,7 +696,7 @@ const styles = StyleSheet.create({
     dropdown: {
         position: 'absolute',
         minWidth: normalize(100),
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.grey,
         marginRight: SPACING.page_horizontal,
         borderRadius: 10,
         paddingVertical: SPACING.xxx_small,

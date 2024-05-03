@@ -654,7 +654,8 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount, updateCurre
                         {/* Random selection from our categories */}
                         Explore by categories
                     </Text>
-                    <Text style={{ textAlign: 'center', fontFamily: FONTS.bold, fontSize: FONT_SIZES.h3, color: COLORS.white, marginHorizontal: SPACING.page_horizontal }}>
+                    <Text style={{ textAlign: 'center', fontFamily: FONTS.bold, fontSize: FONT_SIZES.h3, color: COLORS.white, marginHorizontal: SPACING.page_horizontal 
+                }}>
                         Random selection of our profiles
                 </Text>
                     <View style={{ marginTop: SPACING.small, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>

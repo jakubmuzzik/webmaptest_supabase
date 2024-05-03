@@ -84,7 +84,7 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
             fontSize: FONT_SIZES.large,
             opacity: interpolate(scrollY1.value, [0, 30, 50], [0, 0.8, 1], Extrapolation.CLAMP),
             color: COLORS.white,
-            backgroundColor: '#261718'
+            backgroundColor: COLORS.grey//'#261718'
         }
     })
 
@@ -100,7 +100,7 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
 
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: '#261718',
+            backgroundColor: COLORS.grey,//'#261718',
             borderRadius: 24,
             width: normalize(500),
             maxWidth: '90%',
@@ -164,19 +164,19 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
                 </View>
                 <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles1]} />
 
-                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1, backgroundColor: '#261718' }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
+                <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler1} style={{ flex: 1, zIndex: 1, backgroundColor: COLORS.grey/*'#261718'*/ }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
                     {/* <LinearGradient colors={[
                         COLORS.darkRedBackground,//'#4b010140',//COLORS.darkRedBackground,
                         COLORS.lightBlack,
                     ]}
                         style={{ position: 'absolute', width: '100%', height: 200 }}
                     /> */}
-                    <LinearGradient colors={[
+                    {/* <LinearGradient colors={[
                         '#221718',//'#4b010140',//COLORS.darkRedBackground,
                         '#261718',
                     ]}
                         style={{ position: 'absolute', width: '100%', height: 300 }}
-                    />
+                    /> */}
 
                     <View style={{ paddingHorizontal: SPACING.small }}>
 
