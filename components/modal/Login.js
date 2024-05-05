@@ -120,6 +120,8 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
     const modalContainerStyles = useAnimatedStyle(() => {
         return {
             borderRadius: 24,
+            borderWidth: 1,
+            borderColor: COLORS.lightGrey,
             width: normalize(500),
             maxWidth: '90%',
             height: normalize(500),

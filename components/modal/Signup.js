@@ -102,6 +102,8 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
         return {
             backgroundColor: COLORS.grey,//'#261718',
             borderRadius: 24,
+            borderWidth: 1,
+            borderColor: COLORS.lightGrey,
             width: normalize(500),
             maxWidth: '90%',
             height: normalize(650),

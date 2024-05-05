@@ -303,7 +303,7 @@ const Header = ({ logOut, toastRef, currentAuthUser }) => {
     
                                 {isSmallScreen && (
                                     <>
-                                        <View style={{ marginVertical: 2, borderBottomWidth: 1, borderColor: 'rgba(0,0,0,0.2)' }} />
+                                        <View style={{ marginVertical: 2, borderBottomWidth: 1, borderColor: 'grey' }} />
     
                                         <HoverableView style={{ flexDirection: 'row', padding: SPACING.xx_small }} hoveredBackgroundColor={COLORS.darkRedBackground}>
                                             <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, opacity: 0.8, color: COLORS.white }}>
@@ -699,6 +699,8 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.grey,
         marginRight: SPACING.page_horizontal,
         borderRadius: 10,
+        borderWidth: 1,
+        borderColor: COLORS.lightGrey,
         paddingVertical: SPACING.xxx_small,
         shadowColor: "#000",
         shadowColor: "#000",
