@@ -185,19 +185,13 @@ const EmailEditor = ({ visible, setVisible, toastRef, currentEmail }) => {
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small }}>
+                            <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small }}>
                                 Change email
                             </Text>
 
                             <HoverableInput
                                 placeholder="Enter new email"
                                 label="New email"
-                                borderColor={COLORS.placeholder}
-                                hoveredBorderColor={COLORS.red}
-                                textColor='#000'
-                                textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                 containerStyle={{ marginHorizontal: SPACING.small }}
                                 text={data.newEmail}
                                 setText={(text) => setData({ ...data, ['newEmail']: text })}
@@ -209,12 +203,6 @@ const EmailEditor = ({ visible, setVisible, toastRef, currentEmail }) => {
                             <HoverableInput
                                 placeholder="Confirm new email"
                                 label="Confirm new email"
-                                borderColor={COLORS.placeholder}
-                                hoveredBorderColor={COLORS.red}
-                                textColor='#000'
-                                textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                 containerStyle={{ marginHorizontal: SPACING.small }}
                                 text={data.confirmNewEmail}
                                 setText={(text) => setData({ ...data, ['confirmNewEmail']: text })}

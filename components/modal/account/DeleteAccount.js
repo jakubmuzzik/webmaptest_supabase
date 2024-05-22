@@ -173,7 +173,7 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment }) => {
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small }}>
+                            <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small }}>
                                 Delete account
                             </Text>
 
@@ -181,12 +181,6 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment }) => {
                                 containerStyle={{ marginTop: SPACING.xxx_small, marginHorizontal: SPACING.small }}
                                 placeholder="Enter your password"
                                 label="Confirm your password"
-                                borderColor={COLORS.placeholder}
-                                hoveredBorderColor={COLORS.red}
-                                textColor='#000'
-                                textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                 text={data.password}
                                 setText={(text) => setData({ ...data, ['password']: text })}
                                 leftIconName="lock-outline"

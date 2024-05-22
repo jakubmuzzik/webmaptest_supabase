@@ -108,8 +108,6 @@ const ContactInformationEditor = ({ visible, setVisible, contactInformation, toa
                 throw updateError
             }
 
-            console.log(userId)
-            console.log(currentUserId)
             if (userId === currentUserId && changedData.name !== contactInformation.name) {
                 const { error: authUpdateError } = await supabase.auth.updateUser({
                     data: { name: changedData.name }

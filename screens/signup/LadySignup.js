@@ -141,7 +141,7 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
                     options: {
                         data: {
                             name: data.name,
-                        user_type: 'lady'
+                            user_type: 'lady'
                         }
                     }
                 }

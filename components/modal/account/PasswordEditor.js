@@ -203,20 +203,14 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
                         <Animated.View style={[styles.modal__shadowHeader, modalHeaderTextStyles]} />
 
                         <Animated.ScrollView scrollEventThrottle={1} onScroll={scrollHandler} style={{ flex: 1, zIndex: 1 }} contentContainerStyle={{ paddingBottom: SPACING.small }}>
-                            <Text style={{ fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small }}>
+                            <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: FONT_SIZES.h1, marginTop: SPACING.xxxxx_large, marginBottom: SPACING.small, marginHorizontal: SPACING.small }}>
                                 Change password
                             </Text>
 
                             {!new URLSearchParams(location.search).get('change_password') && <HoverableInput
                                 placeholder="Enter your current password"
                                 label="Current password"
-                                borderColor={COLORS.placeholder}
-                                hoveredBorderColor={COLORS.red}
-                                textColor='#000'
                                 containerStyle={{ marginTop: SPACING.xxx_small, marginHorizontal: SPACING.small }}
-                                textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                 text={data.currentPassword}
                                 setText={(text) => setData({ ...data, ['currentPassword']: text.replaceAll(' ', '') })}
                                 leftIconName='lock-outline'
@@ -230,13 +224,7 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
                             <HoverableInput
                                 placeholder="8 or more characters"
                                 label="New password"
-                                borderColor={COLORS.placeholder}
-                                hoveredBorderColor={COLORS.red}
-                                textColor='#000'
                                 containerStyle={{ marginTop: SPACING.xxx_small, marginHorizontal: SPACING.small }}
-                                textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                 text={data.newPassword}
                                 setText={(text) => setData({ ...data, ['newPassword']: text.replaceAll(' ', '') })}
                                 leftIconName="lock-outline"
@@ -250,13 +238,7 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
                             <HoverableInput
                                 placeholder="8 or more characters"
                                 label="Confirm new password"
-                                borderColor={COLORS.placeholder}
-                                hoveredBorderColor={COLORS.red}
-                                textColor='#000'
                                 containerStyle={{ marginTop: SPACING.xxx_small, marginHorizontal: SPACING.small }}
-                                textStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium, color: '#000' }}
-                                labelStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
-                                placeholderStyle={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.medium }}
                                 text={data.confirmNewPassword}
                                 setText={(text) => setData({ ...data, ['confirmNewPassword']: text.replaceAll(' ', '') })}
                                 leftIconName="lock-outline"
