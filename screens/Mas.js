@@ -88,7 +88,7 @@ const Mas = ({ currentMasseusesCount, updateCurrentMasseusesCount, resetMasseuse
 
             query = buildFiltersForQuery(query, filters)
 
-            query = query.range((Number(params.page) - 1) * MAX_ITEMS_PER_PAGE, Number(params.page) * MAX_ITEMS_PER_PAGE)
+            query = query.range((Number(params.page) - 1) * MAX_ITEMS_PER_PAGE, (Number(params.page) * MAX_ITEMS_PER_PAGE) - 1)
 
             const { data } = await query
 
