@@ -47,7 +47,7 @@ const EditNewEstablishment = ({ offsetX = 0, toastRef, fetchNewEstablishments, n
                     search: new URLSearchParams(stripEmptyParams(params)).toString()
                 },{ replace: true })
                 
-                toastRef.current.show({
+                toastRef.show({
                     type: 'error',
                     text: 'Establishment could not be found.'
                 })

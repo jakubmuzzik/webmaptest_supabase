@@ -186,7 +186,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 replace: true
             })
 
-            toastRef.current?.show({
+            toastRef?.show({
                 type: 'success',
                 text: 'Successfully logged in.'
             })
@@ -236,7 +236,7 @@ const Login = ({ visible, setVisible, onSignUpPress, toastRef, fetchUser }) => {
                 throw error
             }
 
-            toastRef.current.show({
+            toastRef?.show({
                 type: 'success',
                 headerText: 'Password reset link sent',
                 text: 'Instructions to reset your password have been sent to your Email address.'

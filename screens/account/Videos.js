@@ -66,7 +66,7 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
             try {
                 const fileSizeMb = getFileSizeInMb(result.assets[0].uri)
                 if (fileSizeMb > MAX_VIDEO_SIZE_MB) {
-                    toastRef.current.show({
+                    toastRef.show({
                         type: 'error',
                         headerText: 'File Size Error',
                         text:`Maximum file size allowed is ${MAX_VIDEO_SIZE_MB}MB.`
@@ -76,7 +76,7 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
 
                 const dataType = getDataType(result.assets[0].uri)
                 if (dataType !== 'video') {
-                    toastRef.current.show({
+                    toastRef.show({
                         type: 'error',
                         headerText: 'Invalid File Type',
                         text:`Please upload a supported file type.`
@@ -87,7 +87,7 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
                 uploadVideo(result.assets[0].uri)
             } catch (e) {
                 console.error(e)
-                toastRef.current.show({
+                toastRef.show({
                     type: 'error',
                     text: `Video could not be uploaded.`
                 })
@@ -100,14 +100,14 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
         try {
             await uploadUserAsset(videoUri)
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Video uploaded',
                 text: 'Video was successfully uploaded and submitted for review.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Upload error',
                 text: 'Video could not be uploaded.'
@@ -189,7 +189,7 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
         const toDelete = userData.videos.find(video => video.id === videoId)
         //deleting video in review when profile is in review
         if (toDelete.status === IN_REVIEW && userData.status === IN_REVIEW) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'warning',
                 headerText: 'Profile is in review',
                 text: 'You can not delete this video, your profile is currently in review.'
@@ -223,7 +223,7 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
             updateCurrentUserInRedux({ videos: newVideos, id: userData.id })
         }
 
-        toastRef.current.show({
+        toastRef.show({
             type: 'success',
             headerText: 'Success!',
             text: 'Video was deleted.'
@@ -254,14 +254,14 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
                 updateNewEstablishmentInRedux({ videos, id: userData.id })
             }
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Video approved',
                 text: 'Video has been approved'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: error.message
             })
@@ -293,13 +293,13 @@ const Videos = ({ index, setTabHeight, user_type, offsetX = 0, userData, toastRe
                 updateNewEstablishmentInRedux({ videos, id: userData.id })
             }
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Video rejected',
                 text: 'Video has been rejected'
             })
         } catch(error) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: error.message
             })

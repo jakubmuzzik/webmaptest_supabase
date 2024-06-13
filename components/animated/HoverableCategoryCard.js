@@ -41,11 +41,11 @@ const HoverableCategoryCard = ({ selected, imagePath, categoryName, contentWidth
                     <Image
                         style={{
                             width: '55%',
-                            aspectRatio: 1 / 1,
+                            height: '55%',
                             tintColor: selected ? undefined : COLORS.greyText
                         }}
                         source={imagePath}
-                        resizeMode="contain"
+                        resiz="contain"
                     //alt={lady.name}
                     />
                     <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: categoryCardNameFontSize > FONT_SIZES.large ? FONTS.large : categoryCardNameFontSize, textAlign: 'center' }}>

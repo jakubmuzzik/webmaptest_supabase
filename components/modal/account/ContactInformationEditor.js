@@ -120,7 +120,7 @@ const ContactInformationEditor = ({ visible, setVisible, contactInformation, toa
 
             closeModal()
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Success!',
                 text: 'Contact Information was changed successfully.'

@@ -111,14 +111,14 @@ const NewVideos = ({ newVideos, toastRef, fetchNewVideos, setNewVideos, index })
 
             setNewVideos(newVideos.filter(newVideo => isLady ? newVideo.lady_id !== profileId : newVideo.establishment_id !== profileId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Videos rejected',
                 text: 'Videos were successfuly rejected.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Rejection error',
                 text: 'Videos could not be rejected.'
@@ -147,14 +147,14 @@ const NewVideos = ({ newVideos, toastRef, fetchNewVideos, setNewVideos, index })
 
             setNewVideos(newVideos.filter(newVideo => isLady ? newVideo.lady_id !== profileId : newVideo.establishment_id !== profileId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Videos activated',
                 text: 'Videos were successfuly activated.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Activate error',
                 text: 'Videos could not be activated.'
@@ -178,14 +178,14 @@ const NewVideos = ({ newVideos, toastRef, fetchNewVideos, setNewVideos, index })
 
             setNewVideos(newVideos.filter(newVideo => newVideo.id !== videoId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Video activated',
                 text: 'Video was successfuly activated.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Activate error',
                 text: 'Video could not be activated.'
@@ -209,14 +209,14 @@ const NewVideos = ({ newVideos, toastRef, fetchNewVideos, setNewVideos, index })
 
             setNewVideos(newVideos.filter(newVideo => newVideo.id !== videoId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Video rejected',
                 text: 'Video was successfuly rejected.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Rejection error',
                 text: 'Video could not be rejected.'

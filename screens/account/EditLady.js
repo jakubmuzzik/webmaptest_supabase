@@ -53,7 +53,7 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
                     search: new URLSearchParams(stripEmptyParams(params)).toString()
                 },{ replace: true })
                 
-                toastRef.current.show({
+                toastRef.show({
                     type: 'error',
                     text: 'Selected Lady could not be found.'
                 })
@@ -87,7 +87,7 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
         }
 
         if (!hasAllCoverPhotos() || !hasAllProfileInformation()) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Missing data',
                 text: 'Fix all of the rejected data before re-submitting the profile.'
@@ -109,13 +109,13 @@ const EditLady = ({ offsetX = 0, ladies, fetchLadies, toastRef, updateLadyInRedu
 
             updateLadyInRedux({ status: IN_REVIEW, id: ladyData.id, last_submitted_date: new Date() })
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Profile re-submitted',
                 text: 'Profile was re-submitted for review.'
             })
         } catch(e) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Re-submit error',
                 text: 'Your profile could not be submitted for review.'

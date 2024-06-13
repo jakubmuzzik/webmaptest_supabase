@@ -127,7 +127,7 @@ const Account = ({ currentUser={}, user_type, toastRef, updateCurrentUserInRedux
         }
 
         if (!hasAllCoverPhotos() || !hasAllProfileInformation()) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Missing data',
                 text: 'Fix all of the rejected data before re-submitting the profile.'
@@ -149,13 +149,13 @@ const Account = ({ currentUser={}, user_type, toastRef, updateCurrentUserInRedux
 
             updateCurrentUserInRedux({ status: IN_REVIEW, id: currentUser.id, last_submitted_date: new Date() })
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Profile re-submitted',
                 text: 'Profile was re-submitted for review.'
             })
         } catch(e) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Re-submit error',
                 label: 'Your profile could not be submitted for review.'

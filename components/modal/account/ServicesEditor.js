@@ -106,7 +106,7 @@ const ServicesEditor = ({ visible, setVisible, services, toastRef, userId, updat
 
             closeModal()
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Success!',
                 text: 'Services were changed successfully.'

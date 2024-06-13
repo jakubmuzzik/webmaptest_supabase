@@ -134,7 +134,7 @@ const AddressEditor = ({ visible, setVisible, address, toastRef, userId, updateR
 
             closeModal()
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Success!',
                 text: 'Address was changed successfully.'

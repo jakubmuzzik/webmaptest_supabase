@@ -206,7 +206,7 @@ const Lady = ({ toastRef }) => {
 
             setData(undefined)
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: 'We could not find the lady.'
             })
@@ -543,7 +543,7 @@ const Lady = ({ toastRef }) => {
                     <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: COLORS.greyText, marginHorizontal: SPACING.xx_small }}>
                         |
                     </Text></>}
-                <TouchableOpacity onPress={() => setPhotosModalVisible(true)} style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
+                <TouchableOpacity onPress={() => console.log(document.querySelector('#root').childNodes[0].scrollTo(0,0))} style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={{ fontFamily: FONTS.medium, fontSize: FONT_SIZES.large, color: '#FFF', marginRight: 4 }}>View all</Text>
                     <MaterialCommunityIcons name="dots-grid" size={20} color="white" />
                 </TouchableOpacity>

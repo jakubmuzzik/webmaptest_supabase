@@ -76,7 +76,7 @@ const SearchResults = ({ toastRef }) => {
                 setEstablisthmentsResults([])
             }
         } catch(error) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: "Failed to search the data. Please try again later."
             })

@@ -90,14 +90,14 @@ const Ladies = ({ route, index, setTabHeight, ladies, fetchLadies, removeLadyFro
 
             removeLadyFromRedux(ladyId)
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Lady deleted',
                 text: 'Lady was successfuly deleted.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Delete error',
                 text: 'Lady could not be deleted.'
@@ -118,14 +118,14 @@ const Ladies = ({ route, index, setTabHeight, ladies, fetchLadies, removeLadyFro
 
             updateLadyInRedux({ status: INACTIVE, id: ladyId })
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Lady deactivated',
                 text: 'Lady was successfuly deactivated.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Deactivate error',
                 text: 'Lady could not be deactivated.'
@@ -146,14 +146,14 @@ const Ladies = ({ route, index, setTabHeight, ladies, fetchLadies, removeLadyFro
 
             updateLadyInRedux({ status: ACTIVE, id: ladyId })
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Lady activated',
                 text: 'Lady was successfuly activated.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Activate error',
                 text: 'Lady could not be activated.'

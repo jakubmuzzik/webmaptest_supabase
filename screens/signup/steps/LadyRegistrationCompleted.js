@@ -48,7 +48,7 @@ const LadyRegistrationCompleted = ({ independent, visible, toastRef }) => {
         })
 
         if (!independent) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 text: 'Lady was successfully submitted for review.'
             })

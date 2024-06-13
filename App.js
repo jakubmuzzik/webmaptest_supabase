@@ -1,3 +1,4 @@
+import '@expo/metro-runtime'
 import { useState, useEffect, useRef } from 'react'
 import { Asset } from "expo-asset"
 import * as Font from 'expo-font'
@@ -17,6 +18,8 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    document.querySelector('body').style.overflowY = 'auto'
+    document.querySelector('body').style.backgroundColor = '#261718'
     init()
   }, [])
 
@@ -58,7 +61,7 @@ export default function App() {
         translucent
       />
       <Provider store={store}>
-        <SafeAreaProvider style={{ backgroundColor: COLORS.lightBlack,/* overscrollBehavior: 'none'*/ }}>
+        <SafeAreaProvider style={{ backgroundColor: COLORS.lightBlack, /*overflowY: 'auto'*/ /* overscrollBehavior: 'none'*/ }}>
           <Main />
         </SafeAreaProvider>
       </Provider>

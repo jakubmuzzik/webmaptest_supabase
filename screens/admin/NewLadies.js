@@ -78,7 +78,7 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
                 }
 
                 if (estData[0].status !== ACTIVE) {
-                    toastRef.current.show({
+                    toastRef.show({
                         type: 'error',
                         headerText: 'Activation error',
                         text: 'Lady could not be activated, because associated establishment is not Active.'
@@ -99,14 +99,14 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
 
             setNewLadies(newLadies.filter(newLady => newLady.id !== ladyId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Lady activated',
                 text: 'Lady was successfuly activated.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Activate error',
                 text: 'Lady could not be activated.'
@@ -130,14 +130,14 @@ const NewLadies = ({ newLadies, toastRef, fetchNewLadies, setNewLadies }) => {
 
             setNewLadies(newLadies.filter(newLady => newLady.id !== ladyId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Lady rejected',
                 text: 'Lady was successfuly rejected.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Rejection error',
                 text: 'Lady could not be rejected.'

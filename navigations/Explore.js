@@ -45,7 +45,7 @@ const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishme
             }
 
             previousScrollY.current = window.scrollY
-        
+
             if (positiveScrollYDelta.current >= normalize(70) && window.scrollY > 200 && translateY.value === 0) {
                 translateY.value = withTiming(-normalize(70), {
                     useNativeDriver: true
@@ -61,7 +61,7 @@ const Explore = ({ currentLadiesCount, currentMasseusesCount, currentEstablishme
         return () => {
             document.removeEventListener('scroll', handleScroll)
         }
-      }, [])
+    }, [])
 
     const containersStyle = useAnimatedStyle(() => {
         return {

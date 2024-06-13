@@ -159,7 +159,7 @@ const WorkingHoursEditor = ({ visible, setVisible, working_hours, toastRef, user
 
             closeModal()
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Success!',
                 text: 'Working Hours were changed successfully.'

@@ -42,7 +42,7 @@ const LoginInformation = forwardRef((props, ref) => {
 
         const isEmailValid = isValidEmail(data.email)
         if (!isEmailValid) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: 'Provided Email address is invalid.'
             })
@@ -57,7 +57,7 @@ const LoginInformation = forwardRef((props, ref) => {
 
             if (ladiesError) {
                 console.error(ladiesError)
-                toastRef.current.show({
+                toastRef.show({
                     type: 'error',
                     text: 'Could not validate the email.'
                 })
@@ -72,7 +72,7 @@ const LoginInformation = forwardRef((props, ref) => {
 
             if (establishmentsError) {
                 console.error(establishmentsError)
-                toastRef.current.show({
+                toastRef.show({
                     type: 'error',
                     text: 'Could not validate the email.'
                 })
@@ -81,7 +81,7 @@ const LoginInformation = forwardRef((props, ref) => {
             }
 
             if ((ladiesData && ladiesData.length > 0) || (establishmentsData && establishmentsData.length > 0)) {
-                toastRef.current.show({
+                toastRef.show({
                     type: 'error',
                     text: 'Email address is already in use.'
                 })
@@ -90,7 +90,7 @@ const LoginInformation = forwardRef((props, ref) => {
         } catch (error) {
             console.error(error)
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: 'Could not validate the email.'
             })

@@ -110,7 +110,7 @@ const DeleteAccount = ({ visible, setVisible, toastRef, isEstablishment }) => {
 
             await supabase.auth.refreshSession()
             
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Account deleted',
                 text: 'Your account has been successfully deleted.'

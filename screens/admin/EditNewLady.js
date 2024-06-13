@@ -50,7 +50,7 @@ const EditNewLady = ({ offsetX = 0, toastRef, fetchNewLadies, newLadies }) => {
                     search: new URLSearchParams(stripEmptyParams(params)).toString()
                 },{ replace: true })
                 
-                toastRef.current.show({
+                toastRef.show({
                     type: 'error',
                     text: 'Lady could not be found.'
                 })

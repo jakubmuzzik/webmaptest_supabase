@@ -35,13 +35,6 @@ const Toast = forwardRef(({ }, ref) => {
     const insets = useSafeAreaInsets()
     
     const TOP_VALUE = SPACING.medium + insets.top //60//Platform.OS === 'ios' ? 60 : 20;
-    useImperativeHandle(
-        ref,
-        () => ({
-            show,
-        }),
-        [show],
-    );
 
     const show = useCallback(
         ({ type, headerText, text, duration=3000 }) => {
@@ -65,6 +58,14 @@ const Toast = forwardRef(({ }, ref) => {
             );
         },
         [TOP_VALUE, toastTopAnimation],
+    );
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            show,
+        }),
+        [show],
     );
 
     const hide = () => {

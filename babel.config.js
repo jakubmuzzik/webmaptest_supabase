@@ -3,8 +3,17 @@ module.exports = function(api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
-      '@babel/plugin-proposal-export-namespace-from',
+      '@babel/plugin-transform-export-namespace-from',
       'react-native-reanimated/plugin',
+      [
+        'module-resolver',
+        {
+          alias: {
+            'react-native-maps': '@teovilla/react-native-web-maps',
+            'lottie-react-native': 'react-native-web-lottie',
+          },
+        },
+      ],
     ],
   };
 };

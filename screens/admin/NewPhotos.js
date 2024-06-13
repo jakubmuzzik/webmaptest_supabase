@@ -111,14 +111,14 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
 
             setNewPhotos(newPhotos.filter(newPhoto => isLady ? newPhoto.lady_id !== profileId : newPhoto.establishment_id !== profileId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Photos rejected',
                 text: 'Photos were successfuly rejected.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Rejection error',
                 text: 'Photos could not be rejected.'
@@ -147,14 +147,14 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
 
             setNewPhotos(newPhotos.filter(newPhoto => isLady ? newPhoto.lady_id !== profileId : newPhoto.establishment_id !== profileId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Photos activated',
                 text: 'Photos were successfuly activated.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Activate error',
                 text: 'Photos could not be activated.'
@@ -178,14 +178,14 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
 
             setNewPhotos(newPhotos.filter(newPhoto => newPhoto.id !== photoId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Photo activated',
                 text: 'Photo was successfuly activated.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Activate error',
                 text: 'Photo could not be activated.'
@@ -209,14 +209,14 @@ const NewPhotos = ({ newPhotos, toastRef, fetchNewPhotos, setNewPhotos, index })
 
             setNewPhotos(newPhotos.filter(newPhoto => newPhoto.id !== photoId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Photo rejected',
                 text: 'Photo was successfuly rejected.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Rejection error',
                 text: 'Photo could not be rejected.'

@@ -42,7 +42,7 @@ const LayoutWithHeader = ({ children }) => (
             <Header />
         </BlurView>
 
-        <View style={{ flex: 1, marginTop: normalize(70) }}>
+        <View style={{ flex: 1, marginTop: normalize(70), backgroundColor: COLORS.lightBlack }}>
             {children}
         </View>
 
@@ -74,7 +74,9 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
     const { height } = useWindowDimensions()
 
     useEffect(() => {
-        storeToastRef(toastRef)
+        if (toastRef.current) {
+            storeToastRef(toastRef.current)
+        }
     }, [toastRef])
 
     useEffect(() => {
@@ -93,7 +95,7 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
                 console.error('Error executing query:', error.message);
             });
 
-        const subscription = supabase.auth.onAuthStateChange((_event, session) => {
+        const { subscription } = supabase.auth.onAuthStateChange((_event, session) => {
             console.log(_event)
             console.log('session: ', session)
 
@@ -126,7 +128,7 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
         })
 
         return () => {
-            subscription.unsubscribe()
+            subscription?.unsubscribe()
         }
     }, [])
     
@@ -273,7 +275,7 @@ const Main = ({ scrollDisabled, updateScrollDisabled, updateCities, fetchUser, s
 
     return (
         <>
-            <View style={scrollDisabled ? { height, overflow: 'hidden' }: {flex:1}}>
+            <View style={scrollDisabled ? { height, overflow: 'hidden' }: {flexGrow: 1}}>
                 <RouterProvider router={router} />
             </View>
 

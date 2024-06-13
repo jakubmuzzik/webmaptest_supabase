@@ -76,14 +76,14 @@ const NewEstablishments = ({ newEstablishments, toastRef, fetchNewEstablishments
 
             setNewEstablishments(newEstablishments.filter(newEstablishment => newEstablishment.id !== establishmentId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Establishment activated',
                 text: 'Establishment was successfuly activated.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Activate error',
                 text: 'Establishment could not be activated.'
@@ -107,14 +107,14 @@ const NewEstablishments = ({ newEstablishments, toastRef, fetchNewEstablishments
 
             setNewEstablishments(newEstablishments.filter(newEstablishment => newEstablishment.id !== establishmentId))
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Establishment rejected',
                 text: 'Establishment was successfuly rejected.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Rejection error',
                 text: 'Establishment could not be rejected.'

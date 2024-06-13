@@ -119,7 +119,7 @@ const EmailEditor = ({ visible, setVisible, toastRef, currentEmail }) => {
                 throw error
             }
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 text: 'Confirmation link was sent to the provided email address.'
             })

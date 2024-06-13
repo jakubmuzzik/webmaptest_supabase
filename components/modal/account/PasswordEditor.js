@@ -132,7 +132,7 @@ const PasswordEditor = ({ visible, setVisible, toastRef }) => {
                 }
             }
             
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 text: 'Your password has been successfully changed.'
             })

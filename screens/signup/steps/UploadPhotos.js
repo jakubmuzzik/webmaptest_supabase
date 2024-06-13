@@ -72,7 +72,7 @@ const UploadPhotos = forwardRef((props, ref) => {
         try {
             const fileSizeMb = getFileSizeInMb(result.assets[0].uri)
             if (fileSizeMb > MAX_PHOTO_SIZE_MB) {
-                toastRef.current.show({
+                toastRef.show({
                     type: 'error',
                     headerText: 'File Size Error',
                     text: `Maximum file size allowed is ${MAX_PHOTO_SIZE_MB}MB.`
@@ -82,7 +82,7 @@ const UploadPhotos = forwardRef((props, ref) => {
 
             const dataType = getDataType(result.assets[0].uri)
             if (dataType !== 'image') {
-                toastRef.current.show({
+                toastRef.show({
                     type: 'error',
                     headerText: 'Invalid File Type',
                     text: `Please upload a supported file type.`
@@ -116,7 +116,7 @@ const UploadPhotos = forwardRef((props, ref) => {
             try {
                 const fileSizeMb = getFileSizeInMb(result.assets[0].uri)
                 if (fileSizeMb > MAX_VIDEO_SIZE_MB) {
-                    toastRef.current.show({
+                    toastRef.show({
                         type: 'error',
                         headerText: 'File Size Error',
                         text: `Maximum file size allowed is ${MAX_VIDEO_SIZE_MB}MB.`
@@ -126,7 +126,7 @@ const UploadPhotos = forwardRef((props, ref) => {
 
                 const dataType = getDataType(result.assets[0].uri)
                 if (dataType !== 'video') {
-                    toastRef.current.show({
+                    toastRef.show({
                         type: 'error',
                         headerText: 'Invalid File Type',
                         text: `Please upload a supported file type.`

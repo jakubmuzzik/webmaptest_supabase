@@ -205,8 +205,8 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
                                 onPress={() => setProfileType('lady')}
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
-                                <ImageBackground source={{ uri: require('../../assets/lady.jpg') }}
-                                    style={{ flex: 1, padding: SPACING.x_small }}
+                                <ImageBackground source={require('../../assets/lady.jpg') }
+                                    style={{ flex: 1, padding: SPACING.x_small, height: '100%', width: '100%' }}
                                     imageStyle={{ opacity: profileType === 'lady' ? 1 : 0.7 }}
                                     resizeMode='cover'>
                                     <Image 
@@ -232,8 +232,8 @@ const Signup = ({ visible, setVisible, onLoginPress }) => {
                                 onPress={() => setProfileType('member')}
                                 rippleColor="rgba(220, 46, 46, .10)"
                             >
-                                <ImageBackground source={{ uri: require('../../assets/establishment.jpg') }}
-                                    style={{ flex: 1, padding: SPACING.x_small }}
+                                <ImageBackground source={require('../../assets/establishment.jpg')}
+                                    style={{ flex: 1, padding: SPACING.x_small, height: '100%', width: '100%' }}
                                     imageStyle={{ opacity: profileType === 'member' ? 1 : 0.7 }}
                                     resizeMode='cover'>
                                     <Image

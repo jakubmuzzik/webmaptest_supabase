@@ -79,14 +79,14 @@ const Settings = ({ setTabHeight, toastRef, user_type, logOut, currentUser, curr
 
             updateCurrentUserInRedux({ status: INACTIVE, id: currentUser.id })
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Profile deactivated',
                 text: 'Profile was successfuly deactivated.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Deactivation error',
                 text: 'Profile could not be deactivated.'
@@ -107,14 +107,14 @@ const Settings = ({ setTabHeight, toastRef, user_type, logOut, currentUser, curr
 
             updateCurrentUserInRedux({ status: ACTIVE, id: currentUser.id })
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Profile activated',
                 text: 'Profile was successfuly activated.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Activation error',
                 text: 'Profile could not be activated.'

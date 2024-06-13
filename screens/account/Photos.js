@@ -66,7 +66,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
             try {
                 const fileSizeMb = getFileSizeInMb(result.assets[0].uri)
                 if (fileSizeMb > MAX_PHOTO_SIZE_MB) {
-                    toastRef.current.show({
+                    toastRef.show({
                         type: 'error',
                         headerText: 'File Size Error',
                         text: `Maximum file size allowed is ${MAX_PHOTO_SIZE_MB}MB.`
@@ -76,7 +76,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
 
                 const dataType = getDataType(result.assets[0].uri)
                 if (dataType !== 'image') {
-                    toastRef.current.show({
+                    toastRef.show({
                         type: 'error',
                         headerText: 'Invalid File Type',
                         text: `Please upload a supported file type.`
@@ -87,7 +87,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
                 uploadImage(result.assets[0].uri, index, replaceImageId)
             } catch (e) {
                 console.error(e)
-                toastRef.current.show({
+                toastRef.show({
                     type: 'error',
                     text: `Image could not be uploaded.`
                 })
@@ -104,14 +104,14 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
         try {
             await uploadUserAsset(imageUri, index, replaceImageId)
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Photo uploaded',
                 text: 'Photo was successfully uploaded and submitted for review.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 headerText: 'Upload error',
                 text: 'Photo could not be uploaded.'
@@ -215,7 +215,7 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
         const toDelete = userData.images.find(image => image.id === imageId)
         //deleting image in review when profile is in review
         if (toDelete.status === IN_REVIEW && userData.status === IN_REVIEW) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'warning',
                 headerText: 'Profile is in review',
                 text: 'You can not delete this photo, your profile is currently in review.'
@@ -249,13 +249,13 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
                 updateCurrentUserInRedux({ images: newImages, id: userData.id })
             }
     
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 text: 'Photo was deleted.'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: 'Photo could not be deleted.'
             })
@@ -294,14 +294,14 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
                 updateNewEstablishmentInRedux({ images, id: userData.id })
             }
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Image approved',
                 text: 'Image has been approved'
             })
         } catch(error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: error.message
             })
@@ -333,13 +333,13 @@ const Photos = ({ index, setTabHeight, offsetX = 0, userData, user_type, toastRe
                 updateNewEstablishmentInRedux({ images, id: userData.id })
             }
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Image rejected',
                 text: 'Image has been rejected'
             })
         } catch(error) {
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: error.message
             })

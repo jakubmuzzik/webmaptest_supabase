@@ -89,7 +89,7 @@ const AdminDashboard = ({
             setNewLadiesCount(count ?? 0)
         } catch (error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: error.message
             })
@@ -108,7 +108,7 @@ const AdminDashboard = ({
             setNewEstablishmentsCount(count ?? 0)
         } catch (error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: error.message
             })
@@ -143,7 +143,7 @@ const AdminDashboard = ({
             setNewPhotosCount(total)
         } catch (error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: error.message
             })
@@ -177,7 +177,7 @@ const AdminDashboard = ({
             setNewVideosCount(total)
         } catch (error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: error.message
             })

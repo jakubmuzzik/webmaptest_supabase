@@ -78,7 +78,7 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
             }
         } catch(e) {
             console.error(e)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: 'Data could not be processed.'
             })
@@ -93,7 +93,7 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
             data = await uploadUserData()
         } catch(e) {
             console.error(e)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: 'Data could not be processed.'
             })
@@ -108,7 +108,7 @@ const LadySignup = ({ independent=false, showHeaderText = true, offsetX = 0, upd
             await uploadUserAssets(data)
         } catch(e) {
             console.error(e)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: 'Assets could not be uploaded.'
             })

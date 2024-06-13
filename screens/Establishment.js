@@ -139,7 +139,7 @@ const Establishment = ({ toastRef }) => {
             fetchLadiesUnderEstablishment(data[0].id)
         } catch (error) {
             console.error(error)
-            toastRef.current.show({
+            toastRef.show({
                 type: 'error',
                 text: 'We could not find the lady.'
             })
@@ -710,7 +710,7 @@ const Establishment = ({ toastRef }) => {
                 style={{ position: 'absolute', width: '100%', height: Dimensions.get('window').height - normalize(600) }}
             />
 
-            <View style={{ alignSelf: 'center', maxWidth: '100%', width: 800 + SPACING.xxx_small, padding: SPACING.large }}>
+            <View style={{ alignSelf: 'center', maxWidth: '100%', width: 800 + SPACING.xxx_small, padding: SPACING.large,  }}>
                 {renderHeaderInfo()}
 
                 {renderCoverPhoto()}

@@ -133,7 +133,7 @@ const PersonalDetailsEditor = ({ visible, setVisible, personalDetails, toastRef,
 
             closeModal()
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Success!',
                 text: 'Personal Details were changed successfully.'

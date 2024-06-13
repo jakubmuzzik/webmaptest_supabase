@@ -104,7 +104,7 @@ const PricingEditor = ({ visible, setVisible, pricing, toastRef, userId, updateR
 
             closeModal()
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Success!',
                 text: 'Pricing was changed successfully.'

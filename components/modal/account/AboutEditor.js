@@ -101,7 +101,7 @@ const AboutEditor = ({ visible, setVisible, about, toastRef, updateRedux, userId
 
             closeModal()
 
-            toastRef.current.show({
+            toastRef.show({
                 type: 'success',
                 headerText: 'Success!',
                 text: 'Description was changed successfully.'
