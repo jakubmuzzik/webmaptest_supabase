@@ -193,7 +193,7 @@ const AddressSearch = ({ visible, setVisible, onSelect }) => {
                                     onBlur={() => setSearchBorderColor('grey')}
                                     onFocus={() => setSearchBorderColor(COLORS.red)}
                                 />
-                                <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? '1' : '0' }} name="close" size={normalize(20)} color="white" />
+                                <Ionicons onPress={() => onSearch('')} style={{ opacity: search ? 1 : 0 }} name="close" size={normalize(20)} color="white" />
                             </HoverableView>
 
                             {!search && !isSearching && results.length === 0 && <TouchableRipple
