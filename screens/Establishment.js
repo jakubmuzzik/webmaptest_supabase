@@ -153,7 +153,7 @@ const Establishment = ({ toastRef }) => {
             .from('ladies')
             .select('*, images(*), videos(*)')
             .match({ status: ACTIVE, establishment_id })
-            .order('last_modified_date', { descending: true })
+            .order('last_modified_date', { ascending: false })
         //TODO - load e.g. first 20 and then place show more button...
 
         if (ladiesData && ladiesData.length > 0) {

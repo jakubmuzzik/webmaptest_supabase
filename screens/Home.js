@@ -160,7 +160,7 @@ const Home = ({ resetLadiesPaginationData, updateCurrentLadiesCount, updateCurre
                 .from('ladies')
                 .select('*, images(*), videos(*)')
                 .match({ status: ACTIVE })
-                .order('created_date', { descending: true })
+                .order('created_date', { ascending: false })
                 .limit(30)
 
             if (error) {

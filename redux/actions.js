@@ -148,7 +148,7 @@ export const fetchLadies = () => async (dispatch, getState) => {
         .from('ladies')
         .select('*, images(*), videos(*)')
         .eq('establishment_id', getState().userState.currentAuthUser.id)
-        .order('created_date', { descending: true })
+        .order('created_date', { ascending: false })
 
     if (error || !data || data.length === 0) {
         dispatch({ type: LADIES_STATE_CHANGE, ladies: [] })
@@ -273,7 +273,7 @@ export const fetchNewLadies = () => async (dispatch) => {
         .from('ladies')
         .select('*, images(*), videos(*)')
         .eq('status', IN_REVIEW)
-        .order('last_submitted_date', { descending: false })
+        .order('last_submitted_date', { ascending: true })
 
     if (error || !data || data.length === 0) {
         dispatch(setNewLadies([]))
@@ -287,7 +287,7 @@ export const fetchNewEstablishments = () => async (dispatch) => {
         .from('establishments')
         .select('*, images(*), videos(*)')
         .eq('status', IN_REVIEW)
-        .order('last_submitted_date', { descending: false })
+        .order('last_submitted_date', { ascending: true })
 
     if (error || !data || data.length === 0) {
         dispatch(setNewEstablishments([]))
